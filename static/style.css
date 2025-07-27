@@ -1,4 +1,4 @@
-ï»¿/* Genel Ayarlar */
+/* Genel Ayarlar */
 * {
     margin: 0;
     padding: 0;
@@ -11,15 +11,13 @@ body {
     color: white;
 }
 
-/* Ãœst MenÃ¼ */
+/* Üst Menü */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 10%;
     background: transparent;
-    position: relative; /* Dropdown iÃ§in referans */
-    z-index: 10;
 }
 
 .logo {
@@ -41,17 +39,16 @@ nav ul {
             color: white;
             font-weight: 500;
             transition: 0.3s;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 5px 10px; /* Kutu þeklinde görünmesi için iç boþluk */
+            border-radius: 5px; /* Kenar yuvarlama */
         }
 
-            nav ul li a:hover,
-            nav ul li a.active {
-                background: #00d9ff;
-                color: white;
+            nav ul li a:hover {
+                background: #00d9ff; /* Hover durumunda arka plan rengi */
+                color: white; /* Renk deðiþmesin */
             }
 
-/* Dil SeÃ§ici */
+/* Dil Seçici */
 .language-selector {
     display: flex;
     justify-content: flex-end;
@@ -103,30 +100,18 @@ nav ul {
             background: #00d9ff;
         }
 
-
-
-
-/* Ana BÃ¶lÃ¼m */
+/* Ana Bölüm */
 .hero {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 50px 10%;
     height: 100vh;
-    gap: 30px;
-    flex-wrap: wrap; /* KÃ¼Ã§Ã¼k ekranlar iÃ§in alt satÄ±ra geÃ§sin */
-}
-
-.hero-text {
-    flex: 1 1 400px;
-    max-width: 600px;
 }
 
 .hero-image {
     position: relative;
     display: inline-block;
-    flex: 1 1 300px;
-    max-width: 350px;
 }
 
     .hero-image::before {
@@ -155,7 +140,7 @@ nav ul {
         color: #00d9ff;
     }
 
-/* Sosyal Medya Ä°konlarÄ± */
+/* Sosyal Medya Ýkonlarý */
 .social-icons {
     margin: 20px 0;
 }
@@ -188,109 +173,10 @@ nav ul {
         background: #00bcd4;
     }
 
-/* Profil FotoÄŸrafÄ± */
+/* Profil Fotoðrafý */
 .hero-image img {
     width: 300px;
     height: 300px;
     border-radius: 50%;
     object-fit: cover;
-}
-
-/* About SayfasÄ± */
-.about-section {
-    max-width: 1000px;
-    margin: 100px auto;
-    padding: 50px 40px;
-    background: #1e1e1e;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 217, 255, 0.1);
-    color: white;
-}
-
-    .about-section h1 {
-        font-size: 36px;
-        margin-bottom: 30px;
-        color: #00d9ff;
-        border-bottom: 2px solid #00d9ff;
-        display: inline-block;
-        padding-bottom: 10px;
-    }
-
-    .about-section p {
-        font-size: 18px;
-        line-height: 1.8;
-        text-align: justify;
-        color: #ccc;
-    }
-
-/* Responsive Ayarlar */
-@media screen and (max-width: 1024px) {
-    .hero-text h1 {
-        font-size: 36px;
-    }
-
-    .hero-text h3 {
-        font-size: 20px;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    header {
-        padding: 15px 5%;
-    }
-
-    nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-        nav ul li {
-            margin: 10px;
-        }
-
-    .hero {
-        flex-direction: column;
-        padding: 30px 5%;
-        height: auto;
-        text-align: center;
-    }
-
-    .hero-text,
-    .hero-image {
-        max-width: 100%;
-        flex: none;
-    }
-
-        .hero-text h1 {
-            font-size: 28px;
-        }
-
-        .hero-text h3 {
-            font-size: 18px;
-        }
-
-    .lang-dropdown {
-        right: 5%;
-        top: 50px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .hero-text h1 {
-        font-size: 24px;
-    }
-
-    .hero-text h3 {
-        font-size: 16px;
-    }
-
-    .lang-button {
-        font-size: 14px;
-        padding: 6px 14px;
-    }
-
-    .lang-dropdown button {
-        font-size: 13px;
-        padding: 8px 15px;
-    }
 }
