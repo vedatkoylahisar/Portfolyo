@@ -445,3 +445,212 @@ nav ul {
         padding: 6px 14px;
     }
 }
+/* =================================== */
+/* "Coming Soon" Sayfası Stilleri      */
+/* =================================== */
+.coming-soon-section {
+    /* Flexbox, icerigi hem dikeyde hem yatayda ortalamak icin kullanilir */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 70vh; /* Sayfanin dikeyde buyuk bir bolumunu kaplamasini saglar */
+    width: 100%;
+}
+
+.coming-soon-content h1 {
+    font-size: 52px;
+    color: #00d9ff;
+    margin-bottom: 20px;
+}
+
+.coming-soon-content p {
+    font-size: 20px;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.construction-icon {
+    font-size: 60px;
+    color: #00d9ff;
+    opacity: 0.8;
+}
+
+/* =================================== */
+/* ILETISIM SAYFASI STilleri           */
+/* =================================== */
+
+.contact-section {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 40px;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+    .contact-header h1 {
+        font-size: 48px;
+        color: #00d9ff;
+        margin-bottom: 15px;
+    }
+
+    .contact-header p {
+        font-size: 18px;
+        color: #ccc;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+.contact-wrapper {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap; /* Kucuk ekranlar icin */
+}
+
+/* Sol ve Sag Sutunlar */
+.contact-left, .contact-right {
+    flex: 1;
+    min-width: 300px; /* Kucuk ekranlarda sigmayi saglar */
+}
+
+    .contact-left h3 {
+        font-size: 24px;
+        color: #00d9ff;
+        margin-bottom: 20px;
+        border-left: 4px solid #00d9ff;
+        padding-left: 10px;
+    }
+
+/* Iletisim Formu */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+    .contact-form .form-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 15px;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #00d9ff;
+        }
+
+    .contact-form textarea {
+        height: 150px;
+        resize: vertical;
+    }
+
+    .contact-form .btn {
+        align-self: flex-start; /* Butonu sola yaslar */
+        border: none;
+        cursor: pointer;
+    }
+
+/* Ayirici Cizgi ("veya") */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 40px 0;
+    color: #555;
+}
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #333;
+    }
+
+    .divider span {
+        padding: 0 15px;
+    }
+
+/* Sosyal Medya Linkleri */
+.social-contact {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.3s, background-color 0.3s;
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+}
+
+    .social-link:hover {
+        transform: translateY(-5px);
+    }
+
+    .social-link i {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    /* Farkli sosyal medya linkleri icin renkler */
+    .social-link.linkedin {
+        border-color: #0A66C2;
+    }
+
+        .social-link.linkedin:hover {
+            background-color: #0A66C2;
+        }
+
+    .social-link.github {
+        border-color: #6e5494;
+    }
+
+        .social-link.github:hover {
+            background-color: #6e5494;
+        }
+
+    .social-link.email {
+        border-color: #c71610;
+    }
+
+        .social-link.email:hover {
+            background-color: #c71610;
+        }
+
+
+/* Sag Sutundaki Chatbot */
+.contact-right .chatbot-container {
+    height: 100%;
+    min-height: 550px;
+    opacity: 1; /* Chatbot'un gorunur olmasi icin */
+    transform: scale(1);
+}
+
+/* Responsive Ayarlar */
+@media (max-width: 992px) {
+    .contact-wrapper {
+        flex-direction: column;
+    }
+}
+

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+<!-- Sets the page title -->
+{% block title %}{{ texts.contact }} - {{ texts.name }}{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <!-- Baslik ve tanitim yazisi kaldirildi -->
+
+    <div class="contact-wrapper">
+        <!-- LEFT COLUMN: Form and Social Media -->
+        <div class="contact-left">
+
+            <h3>{{ texts.contactFormTitle }}</h3>
+            <form action="#" method="POST" class="contact-form">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="{{ texts.formName }}" required>
+                    <input type="email" name="email" placeholder="{{ texts.formEmail }}" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" placeholder="{{ texts.formMessage }}" required></textarea>
+                </div>
+                <button type="submit" class="btn">{{ texts.formSend }}</button>
+            </form>
+
+            <div class="divider">
+                <span>{{ texts.or }}</span>
+            </div>
+
+            <h3>{{ texts.contactSocialTitle }}</h3>
+            <div class="social-contact">
+                <a href="https://www.linkedin.com/in/vedat-koylahisar-98790b238/" target="_blank" class="social-link linkedin">
+                    <i class="fab fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/vedatkoylahisar" target="_blank" class="social-link github">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+                <a href="mailto:vedatkylhsr@gmail.com" class="social-link email">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Chatbot -->
+        <div class="contact-right">
+            <div class="chatbot-container" id="chatbot-container">
+                <div class="chatbot-header">
+                    <!-- This text will be added to app.py later -->
+                    <p>{{ texts.chatbotTitle }}</p>
+                </div>
+                <div class="chatbot-messages" id="chatbot-messages">
+                    <!-- Chatbot's special intro message for this page -->
+                    <div class="message bot-message">
+                        <p>{{ texts.chatbotContactIntro }}</p>
+                    </div>
+                </div>
+                <form class="chatbot-input-form" id="chatbot-form">
+                    <input type="text" id="chatbot-input" placeholder="{{ texts.chatbotPlaceholder }}" autocomplete="off">
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

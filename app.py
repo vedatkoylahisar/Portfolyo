@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, session
-# 'json' importuna artik ihtiyacimiz yok, cunku Flask'in yerlesik filtresini kullanacagiz.
+import json
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey" # Session icin gerekli
 
 #======================================================================
-# 1. TUM METINLER VE VERILER MERKEZI BIR YERDE (Degisiklik yok)
+# 1. TUM METINLER VE VERILER MERKEZI BIR YERDE
 #======================================================================
 
 MENU_ITEMS = [
@@ -35,7 +35,20 @@ TRANSLATIONS = {
             "I develop applications in C#, Python, and Java, aiming to advance in database structures, artificial intelligence, and data science.",
             "Thanks to internships at Bimser and Keep Games, I gained practical experience with low-code platforms and game engines.",
             "In my free time, I travel to explore different cultures and share stories about software and entrepreneurship on TikTok and Reels."
-        ]
+        ],
+        "comingSoonMessage": "This section will be available very soon...",
+        # === ILETISIM SAYFASI CEVIRILERI (EN) ===
+        "contactIntro": "Have a project in mind or just want to say hello? Feel free to reach out. I'm always open to discussing new projects and creative ideas.",
+        "contactFormTitle": "Send a Message",
+        "formName": "Your Name",
+        "formEmail": "Your Email",
+        "formMessage": "Your Message",
+        "formSend": "Send Message",
+        "or": "OR",
+        "contactSocialTitle": "Connect with Me",
+        "chatbotTitle": "AI Assistant",
+        "chatbotContactIntro": "Alternatively, you can leave a message with me, and I'll make sure Vedat gets it!",
+        "chatbotPlaceholder": "Type a message..."
     },
     'tr': {
         "home": "Anasayfa", "about": "Hakkimda", "services": "Hizmetler", "portfolio": "Portfolyo", "contact": "Iletisim",
@@ -48,7 +61,20 @@ TRANSLATIONS = {
             "C#, Python, Java gibi dillerde uygulama gelistiriyor; veritabani yapilari, yapay zeka ve veri bilimi alanlarinda ilerlemeyi hedefliyorum.",
             "Bimser ve Keep Games firmalarinda yaptigim stajlar sayesinde dusuk kod platformlari ve oyun motorlari konusunda uygulamali tecrube kazandim.",
             "Bos zamanlarimda farkli kulturleri kesfetmek icin seyahat ediyor; TikTok ve Reels platformlarinda yazilim ve girisimcilik hikayeleri paylasiyorum."
-        ]
+        ],
+        "comingSoonMessage": "Bu bolum cok yakinda sizlerle olacak...",
+        # === ILETISIM SAYFASI CEVIRILERI (TR) ===
+        "contactIntro": "Aklinizda bir proje mi var veya sadece merhaba mi demek istiyorsunuz? Bana ulasmaktan cekinmeyin. Yeni projeleri ve yaratici fikirleri tartismaya her zaman acigim.",
+        "contactFormTitle": "Mesaj Gonderin",
+        "formName": "Adiniz",
+        "formEmail": "E-posta Adresiniz",
+        "formMessage": "Mesajiniz",
+        "formSend": "Mesaji Gonder",
+        "or": "VEYA",
+        "contactSocialTitle": "Sosyal Medyada Ulasin",
+        "chatbotTitle": "Yapay Zeka Asistani",
+        "chatbotContactIntro": "Alternatif olarak, mesajinizi bana birakabilirsiniz, Vedat'a ulastigindan emin olurum!",
+        "chatbotPlaceholder": "Bir mesaj yazin..."
     },
     'de': {
         "home": "Startseite", "about": "Uber Mich", "services": "Dienstleistungen", "portfolio": "Portfolio", "contact": "Kontakt",
@@ -61,7 +87,20 @@ TRANSLATIONS = {
             "Ich entwickle Anwendungen in C#, Python und Java und strebe Fortschritte in Datenbankstrukturen, kunstlicher Intelligenz und Datenwissenschaft an.",
             "Durch Praktika bei Bimser und Keep Games habe ich praktische Erfahrungen mit Low-Code-Plattformen und Spiel-Engines gesammelt.",
             "In meiner Freizeit reise ich gerne, um verschiedene Kulturen zu entdecken, und teile Geschichten uber Software und Unternehmertum auf TikTok und Reels."
-        ]
+        ],
+        "comingSoonMessage": "Dieser Bereich wird in Kurze verfugbar sein...",
+        # === ILETISIM SAYFASI CEVIRILERI (DE) ===
+        "contactIntro": "Haben Sie ein Projekt im Sinn oder mochten Sie einfach nur Hallo sagen? Zogern Sie nicht, mich zu kontaktieren. Ich bin immer offen fur die Diskussion neuer Projekte und kreativer Ideen.",
+        "contactFormTitle": "Nachricht Senden",
+        "formName": "Ihr Name",
+        "formEmail": "Ihre E-Mail",
+        "formMessage": "Ihre Nachricht",
+        "formSend": "Nachricht Senden",
+        "or": "ODER",
+        "contactSocialTitle": "Verbinden Sie sich mit mir",
+        "chatbotTitle": "KI-Assistent",
+        "chatbotContactIntro": "Alternativ konnen Sie mir eine Nachricht hinterlassen, und ich werde sicherstellen, dass Vedat sie erhalt!",
+        "chatbotPlaceholder": "Nachricht eingeben..."
     }
 }
 
@@ -72,15 +111,8 @@ TRANSLATIONS = {
 
 @app.context_processor
 def inject_global_vars():
-    """Bu fonksiyon, tum templatelere otomatik olarak degisken gonderir."""
     lang_code = session.get('lang', 'en')
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS['en'])
-    
-    # === ISTE DUZELTME BURADA! ===
-    # Ozel 'to_json' fonksiyonunu ve importunu kaldirdik.
-    # Cunku Flask'in kendi yerlesik '|tojson' filtresi bu isi zaten yapiyor.
-    # Bu sayede kodumuz daha temiz ve Flask standartlarina daha uygun oldu.
-    
     return dict(
         menu=MENU_ITEMS,
         lang=lang_code,
@@ -90,24 +122,36 @@ def inject_global_vars():
 
 
 #======================================================================
-# 3. DIL YONETIMI VE SAYFA ROUTE'LARI (Degisiklik yok)
+# 3. DIL YONETIMI VE SAYFA ROUTE'LARI
 #======================================================================
 
 @app.before_request
 def ensure_lang_in_session():
-    """Her istekten once session'da dil oldugundan emin olur."""
     if 'lang' not in session:
-        session['lang'] = 'en'  # Varsayilan dil
+        session['lang'] = 'en'
 
 @app.route("/set_language/<lang_code>")
 def set_language(lang_code):
-    """Session'daki dili degistirir ve geldigi sayfaya geri doner."""
     if lang_code in LANGUAGE_NAMES:
         session['lang'] = lang_code
     return redirect(request.referrer or url_for('home'))
 
+# Chatbot icin route
+@app.route("/chat", methods=['POST'])
+def chat():
+    user_message = request.json.get('message')
+    if "merhaba" in user_message.lower():
+        bot_response = "Merhaba! Nasil yardimci olabilirim?"
+    elif "hakkinda" in user_message.lower() or "kimsin" in user_message.lower():
+        bot_response = "Ben Vedat'in portfolyo sitesi icin olusturdugu bir sohbet asistaniyim."
+    elif "yetenek" in user_message.lower() or "ne yapar" in user_message.lower():
+        bot_response = "Vedat; Python, Flask, C# ve Veri Bilimi konularinda calismalar yapiyor. Daha fazla bilgi icin portfolyosunu inceleyebilirsiniz."
+    else:
+        bot_response = "Anlayamadim, lutfen farkli bir sey sorun. Ornegin: 'Yeteneklerin nelerdir?'"
+    return {"response": bot_response}
 
-# --- Sayfa Route'lari (Artik cok daha temiz!) ---
+
+# --- Sayfa Route'lari ---
 
 @app.route("/")
 def home():
