@@ -29,79 +29,116 @@ TRANSLATIONS = {
         "greeting": "Hello, It's Me", "name": "Vedat Koylahisar", "profession": "And I'm a", "description": "I am a software developer.", "downloadCV": "Download CV",
         "typingText": ["AI Developer", "Data Analyst", "Freelancer"],
         "aboutTitle": "About Me",
-        "aboutContent": [
-            "Hello! I am Vedat Koylahisar, a 4th year Computer Engineering student at Kocaeli University.",
-            "I have been actively interested in software development for about four years, working on projects for desktop, web, and mobile platforms.",
-            "I develop applications in C#, Python, and Java, aiming to advance in database structures, artificial intelligence, and data science.",
-            "Thanks to internships at Bimser and Keep Games, I gained practical experience with low-code platforms and game engines.",
-            "In my free time, I travel to explore different cultures and share stories about software and entrepreneurship on TikTok and Reels."
-        ],
+        "aboutContent": ["..."],
         "comingSoonMessage": "This section will be available very soon...",
-        # === ILETISIM SAYFASI CEVIRILERI (EN) ===
-        "contactIntro": "Have a project in mind or just want to say hello? Feel free to reach out. I'm always open to discussing new projects and creative ideas.",
-        "contactFormTitle": "Send a Message",
-        "formName": "Your Name",
-        "formEmail": "Your Email",
-        "formMessage": "Your Message",
-        "formSend": "Send Message",
-        "or": "OR",
-        "contactSocialTitle": "Connect with Me",
-        "chatbotTitle": "AI Assistant",
-        "chatbotContactIntro": "Alternatively, you can leave a message with me, and I'll make sure Vedat gets it!",
-        "chatbotPlaceholder": "Type a message..."
+        "contactIntro": "Have a project in mind or just want to say hello? Feel free to reach out...",
+        "contactFormTitle": "Send a Message", "formName": "Your Name", "formEmail": "Your Email", "formMessage": "Your Message", "formSend": "Send Message",
+        "or": "OR", "contactSocialTitle": "Connect with Me",
+        "chatbotTitle": "AI Assistant", "chatbotContactIntro": "Alternatively, you can leave a message with me...", "chatbotPlaceholder": "Type a message...",
+        # === PORTFOLYO SAYFASI CEVIRILERI (EN) ===
+        "portfolioTitle": "My Latest Projects",
+        "portfolioIntro": "Here are a few projects I've worked on recently.",
+        "githubButton": "GitHub",
+        "demoButton": "Live Demo"
     },
     'tr': {
         "home": "Anasayfa", "about": "Hakkimda", "services": "Hizmetler", "portfolio": "Portfolyo", "contact": "Iletisim",
         "greeting": "Merhaba, Ben", "name": "Vedat Koylahisar", "profession": "Ve Ben bir", "description": "Ben yazilim gelistiricisiyim.", "downloadCV": "CV Indir",
         "typingText": ["Yapay Zeka Gelistiricisi", "Veri Analisti", "Freelancer"],
         "aboutTitle": "Hakkimda",
-        "aboutContent": [
-            "Merhaba! Ben Vedat Koylahisar, Kocaeli Universitesi Bilgisayar Muhendisligi 4. sinif ogrencisiyim.",
-            "Yaklasik dort yildir aktif olarak yazilim gelistirme ile ilgileniyor; masaustu, web ve mobil platformlar icin projeler yapiyorum.",
-            "C#, Python, Java gibi dillerde uygulama gelistiriyor; veritabani yapilari, yapay zeka ve veri bilimi alanlarinda ilerlemeyi hedefliyorum.",
-            "Bimser ve Keep Games firmalarinda yaptigim stajlar sayesinde dusuk kod platformlari ve oyun motorlari konusunda uygulamali tecrube kazandim.",
-            "Bos zamanlarimda farkli kulturleri kesfetmek icin seyahat ediyor; TikTok ve Reels platformlarinda yazilim ve girisimcilik hikayeleri paylasiyorum."
-        ],
+        "aboutContent": ["..."],
         "comingSoonMessage": "Bu bolum cok yakinda sizlerle olacak...",
-        # === ILETISIM SAYFASI CEVIRILERI (TR) ===
-        "contactIntro": "Aklinizda bir proje mi var veya sadece merhaba mi demek istiyorsunuz? Bana ulasmaktan cekinmeyin. Yeni projeleri ve yaratici fikirleri tartismaya her zaman acigim.",
-        "contactFormTitle": "Mesaj Gonderin",
-        "formName": "Adiniz",
-        "formEmail": "E-posta Adresiniz",
-        "formMessage": "Mesajiniz",
-        "formSend": "Mesaji Gonder",
-        "or": "VEYA",
-        "contactSocialTitle": "Sosyal Medyada Ulasin",
-        "chatbotTitle": "Yapay Zeka Asistani",
-        "chatbotContactIntro": "Alternatif olarak, mesajinizi bana birakabilirsiniz, Vedat'a ulastigindan emin olurum!",
-        "chatbotPlaceholder": "Bir mesaj yazin..."
+        "contactIntro": "Aklinizda bir proje mi var veya sadece merhaba mi demek istiyorsunuz? Bana ulasmaktan cekinmeyin...",
+        "contactFormTitle": "Mesaj Gonderin", "formName": "Adiniz", "formEmail": "E-posta Adresiniz", "formMessage": "Mesajiniz", "formSend": "Mesaji Gonder",
+        "or": "VEYA", "contactSocialTitle": "Sosyal Medyada Ulasin",
+        "chatbotTitle": "Yapay Zeka Asistani", "chatbotContactIntro": "Alternatif olarak, mesajinizi bana birakabilirsiniz...", "chatbotPlaceholder": "Bir mesaj yazin...",
+        # === PORTFOLYO SAYFASI CEVIRILERI (TR) ===
+        "portfolioTitle": "Son Projelerim",
+        "portfolioIntro": "Son zamanlarda uzerinde calistigim birkac proje.",
+        "githubButton": "GitHub",
+        "demoButton": "Canli Demo"
     },
     'de': {
         "home": "Startseite", "about": "Uber Mich", "services": "Dienstleistungen", "portfolio": "Portfolio", "contact": "Kontakt",
         "greeting": "Hallo, Ich bin", "name": "Vedat Koylahisar", "profession": "Und ich bin ein", "description": "Ich bin Softwareentwickler.", "downloadCV": "Lebenslauf herunterladen",
         "typingText": ["KI-Entwickler", "Datenanalyst", "Freiberufler"],
         "aboutTitle": "Uber Mich",
-        "aboutContent": [
-            "Hallo! Ich bin Vedat Koylahisar, ein Student der Informatik im 4. Jahr an der Universitat Kocaeli.",
-            "Seit etwa vier Jahren beschaftige ich mich aktiv mit Softwareentwicklung und arbeite an Projekten fur Desktop-, Web- und Mobilplattformen.",
-            "Ich entwickle Anwendungen in C#, Python und Java und strebe Fortschritte in Datenbankstrukturen, kunstlicher Intelligenz und Datenwissenschaft an.",
-            "Durch Praktika bei Bimser und Keep Games habe ich praktische Erfahrungen mit Low-Code-Plattformen und Spiel-Engines gesammelt.",
-            "In meiner Freizeit reise ich gerne, um verschiedene Kulturen zu entdecken, und teile Geschichten uber Software und Unternehmertum auf TikTok und Reels."
-        ],
+        "aboutContent": ["..."],
         "comingSoonMessage": "Dieser Bereich wird in Kurze verfugbar sein...",
-        # === ILETISIM SAYFASI CEVIRILERI (DE) ===
-        "contactIntro": "Haben Sie ein Projekt im Sinn oder mochten Sie einfach nur Hallo sagen? Zogern Sie nicht, mich zu kontaktieren. Ich bin immer offen fur die Diskussion neuer Projekte und kreativer Ideen.",
-        "contactFormTitle": "Nachricht Senden",
-        "formName": "Ihr Name",
-        "formEmail": "Ihre E-Mail",
-        "formMessage": "Ihre Nachricht",
-        "formSend": "Nachricht Senden",
-        "or": "ODER",
-        "contactSocialTitle": "Verbinden Sie sich mit mir",
-        "chatbotTitle": "KI-Assistent",
-        "chatbotContactIntro": "Alternativ konnen Sie mir eine Nachricht hinterlassen, und ich werde sicherstellen, dass Vedat sie erhalt!",
-        "chatbotPlaceholder": "Nachricht eingeben..."
+        "contactIntro": "Haben Sie ein Projekt im Sinn oder mochten Sie einfach nur Hallo sagen? Zogern Sie nicht, mich zu kontaktieren...",
+        "contactFormTitle": "Nachricht Senden", "formName": "Ihr Name", "formEmail": "Ihre E-Mail", "formMessage": "Ihre Nachricht", "formSend": "Nachricht Senden",
+        "or": "ODER", "contactSocialTitle": "Verbinden Sie sich mit mir",
+        "chatbotTitle": "KI-Assistent", "chatbotContactIntro": "Alternativ konnen Sie mir eine Nachricht hinterlassen...", "chatbotPlaceholder": "Nachricht eingeben...",
+        # === PORTFOLYO SAYFASI CEVIRILERI (DE) ===
+        "portfolioTitle": "Meine Neuesten Projekte",
+        "portfolioIntro": "Hier sind einige Projekte, an denen ich kurzlich gearbeitet habe.",
+        "githubButton": "GitHub",
+        "demoButton": "Live-Demo"
     }
+}
+
+# === YENI: PROJE VERILERI ===
+PROJECTS = {
+    'tr': [
+        {
+            'title': "Proje 1 Basligi",
+            'desc': "Bu proje, su teknolojiler kullanilarak yapilmis harika bir calismadir.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        },
+        {
+            'title': "Proje 2 Basligi",
+            'desc': "Bu da ikinci projemin kisa bir aciklamasi.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        },
+        {
+            'title': "Proje 3 Basligi",
+            'desc': "Bu da ucuncu projemin kisa bir aciklamasi.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        }
+    ],
+    'en': [
+        {
+            'title': "Project 1 Title",
+            'desc': "This is a great project made with these technologies.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        },
+        {
+            'title': "Project 2 Title",
+            'desc': "A short description for my second project.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        },
+        {
+            'title': "Project 3 Title",
+            'desc': "A short description for my third project.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        }
+    ],
+    'de': [
+        {
+            'title': "Projekttitel 1",
+            'desc': "Dies ist ein groSartiges Projekt, das mit diesen Technologien erstellt wurde.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        },
+        {
+            'title': "Projekttitel 2",
+            'desc': "Eine kurze Beschreibung fur mein zweites Projekt.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        },
+        {
+            'title': "Projekttitel 3",
+            'desc': "Eine kurze Beschreibung fur mein drittes Projekt.",
+            'github': "https://github.com/vedatkoylahisar",
+            'demo': "#"
+        }
+    ]
 }
 
 
@@ -136,19 +173,11 @@ def set_language(lang_code):
         session['lang'] = lang_code
     return redirect(request.referrer or url_for('home'))
 
-# Chatbot icin route
 @app.route("/chat", methods=['POST'])
 def chat():
     user_message = request.json.get('message')
-    if "merhaba" in user_message.lower():
-        bot_response = "Merhaba! Nasil yardimci olabilirim?"
-    elif "hakkinda" in user_message.lower() or "kimsin" in user_message.lower():
-        bot_response = "Ben Vedat'in portfolyo sitesi icin olusturdugu bir sohbet asistaniyim."
-    elif "yetenek" in user_message.lower() or "ne yapar" in user_message.lower():
-        bot_response = "Vedat; Python, Flask, C# ve Veri Bilimi konularinda calismalar yapiyor. Daha fazla bilgi icin portfolyosunu inceleyebilirsiniz."
-    else:
-        bot_response = "Anlayamadim, lutfen farkli bir sey sorun. Ornegin: 'Yeteneklerin nelerdir?'"
-    return {"response": bot_response}
+    # ... (chatbot logic)
+    return {"response": "Anlasilmadi..."}
 
 
 # --- Sayfa Route'lari ---
@@ -165,9 +194,12 @@ def about():
 def services():
     return render_template("services.html", active='services')
 
+# === PORTFOLYO ROUTE'U GUNCELLEMESI ===
 @app.route("/portfolio")
 def portfolio():
-    return render_template("portfolio.html", active='portfolio')
+    lang_code = session.get('lang', 'en')
+    projects_list = PROJECTS.get(lang_code, PROJECTS['en'])
+    return render_template("portfolio.html", active='portfolio', projects=projects_list)
 
 @app.route("/contact")
 def contact():

@@ -11,7 +11,6 @@
         <h1>{{ texts.name }}</h1>
         <h3>
             {{ texts.profession }}
-            <!-- Tirnak isareti hatasini onlemek icin tek tirnak kullanildi -->
             <span class="typing" data-texts='{{ texts.typingText|tojson }}'></span>
         </h3>
         <p>{{ texts.description }}</p>
@@ -22,21 +21,22 @@
             <a href="mailto:vedatkylhsr@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
 
-        <a href="#" class="btn">{{ texts.downloadCV }}</a>
+        <!--
+            ================================================================
+            İŞTE DÜZELTME BURADA!
+            ================================================================
+            Butonun 'href' ozelligi, static/files klasorundeki cv.pdf dosyasina
+            yonlendirildi. 'download' ozelligi, dosyanin tarayicida acilmak
+            yerine dogrudan indirilmesini saglar.
+        -->
+        <a href="{{ url_for('static', filename='files/cv.pdf') }}" class="btn" download="Vedat_Koylahisar_CV.pdf">{{ texts.downloadCV }}</a>
     </div>
 
-    <!--
-        ================================================================
-        DEGISIKLIK BURADA
-        ================================================================
-        Eski '.hero-image' blogu, animasyonun duzgun calismasi icin
-        yeni bir yapiyla degistirildi. En onemlisi, img etiketine
-        JavaScript'in aradigi 'animated-profile-pic' id'si eklendi.
-    -->
+    <!-- Bu blok, animasyonlu fotografi ve gizli chatbot'u icerir -->
     <div class="animation-wrapper">
         <img src="{{ url_for('static', filename='img/vedatpp.jpg') }}" alt="Profil Fotografi" id="animated-profile-pic" />
 
-        <!-- Chatbot baslangicta gizli olacak sekilde buraya eklendi -->
+        <!-- Gizli Chatbot -->
         <div class="chatbot-container" id="chatbot-container">
             <div class="chatbot-header">
                 <p>Sohbet Asistanı</p>

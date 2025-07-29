@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+<!-- Sayfa basligini ayarlar -->
+{% block title %}{{ texts.portfolio }} - {{ texts.name }}{% endblock %}
+
+{% block content %}
+<section class="portfolio-section">
+    <div class="portfolio-header">
+        <h1>{{ texts.portfolioTitle }}</h1>
+        <p>{{ texts.portfolioIntro }}</p>
+    </div>
+
+    <div class="portfolio-grid">
+        <!--
+            ================================================================
+            KISA YOL BURADA!
+            ================================================================
+            Bu 'for' dongusu, app.py'den gelen 'projects' listesindeki
+            her bir proje icin asagidaki HTML blogunu otomatik olarak olusturur.
+        -->
+        {% for project in projects %}
+        <div class="portfolio-item">
+            <div class="portfolio-item-content">
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.desc }}</p>
+                <div class="portfolio-item-links">
+                    <a href="{{ project.github }}" class="btn-outline"><i class="fab fa-github"></i> {{ texts.githubButton }}</a>
+                    <a href="{{ project.demo }}" class="btn">{{ texts.demoButton }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- Dongu bittikten sonra artik manuel kod bloguna ihtiyac yok -->
+
+    </div>
+</section>
+{% endblock %}
