@@ -2,41 +2,55 @@
 <html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% block title %}Vedat Koylahisar{% endblock %}</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{{ texts.name }} - Portfolio{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
     <header>
-        <h2 class="logo">Portfolio.</h2>
+        <div class="logo-container">
+            <!--
+                ================================================================
+                İŞTE MANTIK BURADA!
+                ================================================================
+                Eger aktif sayfa 'home' ise, animasyonun hedefi icin bos bir
+                placeholder koy. Degilse (yani about, contact vb. sayfalardaysak),
+                fotografin kucuk halini dogrudan goster.
+            -->
+            {% if active == 'home' %}
+            <div id="header-pic-placeholder"></div>
+            {% else %}
+            <img src="{{ url_for('static', filename='img/vedatpp.jpg') }}" alt="Profil Fotografi" class="header-profile-pic-static" />
+            {% endif %}
+
+            <h2 class="logo">Portfolio.</h2>
+        </div>
         <nav>
             <ul>
                 {% for item in menu %}
                 <li>
                     <a href="{{ url_for(item.endpoint) }}" class="{% if active == item.endpoint %}active{% endif %}">
-                        {{ item.name }}
+                        {{ texts[item.name_key] }}
                     </a>
                 </li>
                 {% endfor %}
             </ul>
         </nav>
-
         <div class="language-selector">
-            <button id="langButton" class="lang-button">{{ language_names[lang] }} ▼</button>
+            <button id="langButton" class="lang-button">
+                {{ language_names[lang] }} <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
+            </button>
             <div id="langDropdown" class="lang-dropdown">
-                <a href="{{ url_for('set_language', lang='en') }}">English</a>
-                <a href="{{ url_for('set_language', lang='tr') }}">Turkce</a>
-                <a href="{{ url_for('set_language', lang='de') }}">Deutsch</a>
+                {% for code, name in language_names.items() %}
+                <a href="{{ url_for('set_language', lang_code=code) }}">{{ name }}</a>
+                {% endfor %}
             </div>
         </div>
     </header>
-
     <main>
         {% block content %}{% endblock %}
     </main>
-
 </body>
 </html>

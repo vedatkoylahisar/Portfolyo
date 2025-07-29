@@ -1,23 +1,56 @@
 {% extends "base.html" %}
 
-{% block title %}Anasayfa - Vedat Koylahisar{% endblock %}
+<!-- Sayfa basligini, app.py'den gelen 'texts' sozlugunu kullanarak ayarlar -->
+{% block title %}{{ texts.home }} - {{ texts.name }}{% endblock %}
 
 {% block content %}
 <section class="hero">
     <div class="hero-text">
-        <h3 id="greeting-text">Hello, It's Me</h3>
-        <h1 id="name-text">Vedat Koylahisar</h1>
-        <h3><span id="profession-text">And I'm a</span> <span class="typing"></span></h3>
-        <p></p>
+        <!-- Tum metinler 'texts' sozlugunden alinir -->
+        <h3>{{ texts.greeting }}</h3>
+        <h1>{{ texts.name }}</h1>
+        <h3>
+            {{ texts.profession }}
+            <!-- Tirnak isareti hatasini onlemek icin tek tirnak kullanildi -->
+            <span class="typing" data-texts='{{ texts.typingText|tojson }}'></span>
+        </h3>
+        <p>{{ texts.description }}</p>
+
         <div class="social-icons">
             <a href="https://www.linkedin.com/in/vedat-koylahisar-98790b238/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://github.com/vedatkoylahisar" target="_blank"><i class="fab fa-github"></i></a>
             <a href="mailto:vedatkylhsr@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
-        <a href="#" class="btn">Download CV</a>
+
+        <a href="#" class="btn">{{ texts.downloadCV }}</a>
     </div>
-    <div class="hero-image">
-        <img src="{{ url_for('static', filename='img/vedatpp.jpg') }}" alt="Profil Fotoğrafı" />
+
+    <!--
+        ================================================================
+        DEGISIKLIK BURADA
+        ================================================================
+        Eski '.hero-image' blogu, animasyonun duzgun calismasi icin
+        yeni bir yapiyla degistirildi. En onemlisi, img etiketine
+        JavaScript'in aradigi 'animated-profile-pic' id'si eklendi.
+    -->
+    <div class="animation-wrapper">
+        <img src="{{ url_for('static', filename='img/vedatpp.jpg') }}" alt="Profil Fotografi" id="animated-profile-pic" />
+
+        <!-- Chatbot baslangicta gizli olacak sekilde buraya eklendi -->
+        <div class="chatbot-container" id="chatbot-container">
+            <div class="chatbot-header">
+                <p>Sohbet Asistanı</p>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    <p>Merhaba! Ben Vedat'ın dijital asistanıyım. Nasıl yardımcı olabilirim?</p>
+                </div>
+            </div>
+            <form class="chatbot-input-form" id="chatbot-form">
+                <input type="text" id="chatbot-input" placeholder="Bir mesaj yazın..." autocomplete="off">
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
     </div>
 </section>
 {% endblock %}

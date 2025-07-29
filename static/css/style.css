@@ -11,15 +11,23 @@ body {
     color: white;
 }
 
-/* Üst Menü */
+/* =================================== */
+/* Üst Menü (Header)                   */
+/* =================================== */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 10%;
     background: transparent;
-    position: relative; /* Dropdown için referans */
+    position: relative;
     z-index: 10;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .logo {
@@ -48,14 +56,14 @@ nav ul {
             nav ul li a:hover,
             nav ul li a.active {
                 background: #00d9ff;
-                color: white;
+                color: #121212;
             }
 
-/* Dil Seçici */
+/* =================================== */
+/* Dil Seçici                          */
+/* =================================== */
 .language-selector {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    position: relative;
 }
 
 .lang-button {
@@ -63,10 +71,11 @@ nav ul {
     border: none;
     font-size: 16px;
     padding: 8px 15px;
-    color: white;
+    color: #121212;
     cursor: pointer;
     border-radius: 5px;
     transition: 0.3s;
+    font-weight: bold;
 }
 
     .lang-button:hover {
@@ -76,45 +85,45 @@ nav ul {
 .lang-dropdown {
     display: none;
     position: absolute;
-    top: 60px;
-    right: 10%;
-    background: #121212;
+    top: 50px;
+    right: 0;
+    background: #1e1e1e;
     border: 1px solid #00d9ff;
     border-radius: 5px;
-    z-index: 1;
+    z-index: 10;
+    min-width: 120px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
     .lang-dropdown.show {
         display: block;
     }
 
-    .lang-dropdown button {
-        background: none;
-        border: none;
-        color: white;
+    .lang-dropdown a {
+        display: block;
         padding: 10px 20px;
-        text-align: left;
-        width: 100%;
-        cursor: pointer;
+        color: white;
+        text-decoration: none;
         transition: 0.3s;
     }
 
-        .lang-dropdown button:hover {
+        .lang-dropdown a:hover {
             background: #00d9ff;
+            color: #121212;
         }
 
-
-
-
-/* Ana Bölüm */
+/* =================================== */
+/* Ana Bölüm (Hero)                    */
+/* =================================== */
 .hero {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 50px 10%;
-    height: 100vh;
+    min-height: 80vh;
     gap: 30px;
-    flex-wrap: wrap; /* Küçük ekranlar için alt satıra geçsin */
+    flex-wrap: wrap;
 }
 
 .hero-text {
@@ -122,14 +131,36 @@ nav ul {
     max-width: 600px;
 }
 
-.hero-image {
+/* =================================== */
+/* FOTOĞRAF ANİMASYONU VE CHATBOT      */
+/* =================================== */
+
+.animation-wrapper {
     position: relative;
-    display: inline-block;
+    width: 350px;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1 1 300px;
-    max-width: 350px;
 }
 
-    .hero-image::before {
+#animated-profile-pic {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 3px solid #00d9ff;
+    object-fit: cover;
+    z-index: 100;
+    transition: all 2.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+    /* === MAVI PARLAMAYI GERI GETIREN KOD === */
+    #animated-profile-pic::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -140,9 +171,139 @@ nav ul {
         filter: blur(50px);
         transform: translate(-50%, -50%);
         z-index: -1;
+        transition: opacity 1.5s ease-out; /* Parlamanin yavasca kaybolmasini saglar */
+        opacity: 1; /* Baslangicta gorunur */
     }
 
-/* Metin Stilleri */
+    /* === JS tarafindan 'is-animating' classi eklendiginde parlama kaybolur === */
+    #animated-profile-pic.is-animating::before {
+        opacity: 0;
+    }
+
+#header-pic-placeholder {
+    width: 40px;
+    height: 40px;
+}
+
+.header-profile-pic-static {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00d9ff;
+}
+
+/* Chatbot stilleri */
+.chatbot-container {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    width: 350px;
+    height: 450px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+    .chatbot-container.visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+.chatbot-header {
+    background: #00d9ff;
+    color: #121212;
+    padding: 10px 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.chatbot-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.4;
+}
+
+    .message p {
+        margin: 0;
+    }
+
+.bot-message {
+    background: #3a3a3a;
+    color: #f1f1f1;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+}
+
+.user-message {
+    background: #00d9ff;
+    color: #121212;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+}
+
+.chatbot-input-form {
+    display: flex;
+    border-top: 1px solid #333;
+}
+
+    .chatbot-input-form input {
+        flex-grow: 1;
+        background: #3a3a3a;
+        border: none;
+        padding: 15px;
+        color: white;
+        font-size: 14px;
+    }
+
+        .chatbot-input-form input:focus {
+            outline: none;
+        }
+
+    .chatbot-input-form button {
+        background: #00d9ff;
+        border: none;
+        padding: 0 20px;
+        color: #121212;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+
+        .chatbot-input-form button:hover {
+            background: #00bcd4;
+        }
+
+.chatbot-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 6px;
+}
+
+/* =================================== */
+/* Metin Stilleri                      */
+/* =================================== */
 .hero-text h1 {
     font-size: 48px;
 }
@@ -151,11 +312,11 @@ nav ul {
     font-size: 24px;
 }
 
-    .hero-text h3 span {
+    .hero-text h3 span.typing {
         color: #00d9ff;
+        font-weight: bold;
     }
 
-/* Sosyal Medya İkonları */
 .social-icons {
     margin: 20px 0;
 }
@@ -172,12 +333,11 @@ nav ul {
             color: #00d9ff;
         }
 
-/* Buton */
 .btn {
     display: inline-block;
     padding: 10px 20px;
     background: #00d9ff;
-    color: white;
+    color: #121212;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
@@ -188,15 +348,9 @@ nav ul {
         background: #00bcd4;
     }
 
-/* Profil Fotoğrafı */
-.hero-image img {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-/* About Sayfası */
+/* =================================== */
+/* About Sayfası                       */
+/* =================================== */
 .about-section {
     max-width: 1000px;
     margin: 100px auto;
@@ -223,7 +377,9 @@ nav ul {
         color: #ccc;
     }
 
-/* Responsive Ayarlar */
+/* =================================== */
+/* Responsive Ayarlar                  */
+/* =================================== */
 @media screen and (max-width: 1024px) {
     .hero-text h1 {
         font-size: 36px;
@@ -251,12 +407,12 @@ nav ul {
     .hero {
         flex-direction: column;
         padding: 30px 5%;
-        height: auto;
+        min-height: auto;
         text-align: center;
     }
 
     .hero-text,
-    .hero-image {
+    .animation-wrapper {
         max-width: 100%;
         flex: none;
     }
@@ -287,10 +443,5 @@ nav ul {
     .lang-button {
         font-size: 14px;
         padding: 6px 14px;
-    }
-
-    .lang-dropdown button {
-        font-size: 13px;
-        padding: 8px 15px;
     }
 }
