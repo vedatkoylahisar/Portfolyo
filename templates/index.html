@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
-<!-- Sayfa basligini, app.py'den gelen 'texts' sozlugunu kullanarak ayarlar -->
+<!-- ... (block title ve hero-text kısmı aynı) ... -->
 {% block title %}{{ texts.home }} - {{ texts.name }}{% endblock %}
 
 {% block content %}
 <section class="hero">
     <div class="hero-text">
-        <!-- Tum metinler 'texts' sozlugunden alinir -->
+        <!-- ... (greeting, name, typingText, social-icons, cv button... hepsi aynı) ... -->
+        <!-- ... existing code ... -->
         <h3>{{ texts.greeting }}</h3>
         <h1>{{ texts.name }}</h1>
         <h3>
@@ -16,38 +17,34 @@
         <p>{{ texts.description }}</p>
 
         <div class="social-icons">
+            <!-- ... existing code ... -->
             <a href="https://www.linkedin.com/in/vedat-koylahisar-98790b238/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://github.com/vedatkoylahisar" target="_blank"><i class="fab fa-github"></i></a>
             <a href="mailto:vedatkylhsr@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
-
-        <!--
-            ================================================================
-            İŞTE DÜZELTME BURADA!
-            ================================================================
-            Butonun 'href' ozelligi, static/files klasorundeki cv.pdf dosyasina
-            yonlendirildi. 'download' ozelligi, dosyanin tarayicida acilmak
-            yerine dogrudan indirilmesini saglar.
-        -->
+        <!-- ... existing code ... -->
         <a href="{{ url_for('static', filename='files/cv.pdf') }}" class="btn" download="Vedat_Koylahisar_CV.pdf">{{ texts.downloadCV }}</a>
     </div>
 
-    <!-- Bu blok, animasyonlu fotografi ve gizli chatbot'u icerir -->
+    <!-- ... (animation-wrapper ve img aynı) ... -->
     <div class="animation-wrapper">
         <img src="{{ url_for('static', filename='img/vedatpp.jpg') }}" alt="Profil Fotografi" id="animated-profile-pic" />
 
         <!-- Gizli Chatbot -->
         <div class="chatbot-container" id="chatbot-container">
             <div class="chatbot-header">
-                <p>Sohbet Asistanı</p>
+                <!-- DEGISTI: Statik metin yerine degisken kullanildi -->
+                <p>{{ texts.chatbotTitle }}</p>
             </div>
             <div class="chatbot-messages" id="chatbot-messages">
                 <div class="message bot-message">
-                    <p>Merhaba! Ben Vedat'ın dijital asistanıyım. Nasıl yardımcı olabilirim?</p>
+                    <!-- DEGISTI: Statik metin yerine degisken kullanildi -->
+                    <p>{{ texts.chatbotHello }}</p>
                 </div>
             </div>
             <form class="chatbot-input-form" id="chatbot-form">
-                <input type="text" id="chatbot-input" placeholder="Bir mesaj yazın..." autocomplete="off">
+                <!-- DEGISTI: Statik placeholder yerine degisken kullanildi -->
+                <input type="text" id="chatbot-input" placeholder="{{ texts.chatbotPlaceholder }}" autocomplete="off">
                 <button type="submit"><i class="fas fa-paper-plane"></i></button>
             </form>
         </div>

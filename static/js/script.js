@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //---------------------------------
     // DIL SECICI DROPDOWN MENUSU
+    // (Kodun degismedi)
     //---------------------------------
     const langButton = document.getElementById('langButton');
     const langDropdown = document.getElementById('langDropdown');
@@ -72,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //---------------------------------
     // YAZI YAZMA ANIMASYONU
+    // (Kodun degismedi, sadece Turkce karakterler kaldirildi)
     //---------------------------------
     const typingElement = document.querySelector(".typing");
     if (typingElement) {
@@ -111,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //---------------------------------
-    // CHATBOT ISLEVSELLIGI
+    // CHATBOT ISLEVSELLIGI (GUNCEL VE DUZELTILMIS KOD)
     //---------------------------------
     const chatbotForm = document.getElementById('chatbot-form');
     const chatbotInput = document.getElementById('chatbot-input');
@@ -119,36 +121,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (chatbotForm) {
         chatbotForm.addEventListener('submit', async (e) => {
+            // 1. Sayfanin yenilenmesini engelle
             e.preventDefault();
+
+            // 2. Mesaji al
             const userMessage = chatbotInput.value.trim();
             if (userMessage === "") return;
 
-            addMessage(userMessage, 'user-message');
+            // 3. Kullanici mesajini ekrana bas ve input'u temizle
+            addMessage('user', userMessage);
             chatbotInput.value = "";
 
+            // 4. "Yaziyor..." mesaji ekle
+            const loadingMessage = addMessage('bot', '...');
+
             try {
+                // 5. Backend'e '/chat' rotasina istek at
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: userMessage })
                 });
+
+                if (!response.ok) {
+                    throw new Error('Sunucu yanit vermedi');
+                }
+
                 const data = await response.json();
-                addMessage(data.response, 'bot-message');
+
+                // 6. KRITIK DUZELTME: 'data.response' DEGIL, 'data.reply'
+                // "..." mesajini gercek cevapla guncelle
+                loadingMessage.querySelector('p').textContent = data.reply;
+
             } catch (error) {
                 console.error("Chatbot hatasi:", error);
-                addMessage("Üzgünüm, bir sorun oluþtu.", 'bot-message');
+                // Hata olursa "..." mesajini hata mesajiyla guncelle
+                loadingMessage.querySelector('p').textContent = "Uzgunum, bir sorun olustu."; // Turkce karakter kaldirildi
             }
         });
     }
 
-    function addMessage(text, className) {
-        if (!chatbotMessages) return;
+    // GUNCEL addMessage FONKSIYONU
+    // Bu fonksiyon, 'user' veya 'bot' alir ve uygun class'i kendi ekler
+    function addMessage(sender, text) {
+        if (!chatbotMessages) return; // Guvenlik kontrolu
+
         const messageElement = document.createElement('div');
-        messageElement.classList.add('message', className);
+        messageElement.classList.add('message');
+
         const textElement = document.createElement('p');
         textElement.textContent = text;
+
+        if (sender === 'user') {
+            messageElement.classList.add('user-message');
+        } else {
+            messageElement.classList.add('bot-message');
+        }
+
         messageElement.appendChild(textElement);
         chatbotMessages.appendChild(messageElement);
+
+        // Pencereyi en alta kaydir
         chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+        // "Yaziyor..." mesajini guncelleyebilmek icin elementi geri dondur
+        return messageElement;
     }
 });
