@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-<!-- Sayfa basligini ayarlar -->
 {% block title %}{{ texts.portfolio }} - {{ texts.name }}{% endblock %}
 
 {% block content %}
@@ -11,27 +10,30 @@
     </div>
 
     <div class="portfolio-grid">
-        <!--
-            ================================================================
-            KISA YOL BURADA!
-            ================================================================
-            Bu 'for' dongusu, app.py'den gelen 'projects' listesindeki
-            her bir proje icin asagidaki HTML blogunu otomatik olarak olusturur.
-        -->
         {% for project in projects %}
         <div class="portfolio-item">
             <div class="portfolio-item-content">
+                <!-- Baslik (duz metin, tiklanamaz) -->
                 <h3>{{ project.title }}</h3>
-                <p>{{ project.desc }}</p>
+
+                <!-- Aciklama -->
+                <p>{{ project.description or project.desc }}</p>
+
+                <!-- Linkler -->
                 <div class="portfolio-item-links">
-                    <a href="{{ project.github }}" class="btn-outline"><i class="fab fa-github"></i> {{ texts.githubButton }}</a>
-                    <a href="{{ project.demo }}" class="btn">{{ texts.demoButton }}</a>
+                    {% if project.github %}
+                    <a href="{{ project.github }}" class="btn-outline" target="_blank"><i class="fab fa-github"></i> {{ texts.githubButton }}</a>
+                    {% endif %}
+                    {% if project.demo %}
+                    <a href="{{ project.demo }}" class="btn" target="_blank">{{ texts.demoButton }}</a>
+                    {% endif %}
+                    {% if project.url %}
+                    <a href="{{ project.url }}" class="btn" target="_blank">View Kaggle</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
         {% endfor %}
-        <!-- Dongu bittikten sonra artik manuel kod bloguna ihtiyac yok -->
-
     </div>
 </section>
 {% endblock %}

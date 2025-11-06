@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import json
 import requests # HTTP istekleri icin
 
+os.environ["KAGGLE_CONFIG_DIR"] = r"C:\Users\vedat\Desktop\Portfolyo"
+
+from kaggle.api.kaggle_api_extended import KaggleApi
 # .env dosyasindaki degiskenleri yukle
 load_dotenv()
 
@@ -189,6 +192,32 @@ You are not a general AI. You do not know the current date, time, weather, or ne
         print(f"Chatbot Hata: {e}")
         return jsonify({'reply': error_message}), 500
 
+def fetch_kaggle_projects():
+    try:
+        api = KaggleApi()
+        api.authenticate()
+
+        username = os.getenv("KAGGLE_USERNAME") or "vedatkoylahisar"
+
+        # Son 10 projeyi al
+        kernels = api.kernels_list(user=username, page_size=10)
+        kernels = list(kernels)  # iterable -> liste
+
+        projects = []
+        for k in kernels:
+            desc = getattr(k, 'description', None) or "No description provided."
+            projects.append({
+                    "title": getattr(k, 'title', 'Untitled'),
+                    # Description boşsa hiç yazma
+                    "description": getattr(k, 'description', None),
+                    "url": f"https://www.kaggle.com/code/{username}/{k.ref.split('/')[-1]}",
+                    "image": "/static/images/kaggle_logo.png"
+                            })
+        return projects
+    except Exception as e:
+        print("Kaggle API error:", e)
+        return []
+
 
 # --- Sayfa Route'lari (Degisiklik Yok) ---
 @app.route("/")
@@ -203,12 +232,18 @@ def about():
 def services():
     return render_template("services.html", active='services')
 
+# --- /portfolio route ---
 @app.route("/portfolio")
 def portfolio():
-    # Veriler global degiskenden geliyor
     lang_code = session.get('lang', 'en')
-    projects_list = PROJECTS.get(lang_code, PROJECTS.get('en', []))
-    return render_template("portfolio.html", active='portfolio', projects=projects_list)
+    
+    kaggle_projects = fetch_kaggle_projects()  # son 10 projeyi çek
+    projects_list = PROJECTS.get(lang_code, PROJECTS['en'])  # siteye ekli diğer projeler
+    
+    # İstersen Kaggle projeleri + diğer projeler
+    all_projects = projects_list + kaggle_projects
+
+    return render_template("portfolio.html", active='portfolio', projects=all_projects)
 
 @app.route("/contact")
 def contact():
