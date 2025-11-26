@@ -32,38 +32,49 @@ MENU_ITEMS = []
 LANGUAGE_NAMES = {}
 TRANSLATIONS = {}
 PROJECTS = {}
+SKILLS = {}  # <<< SKILLS değişkeni
 
 def load_data_from_json():
     """data.json dosyasindaki tum verileri global degiskenlere yukler."""
-    global MENU_ITEMS, LANGUAGE_NAMES, TRANSLATIONS, PROJECTS
+    global MENU_ITEMS, LANGUAGE_NAMES, TRANSLATIONS, PROJECTS, SKILLS
     try:
-        # UTF-8 kodlamasi ile dosyayi ac
         with open('data.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Verileri global degiskenlere ata
+        # Global degiskenlere ata
         MENU_ITEMS = data.get("MENU_ITEMS", [])
         LANGUAGE_NAMES = data.get("LANGUAGE_NAMES", {})
         TRANSLATIONS = data.get("TRANSLATIONS", {})
         PROJECTS = data.get("PROJECTS", {})
+        SKILLS = data.get("SKILLS", {})
+
+        # Kontrol ve uyarı
+        if not TRANSLATIONS:
+            print("UYARI: TRANSLATIONS eksik olabilir.")
+        if not PROJECTS:
+            print("UYARI: PROJECTS eksik olabilir.")
+        if not SKILLS:
+            print("UYARI: SKILLS eksik olabilir.")
         
-        if not TRANSLATIONS or not PROJECTS:
-            print("UYARI: data.json dosyasinda TRANSLATIONS veya PROJECTS eksik olabilir.")
-            
+        # skillsIntro eksikse boş string olarak ekle
+        for lang_code, texts in TRANSLATIONS.items():
+            if "skillsIntro" not in texts:
+                texts["skillsIntro"] = ""
+
     except FileNotFoundError:
         print("="*50)
-        print("HATA: data.json dosyasi bulunamadi!")
-        print("Lutfen app.py ile ayni dizinde oldugundan emin olun.")
+        print("HATA: data.json dosyasi bulunamadi! Lutfen app.py ile ayni dizinde oldugundan emin olun.")
         print("="*50)
     except json.JSONDecodeError:
         print("="*50)
-        print("HATA: data.json dosyasi hatali formatta. Gecerli bir JSON oldugundan emin olun.")
+        print("HATA: data.json hatali formatta. Gecerli bir JSON oldugundan emin olun.")
         print("="*50)
     except Exception as e:
         print(f"data.json okunurken beklenmedik bir hata olustu: {e}")
 
 # Uygulama basladiginda verileri yukle
 load_data_from_json()
+
 
 
 #======================================================================
@@ -226,23 +237,45 @@ def home():
 
 @app.route("/about")
 def about():
-    return render_template("about.html", active='about')
+    lang_code = session.get('lang', 'en')
+
+    current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS["en"])
+    current_skills_data = SKILLS.get(lang_code, SKILLS["en"])
+    current_skills_intro = current_texts.get("skillsIntro", "")  # <<< BURASI EKLENDİ
+
+    return render_template(
+        "about.html",
+        active='about',
+        texts=current_texts,
+        skills=current_skills_data,
+        skillsIntro=current_skills_intro  # <<< BURASI EKLENDİ
+    )
+
+
+
 
 @app.route("/services")
 def services():
     return render_template("services.html", active='services')
 
-# --- /portfolio route ---
 @app.route("/portfolio")
 def portfolio():
     lang_code = session.get('lang', 'en')
     
-    kaggle_projects = fetch_kaggle_projects()  # son 10 projeyi çek
-    projects_list = PROJECTS.get(lang_code, PROJECTS['en'])  # siteye ekli diğer projeler
+    # Yerel projeleri al (data.json'dan)
+    # Eğer lang_code için proje yoksa, default olarak 'en' kullan
+    projects_from_json = PROJECTS.get(lang_code, PROJECTS.get('en', []))
     
-    # İstersen Kaggle projeleri + diğer projeler
-    all_projects = projects_list + kaggle_projects
+    # Kaggle projelerini çek (Bu projelerin 'desc' yerine 'description' kullandığını varsayıyoruz)
+    kaggle_projects = fetch_kaggle_projects()
+    
+    # Tüm projeleri birleştir
+    all_projects = projects_from_json + kaggle_projects
 
+    # HATA AYIKLAMA (DEBUG) İÇİN: Konsola kaç proje çekildiğini yazdırın
+    print(f"DEBUG: {len(projects_from_json)} JSON projesi ve {len(kaggle_projects)} Kaggle projesi çekildi. Toplam: {len(all_projects)}")
+
+    # Eğer all_projects listesi boşsa, şablonunuzda hiçbir şey görünmez.
     return render_template("portfolio.html", active='portfolio', projects=all_projects)
 
 @app.route("/contact")
