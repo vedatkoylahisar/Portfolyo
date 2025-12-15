@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify , flash
 from dotenv import load_dotenv
 import json
 import requests # HTTP istekleri icin
+import smtplib
+import re
+from email.message import EmailMessage
 
-os.environ["KAGGLE_CONFIG_DIR"] = r"C:\Users\vedat\Desktop\Portfolyo"
+basedir = os.path.abspath(os.path.dirname(__file__))
+os.environ["KAGGLE_CONFIG_DIR"] = basedir
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 # .env dosyasindaki degiskenleri yukle
@@ -13,6 +17,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
+EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 # === Hugging Face API Ayarlari (Degisiklik Yok) ===
 HF_API_KEY = os.environ.get("HUGGINGFACE_API_KEY")
@@ -33,6 +39,10 @@ LANGUAGE_NAMES = {}
 TRANSLATIONS = {}
 PROJECTS = {}
 SKILLS = {}  # <<< SKILLS değişkeni
+
+with open("chatbot_contact_flow.json", "r", encoding="utf-8") as f:
+    CONTACT_FLOW = json.load(f)
+
 
 def load_data_from_json():
     """data.json dosyasindaki tum verileri global degiskenlere yukler."""
@@ -130,6 +140,7 @@ def chat():
         if not user_message:
             return jsonify({'error': 'Mesaj bulunamadi'}), 400
 
+
         # 1. CV'den gelen SABIT bilgileri al
         vedat_context = current_texts.get("chatbot_context", "")
 
@@ -149,6 +160,10 @@ You are a professional portfolio assistant for Vedat Koylahisar. Your name is 'Y
 Your primary goal is to answer user questions based *ONLY* on the facts provided below.
 You MUST respond in the user's current language: {lang_name}.
 You are not a general AI. You do not know the current date, time, weather, or news.
+If the user is chatting normally during a contact process,
+answer naturally like a chatbot.
+Do not repeat contact questions unless it makes sense.
+
 
 **Strict Rules:**
 1. Do not invent or assume any information not listed in the facts.
@@ -278,9 +293,43 @@ def portfolio():
     # Eğer all_projects listesi boşsa, şablonunuzda hiçbir şey görünmez.
     return render_template("portfolio.html", active='portfolio', projects=all_projects)
 
-@app.route("/contact")
+
+def send_mail(name, email, message):
+    msg = EmailMessage()
+    msg["Subject"] = "Portfolio Iletisim Mesaji"
+    msg["From"] = EMAIL_ADDRESS
+    msg["To"] = EMAIL_ADDRESS
+
+    msg.set_content(f"""
+Yeni bir iletisim mesaji aldin:
+
+Isim: {name}
+Gonderen Mail: {email}
+
+Mesaj:
+{message}
+""")
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
+
+
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html", active='contact')
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        message = request.form["message"]
+
+        send_mail(name, email, message)
+
+        flash("Mesajiniz basariyla gonderildi.", "success")
+        return redirect(url_for("contact"))
+
+    return render_template("contact.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

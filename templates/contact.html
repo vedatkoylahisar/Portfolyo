@@ -12,7 +12,7 @@
         <div class="contact-left">
 
             <h3>{{ texts.contactFormTitle }}</h3>
-            <form action="#" method="POST" class="contact-form">
+            <form action="{{ url_for('contact') }}" method="POST" class="contact-form">
                 <div class="form-group">
                     <input type="text" name="name" placeholder="{{ texts.formName }}" required>
                     <input type="email" name="email" placeholder="{{ texts.formEmail }}" required>

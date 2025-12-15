@@ -1,0 +1,32 @@
+{
+  "start": {
+    "tr": "Ismin nedir?",
+    "en": "What is your name?",
+    "de": "Wie heissen Sie?"
+  },
+  "ask_email": {
+    "tr": "{{name}}, e-posta adresin nedir?",
+    "en": "{{name}}, what is your email?",
+    "de": "{{name}}, wie lautet Ihre E-Mail-Adresse?"
+  },
+  "ask_message": {
+    "tr": "Mesajin nedir?",
+    "en": "What is your message?",
+    "de": "Was ist Ihre Nachricht?"
+  },
+  "confirm": {
+    "tr": "Mesajin gonderildi.",
+    "en": "Your message has been sent.",
+    "de": "Ihre Nachricht wurde gesendet."
+  },
+  "cancel": {
+    "tr": "Iptal edildi.",
+    "en": "Cancelled.",
+    "de": "Abgebrochen."
+  },
+  "invalid_email": {
+    "tr": "Gecerli bir e-posta gir.",
+    "en": "Please enter a valid email.",
+    "de": "Bitte geben Sie eine gueltige E-Mail ein."
+  }
+}
