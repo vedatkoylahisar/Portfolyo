@@ -310,9 +310,22 @@ Mesaj:
 {message}
 """)
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        smtp.send_message(msg)
+    try:
+        # SMTP_SSL yerine standart SMTP ve 587 portunu kullanıyoruz
+        # timeout=30 ekledik ki işlem uzarsa Gunicorn worker'ı öldürmesin, kod hata versin
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as smtp:
+            smtp.ehlo()            # Sunucuya merhaba de
+            smtp.starttls()        # Bağlantıyı şifrele (TLS)
+            smtp.ehlo()            # Tekrar merhaba de
+            
+            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+            print("Mail basariyla gonderildi!")
+            
+    except Exception as e:
+        print(f"Mail gonderme hatasi: {e}")
+        # Hata olsa bile uygulamanın çökmemesi için burada pass geçiyoruz
+        pass
 
 
 
