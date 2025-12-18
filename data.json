@@ -219,68 +219,143 @@
       {
         "icon_class": "fas fa-code",
         "title_key": "fullstackDev",
-        "items": [ "C# & ASP.NET Core MVC", "React & Next.js", "Node.js", "HTML5 / CSS3", "JavaScript (ES6+)" ]
+        "items": [
+          "C# & ASP.NET Core MVC",
+          "React & Next.js",
+          "Node.js",
+          "HTML5 / CSS3",
+          "JavaScript (ES6+)"
+        ]
       },
       {
         "icon_class": "fas fa-database",
         "title_key": "backendDb",
-        "items": [ "Python (FastAPI)", "Restful API Design", "MongoDB", "PostgreSQL", "MySQL / MSSQL (SSMS)" ]
+        "items": [
+          "Python (FastAPI)",
+          "RESTful API Design",
+          "MongoDB",
+          "PostgreSQL",
+          "MySQL / MSSQL (SSMS)"
+        ]
       },
       {
         "icon_class": "fas fa-robot",
         "title_key": "aiMl",
-        "items": [ "Machine Learning", "Deep Learning", "LLM Development" ]
+        "items": [
+          "Pandas",
+          "NumPy",
+          "Matplotlib",
+          "Seaborn",
+          "Scikit-learn",
+          "TensorFlow"
+        ]
       },
       {
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
-        "items": [ "AWS Services (S3, EC2)", "Azure Fundamentals", "CI/CD (GitHub Actions)", "Automation and Scripting" ]
+        "items": [
+          "Git & GitHub (Version Control)",
+          "Cloud Deployment with Render",
+          "Cloudflare DNS & Domain Management",
+          "Firebase Fundamentals (Previous Experience)"
+        ]
       }
     ],
+
     "tr": [
       {
         "icon_class": "fas fa-code",
         "title_key": "fullstackDev",
-        "items": [ "C# & ASP.NET Core MVC", "React & Next.js", "Node.js", "HTML5 / CSS3", "JavaScript (ES6+)" ]
+        "items": [
+          "C# & ASP.NET Core MVC",
+          "React & Next.js",
+          "Node.js",
+          "HTML5 / CSS3",
+          "JavaScript (ES6+)"
+        ]
       },
       {
         "icon_class": "fas fa-database",
         "title_key": "backendDb",
-        "items": [ "Python (FastAPI)", "Restful API Tasarimi", "MongoDB", "PostgreSQL", "MySQL / MSSQL (SSMS)" ]
+        "items": [
+          "Python (FastAPI)",
+          "RESTful API Tasarimi",
+          "MongoDB",
+          "PostgreSQL",
+          "MySQL / MSSQL (SSMS)"
+        ]
       },
       {
         "icon_class": "fas fa-robot",
         "title_key": "aiMl",
-        "items": [ "Makine Ogrenmesi", "Derin Ogrenme", "LLM Gelistirme" ]
+        "items": [
+          "Pandas",
+          "NumPy",
+          "Matplotlib",
+          "Seaborn",
+          "Scikit-learn",
+          "TensorFlow"
+        ]
       },
       {
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
-        "items": [ "AWS Servisleri (S3, EC2)", "Azure Temelleri", "CI/CD (GitHub Actions)", "Otomasyon ve Scripting" ]
+        "items": [
+          "Git & GitHub (Version Control)",
+          "Cloud Deployment with Render",
+          "Cloudflare DNS & Domain Management",
+          "Firebase Fundamentals (Previous Experience)"
+        ]
       }
     ],
+
     "de": [
       {
         "icon_class": "fas fa-code",
         "title_key": "fullstackDev",
-        "items": [ "C# & ASP.NET Core MVC", "React & Next.js", "Node.js", "HTML5 / CSS3", "JavaScript (ES6+)" ]
+        "items": [
+          "C# & ASP.NET Core MVC",
+          "React & Next.js",
+          "Node.js",
+          "HTML5 / CSS3",
+          "JavaScript (ES6+)"
+        ]
       },
       {
         "icon_class": "fas fa-database",
         "title_key": "backendDb",
-        "items": [ "Python (FastAPI)", "Restful API Design", "MongoDB", "PostgreSQL", "MySQL / MSSQL (SSMS)" ]
+        "items": [
+          "Python (FastAPI)",
+          "RESTful API Design",
+          "MongoDB",
+          "PostgreSQL",
+          "MySQL / MSSQL (SSMS)"
+        ]
       },
       {
         "icon_class": "fas fa-robot",
         "title_key": "aiMl",
-        "items": [ "Maschinelles Lernen", "Tiefes Lernen", "LLM Entwicklung" ]
+        "items": [
+          "Pandas",
+          "NumPy",
+          "Matplotlib",
+          "Seaborn",
+          "Scikit-learn",
+          "TensorFlow"
+        ]
       },
       {
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
-        "items": [ "AWS Services (S3, EC2)", "Azure Fundamentals", "CI/CD (GitHub Actions)", "Automation and Scripting" ]
+        "items": [
+          "Git & GitHub (Version Control)",
+          "Cloud Deployment with Render",
+          "Cloudflare DNS & Domain Management",
+          "Firebase Fundamentals (Previous Experience)"
+        ]
       }
     ]
+
   },
   "PROJECTS": {
     "en": [
