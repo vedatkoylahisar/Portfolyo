@@ -1,16 +1,73 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
-<!-- Sets the page title -->
 {% block title %}{{ texts.contact }} - {{ texts.name }}{% endblock %}
 
 {% block content %}
+
+<style>
+    /* Modal Karartma Arka Planı */
+    #flash-modal.modal-overlay {
+        display: none; /* JS ile flex yapılacak */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.9) !important;
+        z-index: 2147483647 !important; /* En üst katman */
+        justify-content: center !important;
+        align-items: center !important;
+        backdrop-filter: blur(8px) !important;
+    }
+
+    /* Ortadaki Kutu */
+    #flash-modal .modal-content {
+        background: #1e1e1e !important;
+        border: 2px solid #00d9ff !important;
+        padding: 40px !important;
+        border-radius: 20px !important;
+        text-align: center !important;
+        max-width: 450px !important;
+        width: 90% !important;
+        box-shadow: 0 0 50px rgba(0, 217, 255, 0.5) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 20px !important;
+    }
+
+    /* Yazı */
+    #flash-modal #modal-message {
+        color: #ffffff !important;
+        font-size: 1.3rem !important;
+        font-weight: 500 !important;
+        margin: 10px 0 !important;
+        display: block !important;
+    }
+
+    /* İkonlar */
+    #flash-modal .success-icon {
+        color: #2ecc71 !important;
+        font-size: 4rem !important;
+    }
+
+    #flash-modal .error-icon {
+        color: #e74c3c !important;
+        font-size: 4rem !important;
+    }
+
+    /* Buton */
+    #flash-modal .btn {
+        margin-top: 15px !important;
+        min-width: 120px !important;
+        cursor: pointer !important;
+    }
+</style>
+
 <section class="contact-section">
-    <!-- Baslik ve tanitim yazisi kaldirildi -->
-
     <div class="contact-wrapper">
-        <!-- LEFT COLUMN: Form and Social Media -->
-        <div class="contact-left">
 
+        <div class="contact-left">
             <h3>{{ texts.contactFormTitle }}</h3>
             <form action="{{ url_for('contact') }}" method="POST" class="contact-form">
                 <div class="form-group">
@@ -23,39 +80,27 @@
                 <button type="submit" class="btn">{{ texts.formSend }}</button>
             </form>
 
-            <div class="divider">
-                <span>{{ texts.or }}</span>
-            </div>
+            <div class="divider"><span>{{ texts.or }}</span></div>
 
             <h3>{{ texts.contactSocialTitle }}</h3>
             <div class="social-contact">
                 <a href="https://www.linkedin.com/in/vedat-koylahisar-98790b238/" target="_blank" class="social-link linkedin">
-                    <i class="fab fa-linkedin-in"></i>
-                    <span>LinkedIn</span>
+                    <i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
                 </a>
                 <a href="https://github.com/vedatkoylahisar" target="_blank" class="social-link github">
-                    <i class="fab fa-github"></i>
-                    <span>GitHub</span>
+                    <i class="fab fa-github"></i><span>GitHub</span>
                 </a>
                 <a href="mailto:vedatkylhsr@gmail.com" class="social-link email">
-                    <i class="fas fa-envelope"></i>
-                    <span>Email</span>
+                    <i class="fas fa-envelope"></i><span>Email</span>
                 </a>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: Chatbot -->
         <div class="contact-right">
             <div class="chatbot-container" id="chatbot-container">
-                <div class="chatbot-header">
-                    <!-- This text will be added to app.py later -->
-                    <p>{{ texts.chatbotTitle }}</p>
-                </div>
+                <div class="chatbot-header"><p>{{ texts.chatbotTitle }}</p></div>
                 <div class="chatbot-messages" id="chatbot-messages">
-                    <!-- Chatbot's special intro message for this page -->
-                    <div class="message bot-message">
-                        <p>{{ texts.chatbotContactIntro }}</p>
-                    </div>
+                    <div class="message bot-message"><p>{{ texts.chatbotContactIntro }}</p></div>
                 </div>
                 <form class="chatbot-input-form" id="chatbot-form">
                     <input type="text" id="chatbot-input" placeholder="{{ texts.chatbotPlaceholder }}" autocomplete="off">
@@ -63,6 +108,36 @@
                 </form>
             </div>
         </div>
+
     </div>
 </section>
+
+<div id="flash-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div id="modal-icon"></div>
+        <p id="modal-message"></p>
+        <button onclick="closeModal()" class="btn">Okay</button>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+<script>
+      window.addEventListener('load', function() {
+        // Tarayıcının cache'ini atlatmak için setTimeout kullanıyoruz
+        setTimeout(function() {
+            {% for category, message in messages %}
+              if (typeof showModal === "function") {
+                console.log("Modal tetikleniyor: {{ message }}");
+                showModal("{{ message }}", "{{ category }}");
+              } else {
+                alert("Mesajınız gönderildi: {{ message }}");
+              }
+            {% endfor %}
+        }, 500);
+      });
+</script>
+  {% endif %}
+{% endwith %}
+
 {% endblock %}

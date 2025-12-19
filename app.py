@@ -316,6 +316,9 @@ def send_mail(to_email, subject, message_text):
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
+    lang_code = session.get('lang', 'en')
+    current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
+
     if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
@@ -331,20 +334,28 @@ Mesaj:
 {message}
         """
 
+        # Mail gönderme işlemini dene
         success = send_mail(
-            to_email=os.getenv("MAIL_FROM"),  # mail sana gelsin
-            subject = "Yeni portfolyo iletisim mesaji",
+            to_email=os.getenv("MAIL_FROM"),
+            subject="Yeni portfolyo iletisim mesaji",
             message_text=mail_content
         )
 
         if success:
-            flash("Mesajiniz basariyla gonderildi.", "success")
+            # JSON dosyanızdaki "contactSuccess" anahtarını kullanır, yoksa default mesaj döner
+            msg = current_texts.get("contactSuccess", "Mesajınız başarıyla gönderildi!")
+            flash(msg, "success")
         else:
-            flash("Mail gonderilirken hata olustu.", "danger")
+            # JSON dosyanızdaki "contactError" anahtarını kullanır
+            msg = current_texts.get("contactError", "Mesaj gönderilirken bir hata oluştu.")
+            flash(msg, "error")
 
-        return redirect(url_for("contact"))
+        # ÖNEMLİ: Form gönderildikten sonra aynı sayfaya yönlendiriyoruz (Redirect-After-Post)
+        return redirect(url_for('contact'))
 
-    return render_template("contact.html")
+    # GET request
+    return render_template("contact.html", active='contact')
+
 
 
 

@@ -1,190 +1,191 @@
-//================================================
-// FOTOGRAF ANIMASYONUNU YONETEN KOD
-//================================================
+/* ==========================================================================
+   1. GLOBAL MODAL FONKSÝYONLARI (En Kritik Bölüm)
+   Bu fonksiyonlar HTML'den direkt çaðrýldýðý için en dýþta tanýmlanmalý.
+   ========================================================================== */
 
-// 'window.onload', tum sayfa (resimler, stiller vb.) yuklendikten sonra calisir.
-window.onload = () => {
-    const animatedPic = document.getElementById('animated-profile-pic');
-    const picPlaceholder = document.getElementById('header-pic-placeholder');
-    const chatbotContainer = document.getElementById('chatbot-container');
-    const animationWrapper = document.querySelector('.animation-wrapper'); // Fotografin icinde bulundugu kutu
+function showModal(message, category) {
+    const modal = document.getElementById('flash-modal');
+    const msgPara = document.getElementById('modal-message');
+    const iconDiv = document.getElementById('modal-icon');
 
-    // Bu animasyon sadece anasayfada calisacagi icin,
-    // ilgili elementlerin varligini kontrol ediyoruz.
-    if (animatedPic && picPlaceholder && animationWrapper) {
+    // Eðer modal sayfada yoksa (baþka sayfadaysak) hata verme, çýk.
+    if (!modal || !msgPara || !iconDiv) return;
 
-        // Sayfa yuklendikten 1 saniye sonra animasyonu baslat.
-        setTimeout(() => {
-            // 1. Hedefin (placeholder) ve ana kutunun (wrapper) konumlarini al
-            const targetRect = picPlaceholder.getBoundingClientRect();
-            const wrapperRect = animationWrapper.getBoundingClientRect();
+    // --- KESÝN ÇÖZÜM: MODALI KURTARMA ---
+    // Eðer modal bir div'in içine hapsolmuþsa, onu oradan alýp body'nin en altýna taþýyoruz.
+    // Bu iþlem, 'transform' veya 'position' çakýþmalarýný %100 çözer.
+    document.body.appendChild(modal);
+    // ------------------------------------
 
-            // === ISTE DUZELTME BURADA! ===
-            // Hedefin konumunu, icinde bulundugu kutuya gore hesapliyoruz.
-            // Bu, fotografin tam olarak dogru noktaya gitmesini saglar.
-            const finalTop = targetRect.top - wrapperRect.top;
-            const finalLeft = targetRect.left - wrapperRect.left;
+    // Mesajý ve ikonu ayarla
+    msgPara.innerText = message;
 
-            // 2. Mavi parlamanin kaybolmasi icin ozel class'i ekle
-            animatedPic.classList.add('is-animating');
-
-            // 3. Animasyonlu fotografa yeni ve dogru stilleri uygula.
-            animatedPic.style.width = `${targetRect.width}px`;
-            animatedPic.style.height = `${targetRect.height}px`;
-            animatedPic.style.top = `${finalTop}px`;
-            animatedPic.style.left = `${finalLeft}px`;
-            animatedPic.style.borderWidth = '2px';
-            animatedPic.style.transform = 'translate(0, 0)'; // Merkezleme transform'unu sifirla
-
-            // 4. Fotografin animasyonu biterken (2.5s sonra) chatbot'u goster
-            setTimeout(() => {
-                if (chatbotContainer) {
-                    chatbotContainer.classList.add('visible');
-                }
-            }, 2500);
-
-        }, 1000); // 1 saniye sonra baslat
+    if (category === 'success') {
+        iconDiv.innerHTML = '<i class="fas fa-check-circle success-icon"></i>';
+    } else {
+        iconDiv.innerHTML = '<i class="fas fa-exclamation-circle error-icon"></i>';
     }
-};
+
+    // Kutuyu göster (CSS'deki flex ortalamayý aktif eder)
+    modal.style.display = 'flex';
+}
+
+function closeModal() {
+    const modal = document.getElementById('flash-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Modalýn dýþýndaki siyah alana týklayýnca kapatma
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('flash-modal');
+    if (event.target === modal) {
+        closeModal();
+    }
+});
 
 
-//================================================
-// DIGER SAYFA ISLEVLERI
-//================================================
+/* ==========================================================================
+   2. SAYFA YÜKLENÝNCE ÇALIÞACAKLAR (Chatbot, Dil Seçimi vb.)
+   ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-    //---------------------------------
-    // DIL SECICI DROPDOWN MENUSU
-    // (Kodun degismedi)
-    //---------------------------------
+    // --- DÝL SEÇÝCÝ ---
     const langButton = document.getElementById('langButton');
     const langDropdown = document.getElementById('langDropdown');
+
     if (langButton && langDropdown) {
-        langButton.addEventListener('click', (event) => {
-            event.stopPropagation();
+        langButton.addEventListener('click', (e) => {
+            e.stopPropagation();
             langDropdown.classList.toggle('show');
         });
         window.addEventListener('click', () => {
-            if (langDropdown.classList.contains('show')) {
-                langDropdown.classList.remove('show');
-            }
+            langDropdown.classList.remove('show');
         });
     }
 
-    //---------------------------------
-    // YAZI YAZMA ANIMASYONU
-    // (Kodun degismedi, sadece Turkce karakterler kaldirildi)
-    //---------------------------------
+    // --- YAZI YAZMA (TYPING) ANÝMASYONU ---
     const typingElement = document.querySelector(".typing");
-    if (typingElement) {
-        const dataTexts = typingElement.dataset.texts;
-        if (dataTexts) {
-            try {
-                const textArray = JSON.parse(dataTexts);
-                if (Array.isArray(textArray) && textArray.length > 0) {
-                    let textIndex = 0, charIndex = 0, isDeleting = false;
-                    function typeEffect() {
-                        const currentText = textArray[textIndex];
-                        if (isDeleting) {
-                            charIndex--;
-                        } else {
-                            charIndex++;
-                        }
-                        typingElement.textContent = currentText.substring(0, charIndex);
+    if (typingElement && typingElement.dataset.texts) {
+        try {
+            const textArray = JSON.parse(typingElement.dataset.texts);
+            if (Array.isArray(textArray) && textArray.length > 0) {
+                let textIndex = 0, charIndex = 0, isDeleting = false;
 
-                        if (!isDeleting && charIndex === currentText.length) {
-                            isDeleting = true;
-                            setTimeout(() => { typeEffect(); }, 2000);
-                        } else if (isDeleting && charIndex === 0) {
-                            isDeleting = false;
-                            textIndex = (textIndex + 1) % textArray.length;
-                            setTimeout(() => { typeEffect(); }, 500);
-                        } else {
-                            setTimeout(() => { typeEffect(); }, isDeleting ? 75 : 150);
-                        }
+                function typeEffect() {
+                    const currentText = textArray[textIndex];
+
+                    if (isDeleting) charIndex--;
+                    else charIndex++;
+
+                    typingElement.textContent = currentText.substring(0, charIndex);
+
+                    let typeSpeed = isDeleting ? 75 : 150;
+
+                    if (!isDeleting && charIndex === currentText.length) {
+                        isDeleting = true;
+                        typeSpeed = 2000; // Yazdýktan sonra bekle
+                    } else if (isDeleting && charIndex === 0) {
+                        isDeleting = false;
+                        textIndex = (textIndex + 1) % textArray.length;
+                        typeSpeed = 500; // Sildikten sonra bekle
                     }
-                    typeEffect();
+
+                    setTimeout(typeEffect, typeSpeed);
                 }
-            } catch (e) {
-                console.error("Hata: 'data-texts' verisi JSON formatinda degil.", e);
-                typingElement.textContent = "Developer";
+                typeEffect();
             }
+        } catch (e) {
+            console.error("Typing animation error:", e);
         }
     }
 
-    //---------------------------------
-    // CHATBOT ISLEVSELLIGI (GUNCEL VE DUZELTILMIS KOD)
-    //---------------------------------
+    // --- CHATBOT ÝÞLEVLERÝ ---
     const chatbotForm = document.getElementById('chatbot-form');
     const chatbotInput = document.getElementById('chatbot-input');
     const chatbotMessages = document.getElementById('chatbot-messages');
 
     if (chatbotForm) {
+        // Yardýmcý fonksiyon: Mesaj ekleme
+        function addMessage(sender, text) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
+            messageElement.innerHTML = `<p>${text}</p>`;
+            chatbotMessages.appendChild(messageElement);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            return messageElement;
+        }
+
         chatbotForm.addEventListener('submit', async (e) => {
-            // 1. Sayfanin yenilenmesini engelle
             e.preventDefault();
-
-            // 2. Mesaji al
             const userMessage = chatbotInput.value.trim();
-            if (userMessage === "") return;
+            if (!userMessage) return;
 
-            // 3. Kullanici mesajini ekrana bas ve input'u temizle
+            // Kullanýcý mesajýný göster
             addMessage('user', userMessage);
             chatbotInput.value = "";
 
-            // 4. "Yaziyor..." mesaji ekle
+            // "Yazýyor..." mesajý
             const loadingMessage = addMessage('bot', '...');
 
             try {
-                // 5. Backend'e '/chat' rotasina istek at
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: userMessage })
                 });
 
-                if (!response.ok) {
-                    throw new Error('Sunucu yanit vermedi');
-                }
+                if (!response.ok) throw new Error('API Error');
 
                 const data = await response.json();
-
-                // 6. KRITIK DUZELTME: 'data.response' DEGIL, 'data.reply'
-                // "..." mesajini gercek cevapla guncelle
+                // Cevabý güncelle
                 loadingMessage.querySelector('p').textContent = data.reply;
 
             } catch (error) {
-                console.error("Chatbot hatasi:", error);
-                // Hata olursa "..." mesajini hata mesajiyla guncelle
-                loadingMessage.querySelector('p').textContent = "Uzgunum, bir sorun olustu."; // Turkce karakter kaldirildi
+                console.error("Chatbot Error:", error);
+                loadingMessage.querySelector('p').textContent = "Connection error. Please try again.";
             }
         });
     }
+});
 
-    // GUNCEL addMessage FONKSIYONU
-    // Bu fonksiyon, 'user' veya 'bot' alir ve uygun class'i kendi ekler
-    function addMessage(sender, text) {
-        if (!chatbotMessages) return; // Guvenlik kontrolu
 
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
+/* ==========================================================================
+   3. PROFÝL FOTOÐRAFI ANÝMASYONU (Sadece Anasayfa)
+   Resimlerin yüklenmesini beklemek için 'load' event'i kullanýlýr.
+   ========================================================================== */
+window.addEventListener('load', () => {
+    const animatedPic = document.getElementById('animated-profile-pic');
+    const picPlaceholder = document.getElementById('header-pic-placeholder');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const animationWrapper = document.querySelector('.animation-wrapper');
 
-        const textElement = document.createElement('p');
-        textElement.textContent = text;
+    if (animatedPic && picPlaceholder && animationWrapper) {
+        setTimeout(() => {
+            const targetRect = picPlaceholder.getBoundingClientRect();
+            const wrapperRect = animationWrapper.getBoundingClientRect();
 
-        if (sender === 'user') {
-            messageElement.classList.add('user-message');
-        } else {
-            messageElement.classList.add('bot-message');
-        }
+            const finalTop = targetRect.top - wrapperRect.top;
+            const finalLeft = targetRect.left - wrapperRect.left;
 
-        messageElement.appendChild(textElement);
-        chatbotMessages.appendChild(messageElement);
+            animatedPic.classList.add('is-animating');
 
-        // Pencereyi en alta kaydir
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            // CSS transition ile hareket ettir
+            Object.assign(animatedPic.style, {
+                width: `${targetRect.width}px`,
+                height: `${targetRect.height}px`,
+                top: `${finalTop}px`,
+                left: `${finalLeft}px`,
+                borderWidth: '2px',
+                transform: 'translate(0, 0)'
+            });
 
-        // "Yaziyor..." mesajini guncelleyebilmek icin elementi geri dondur
-        return messageElement;
+            // Animasyon bitince chatbot'u aç
+            setTimeout(() => {
+                if (chatbotContainer) chatbotContainer.classList.add('visible');
+            }, 2500);
+
+        }, 1000);
     }
 });

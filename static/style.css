@@ -1,4 +1,6 @@
-/* Genel Ayarlar */
+/* ========================================= */
+/* 1. GENEL AYARLAR (SENÝN MEVCUT KODLARIN)  */
+/* ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -9,6 +11,7 @@
 body {
     background: #121212;
     color: white;
+    overflow-x: hidden; /* Yatay kaydýrmayý engelle */
 }
 
 /* Üst Menü */
@@ -18,6 +21,8 @@ header {
     align-items: center;
     padding: 20px 10%;
     background: transparent;
+    position: relative;
+    z-index: 100;
 }
 
 .logo {
@@ -39,13 +44,13 @@ nav ul {
             color: white;
             font-weight: 500;
             transition: 0.3s;
-            padding: 5px 10px; /* Kutu þeklinde görünmesi için iç boþluk */
-            border-radius: 5px; /* Kenar yuvarlama */
+            padding: 5px 10px;
+            border-radius: 5px;
         }
 
             nav ul li a:hover {
-                background: #00d9ff; /* Hover durumunda arka plan rengi */
-                color: white; /* Renk deðiþmesin */
+                background: #00d9ff;
+                color: white;
             }
 
 /* Dil Seçici */
@@ -78,7 +83,7 @@ nav ul {
     background: #121212;
     border: 1px solid #00d9ff;
     border-radius: 5px;
-    z-index: 1;
+    z-index: 1000;
 }
 
     .lang-dropdown.show {
@@ -100,13 +105,13 @@ nav ul {
             background: #00d9ff;
         }
 
-/* Ana Bölüm */
+/* Ana Bölüm (Hero) */
 .hero {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 50px 10%;
-    height: 100vh;
+    min-height: 100vh; /* height yerine min-height daha güvenlidir */
 }
 
 .hero-image {
@@ -127,7 +132,6 @@ nav ul {
         z-index: -1;
     }
 
-/* Metin Stilleri */
 .hero-text h1 {
     font-size: 48px;
 }
@@ -140,7 +144,6 @@ nav ul {
         color: #00d9ff;
     }
 
-/* Sosyal Medya Ýkonlarý */
 .social-icons {
     margin: 20px 0;
 }
@@ -157,7 +160,6 @@ nav ul {
             color: #00d9ff;
         }
 
-/* Buton */
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -167,16 +169,278 @@ nav ul {
     border-radius: 5px;
     font-weight: bold;
     transition: 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
     .btn:hover {
         background: #00bcd4;
     }
 
-/* Profil Fotoðrafý */
 .hero-image img {
     width: 300px;
     height: 300px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+/* ========================================= */
+/* 2. ÝLETÝÞÝM SAYFASI (YENÝ EKLENDÝ)        */
+/* ========================================= */
+.contact-section {
+    padding: 50px 10%;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+}
+
+.contact-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 50px;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Mobilde alt alta geçsin */
+}
+
+/* Sol Kolon (Form) */
+.contact-left {
+    flex: 1;
+    min-width: 300px;
+}
+
+    .contact-left h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #00d9ff;
+        border-left: 3px solid #00d9ff;
+        padding-left: 10px;
+    }
+
+.contact-form .form-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.contact-form textarea {
+    height: 150px;
+    resize: none;
+}
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+        border-color: #00d9ff;
+        box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
+    }
+
+.divider {
+    margin: 30px 0;
+    text-align: center;
+    position: relative;
+}
+
+    .divider span {
+        background: #121212;
+        padding: 0 15px;
+        color: #666;
+        position: relative;
+        z-index: 1;
+    }
+
+    .divider::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        background: #333;
+        z-index: 0;
+    }
+
+.social-contact {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+    .social-link:hover {
+        border-color: #00d9ff;
+        color: #00d9ff;
+    }
+
+/* Sað Kolon (Chatbot) */
+.contact-right {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.chatbot-container {
+    width: 100%;
+    max-width: 400px;
+    background: #1e1e1e;
+    border: 1px solid #00d9ff;
+    border-radius: 10px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.1);
+}
+
+.chatbot-header {
+    background: #00d9ff;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Mesaj Balonlarý */
+.message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.bot-message {
+    background: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+.user-message {
+    background: #00d9ff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.chatbot-input-form {
+    display: flex;
+    border-top: 1px solid #333;
+}
+
+    .chatbot-input-form input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 15px;
+        color: white;
+        outline: none;
+    }
+
+    .chatbot-input-form button {
+        background: #00d9ff;
+        border: none;
+        padding: 0 20px;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .chatbot-input-form button:hover {
+            background: #00bcd4;
+        }
+
+
+/* ========================================= */
+/* 3. MODAL (BÝLDÝRÝM KUTUSU) - DÜZELTÝLDÝ   */
+/* ========================================= */
+.modal-overlay {
+    display: none; /* JS ile 'flex' yapýlacak */
+    position: fixed; /* Sayfaya sabitler */
+    top: 0;
+    left: 0;
+    width: 100%; /* Tüm geniþlik */
+    height: 100%; /* Tüm yükseklik */
+    background: rgba(0, 0, 0, 0.85); /* Arka planý karart */
+    z-index: 10000; /* Her þeyin üstünde */
+    /* Ortalamayý saðlayan kritik kodlar */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #1e1e1e;
+    border: 2px solid #00d9ff; /* Mavi Çerçeve */
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: modalPop 0.3s ease-out;
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#modal-message {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Ýkonlar */
+.success-icon {
+    color: #2ecc71;
+    font-size: 4rem;
+}
+
+.error-icon {
+    color: #e74c3c;
+    font-size: 4rem;
 }
