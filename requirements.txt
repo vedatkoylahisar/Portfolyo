@@ -11,3 +11,4 @@ pandas
 numpy
 urllib3
 certifi
+sendgrid
