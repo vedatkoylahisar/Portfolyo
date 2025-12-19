@@ -7,6 +7,8 @@ import requests # HTTP istekleri icin
 import smtplib
 import re
 from email.message import EmailMessage
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, Email
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 os.environ["KAGGLE_CONFIG_DIR"] = basedir
@@ -294,54 +296,56 @@ def portfolio():
     return render_template("portfolio.html", active='portfolio', projects=all_projects)
 
 
-def send_mail(name, email, message):
-    msg = EmailMessage()
-    msg["Subject"] = "Portfolio Iletisim Mesaji"
-    msg["From"] = EMAIL_ADDRESS
-    msg["To"] = EMAIL_ADDRESS
-
-    msg.set_content(f"""
-Yeni bir iletisim mesaji aldin:
-
-Isim: {name}
-Gonderen Mail: {email}
-
-Mesaj:
-{message}
-""")
+def send_mail(to_email, subject, message_text):
+    message = Mail(
+        from_email=os.getenv("MAIL_FROM"),
+        to_emails=to_email,
+        subject=subject,
+        plain_text_content=message_text
+    )
 
     try:
-        # SMTP_SSL yerine standart SMTP ve 587 portunu kullanıyoruz
-        # timeout=30 ekledik ki işlem uzarsa Gunicorn worker'ı öldürmesin, kod hata versin
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as smtp:
-            smtp.ehlo()            # Sunucuya merhaba de
-            smtp.starttls()        # Bağlantıyı şifrele (TLS)
-            smtp.ehlo()            # Tekrar merhaba de
-            
-            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-            smtp.send_message(msg)
-            print("Mail basariyla gonderildi!")
-            
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        sg.send(message)
+        return True
     except Exception as e:
-        print(f"Mail gonderme hatasi: {e}")
-        # Hata olsa bile uygulamanın çökmemesi için burada pass geçiyoruz
-        pass
+        print("Mail gonderme hatasi:", e)
+        return False
 
 
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        name = request.form["name"]
-        email = request.form["email"]
-        message = request.form["message"]
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
 
-        send_mail(name, email, message)
+        mail_content = f"""
+Yeni Iletisim Formu Mesaji
 
-        flash("Mesajiniz basariyla gonderildi.", "success")
+Isim: {name}
+Email: {email}
+
+Mesaj:
+{message}
+        """
+
+        success = send_mail(
+            to_email=os.getenv("MAIL_FROM"),  # mail sana gelsin
+            subject = "Yeni portfolyo iletisim mesaji",
+            message_text=mail_content
+        )
+
+        if success:
+            flash("Mesajiniz basariyla gonderildi.", "success")
+        else:
+            flash("Mail gonderilirken hata olustu.", "danger")
+
         return redirect(url_for("contact"))
 
     return render_template("contact.html")
+
 
 
 if __name__ == "__main__":
