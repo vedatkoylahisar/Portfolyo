@@ -124,7 +124,7 @@ def set_language(lang_code):
     return redirect(request.referrer or url_for('home'))
 
 # ======================================================================
-# GUNCEL CHAT ROTASI (Loop Fix + Mail Robustness)
+# GUNCEL CHAT ROTASI (FIXED: Başlangıç Durumu Hatası Giderildi)
 # ======================================================================
 @app.route("/chat", methods=['POST'])
 def chat():
@@ -133,16 +133,14 @@ def chat():
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
     error_message = current_texts.get('chat_general_knowledge_decline', 'Sorry, I cannot help with that.')
     
-    # Kullanıcı mesajını al
     user_message = request.json.get('message', '').strip()
     if not user_message:
         return jsonify({'error': 'Mesaj bulunamadi'}), 400
 
-    # 2. Durum Kontrolü
+    # 2. Durum Kontrolü (Varsayılan 'idle')
     current_state = session.get('chat_state', 'idle')
     ai_reply = ""
     
-    # Bu değişken "Hayır" denildiğinde döngüye girmeyi engeller
     force_ai_response = False 
 
     # ------------------------------------------------------------------
@@ -150,11 +148,9 @@ def chat():
     # ------------------------------------------------------------------
     if current_state == 'confirming_contact':
         affirmative = ['evet', 'yes', 'ja', 'onay', 'istiyorum', 'tabii', 'ok', 'hıhı', 'yep']
-        negation = ['hayır', 'no', 'nein', 'yok', 'istemiyorum', 'gerek yok', 'kalsın']
         
         msg_lower = user_message.lower()
 
-        # Cevap EVET ise -> İsim sorma adımına geç
         if any(word in msg_lower for word in affirmative):
             session['chat_state'] = 'waiting_name'
             if lang_code == 'tr': ai_reply = "Harika. Öncelikle adınızı öğrenebilir miyim?"
@@ -162,28 +158,25 @@ def chat():
             else: ai_reply = "Great. May I have your name first?"
             return jsonify({'reply': ai_reply})
         
-        # Cevap HAYIR ise -> Eski mesajı geri getir ve AI'ya gitmesini ZORLA
         else:
             session['chat_state'] = 'idle'
-            # Kullanıcının ilk yazdığı (tetikleyen) mesajı hafızadan geri çağır
             user_message = session.get('stored_message', user_message)
-            # DÖNGÜYÜ KIRAN NOKTA: Tetikleyici kontrolünü atla, direkt AI'ya git
             force_ai_response = True 
+            # DİKKAT: Burada current_state'i de güncellemeliyiz ki aşağıdaki IF bloğuna girsin
+            current_state = 'idle' 
 
     # ------------------------------------------------------------------
     # DURUM 1: NORMAL SOHBET MODU (IDLE)
     # ------------------------------------------------------------------
-    # Eğer state 'idle' ise VE form doldurmuyorsak
-    if session.get('chat_state') == 'idle':
+    # HATA BURADAYDI: session.get('chat_state') yerine current_state kullanıyoruz.
+    if current_state == 'idle':
         
         triggers = ['mesaj', 'message', 'mail', 'iletişim', 'contact', 'ulas', 'ulaş', 'email']
-        
-        # Tetikleyici kelime var mı? (AMA force_ai_response True ise bakma!)
         is_trigger = any(keyword in user_message.lower() for keyword in triggers)
         
         if is_trigger and not force_ai_response:
-            session['stored_message'] = user_message # Mesajı sakla
-            session['chat_state'] = 'confirming_contact' # Teyit moduna geç
+            session['stored_message'] = user_message
+            session['chat_state'] = 'confirming_contact'
             
             if lang_code == 'tr': ai_reply = "Bana mesaj bırakmak mı istiyorsunuz? (Evet / Hayır)"
             elif lang_code == 'de': ai_reply = "Möchten Sie eine Nachricht hinterlassen? (Ja / Nein)"
@@ -192,7 +185,10 @@ def chat():
         
         else:
             # --- YAPAY ZEKA (HUGGING FACE) ---
-            if not HF_API_KEY: return jsonify({'reply': error_message}), 500
+            # 1. API KEY KONTROLÜ (Loglara bakarak hatayı gör)
+            if not HF_API_KEY: 
+                print("HATA: HUGGINGFACE_API_KEY sunucuda bulunamadi!")
+                return jsonify({'reply': error_message}), 500
 
             try:
                 lang_name = LANGUAGE_NAMES.get(lang_code, 'English')
@@ -222,13 +218,16 @@ Answer ONLY based on the facts below. Respond in {lang_name}.
                 }
                 
                 response = requests.post("https://router.huggingface.co/v1/chat/completions", headers=headers, json=payload)
-                if response.status_code != 200: return jsonify({'reply': "Model loading..."}), 503
+                
+                if response.status_code != 200: 
+                    print(f"HF API Hatasi: {response.status_code} - {response.text}")
+                    return jsonify({'reply': "Model loading..."}), 503
 
                 ai_reply = response.json()['choices'][0]['message']['content'].strip()
                 return jsonify({'reply': ai_reply})
 
             except Exception as e:
-                print(f"AI Hata: {e}")
+                print(f"AI Kod Hatasi: {e}")
                 return jsonify({'reply': error_message}), 500
 
     # ------------------------------------------------------------------
@@ -256,15 +255,10 @@ Answer ONLY based on the facts below. Respond in {lang_name}.
         email = str(session.get('contact_email', 'Anonim'))
         
         mail_content = f"Chatbot Uzerinden Yeni Mesaj\n\nIsim: {name}\nEmail: {email}\nMesaj:\n{message_body}"
-        
-        # .env dosyasındaki MAIL_FROM adresine (sana) mail atıyoruz.
         target_email = os.getenv("MAIL_FROM")
         
-        print(f"--- Chatbot Mail Denemesi ---\nHedef: {target_email}\nİçerik: {message_body}\n-----------------------------")
-
         try:
             success = send_mail(to_email=target_email, subject=f"Chatbot: {name}", message_text=mail_content)
-            
             if success:
                 if lang_code == 'tr': ai_reply = "Mesajınız alındı ve Vedat'a iletildi!"
                 elif lang_code == 'de': ai_reply = "Nachricht gesendet!"
@@ -272,7 +266,7 @@ Answer ONLY based on the facts below. Respond in {lang_name}.
             else:
                 raise Exception("send_mail False dondu")
         except Exception as e:
-            print(f"KRITIK MAIL HATASI: {e}")
+            print(f"MAIL HATASI: {e}")
             if lang_code == 'tr': ai_reply = "Mesajınız kaydedildi ancak sistemsel bir hata nedeniyle mail atılamadı."
             else: ai_reply = "Message saved but email failed due to system error."
         
@@ -280,6 +274,7 @@ Answer ONLY based on the facts below. Respond in {lang_name}.
         session.pop('stored_message', None)
         return jsonify({'reply': ai_reply})
 
+    # HİÇBİR ŞARTA UYMAZSA (DEBUG İÇİN)
     return jsonify({'reply': "..."})
 
 def fetch_kaggle_projects():
