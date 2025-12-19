@@ -123,102 +123,164 @@ def set_language(lang_code):
         session['lang'] = lang_code
     return redirect(request.referrer or url_for('home'))
 
-# === /CHAT ROTASI (KATI TALIMATLAR ILE HALUSINASYONU ONLER) ===
+# ======================================================================
+# GUNCEL CHAT ROTASI (Loop Fix + Mail Robustness)
+# ======================================================================
 @app.route("/chat", methods=['POST'])
 def chat():
+    # 1. Temel Ayarlar ve Dil
     lang_code = session.get('lang', 'en')
-    # Veriler global degiskenden geliyor
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
     error_message = current_texts.get('chat_general_knowledge_decline', 'Sorry, I cannot help with that.')
+    
+    # Kullanıcı mesajını al
+    user_message = request.json.get('message', '').strip()
+    if not user_message:
+        return jsonify({'error': 'Mesaj bulunamadi'}), 400
 
-    if not HF_API_KEY:
-        print("Hugging Face API Anahtari eksik.")
-        return jsonify({'reply': error_message}), 500
+    # 2. Durum Kontrolü
+    current_state = session.get('chat_state', 'idle')
+    ai_reply = ""
+    
+    # Bu değişken "Hayır" denildiğinde döngüye girmeyi engeller
+    force_ai_response = False 
 
-    try:
-        user_message = request.json.get('message')
-        lang_name = LANGUAGE_NAMES.get(lang_code, 'English')
-
-        if not user_message:
-            return jsonify({'error': 'Mesaj bulunamadi'}), 400
-
-
-        # 1. CV'den gelen SABIT bilgileri al
-        vedat_context = current_texts.get("chatbot_context", "")
-
-        # 2. PROJELER'den DINAMIK bilgileri olustur
-        project_context = "\n**Key Projects (from website):**\n"
-        # Veriler global degiskenden geliyor
-        projects_list = PROJECTS.get(lang_code, PROJECTS.get('en', []))
-        if projects_list:
-            for proj in projects_list:
-                project_context += f"  - {proj['title']}: {proj['desc']}\n"
-        else:
-            project_context = "\n(No projects listed for this language.)\n"
+    # ------------------------------------------------------------------
+    # ÖZEL DURUM: TEYİT AŞAMASI (CONFIRMING)
+    # ------------------------------------------------------------------
+    if current_state == 'confirming_contact':
+        affirmative = ['evet', 'yes', 'ja', 'onay', 'istiyorum', 'tabii', 'ok', 'hıhı', 'yep']
+        negation = ['hayır', 'no', 'nein', 'yok', 'istemiyorum', 'gerek yok', 'kalsın']
         
-        # 3. KATI SISTEM TALIMATI (Halusinasyonu onler)
-        system_prompt = f"""
-You are a professional portfolio assistant for Vedat Koylahisar. Your name is 'Yapay Zeka Asistani'.
-Your primary goal is to answer user questions based *ONLY* on the facts provided below.
-You MUST respond in the user's current language: {lang_name}.
-You are not a general AI. You do not know the current date, time, weather, or news.
-If the user is chatting normally during a contact process,
-answer naturally like a chatbot.
-Do not repeat contact questions unless it makes sense.
+        msg_lower = user_message.lower()
 
+        # Cevap EVET ise -> İsim sorma adımına geç
+        if any(word in msg_lower for word in affirmative):
+            session['chat_state'] = 'waiting_name'
+            if lang_code == 'tr': ai_reply = "Harika. Öncelikle adınızı öğrenebilir miyim?"
+            elif lang_code == 'de': ai_reply = "Super. Darf ich zuerst Ihren Namen erfahren?"
+            else: ai_reply = "Great. May I have your name first?"
+            return jsonify({'reply': ai_reply})
+        
+        # Cevap HAYIR ise -> Eski mesajı geri getir ve AI'ya gitmesini ZORLA
+        else:
+            session['chat_state'] = 'idle'
+            # Kullanıcının ilk yazdığı (tetikleyen) mesajı hafızadan geri çağır
+            user_message = session.get('stored_message', user_message)
+            # DÖNGÜYÜ KIRAN NOKTA: Tetikleyici kontrolünü atla, direkt AI'ya git
+            force_ai_response = True 
 
-**Strict Rules:**
-1. Do not invent or assume any information not listed in the facts.
-2. If the user asks a question not covered by the facts (e.g., "what is the date today?", "bugun gunlerden ne?", "what is the weather?", "who won the game?", "what is 2+2?"), you MUST politely decline. 
-   - Good response (in {lang_name}): "{current_texts['chat_general_knowledge_decline']}"
-   - Bad response: "Today is July 26th."
-3. Stick *only* to the provided facts.
+    # ------------------------------------------------------------------
+    # DURUM 1: NORMAL SOHBET MODU (IDLE)
+    # ------------------------------------------------------------------
+    # Eğer state 'idle' ise VE form doldurmuyorsak
+    if session.get('chat_state') == 'idle':
+        
+        triggers = ['mesaj', 'message', 'mail', 'iletişim', 'contact', 'ulas', 'ulaş', 'email']
+        
+        # Tetikleyici kelime var mı? (AMA force_ai_response True ise bakma!)
+        is_trigger = any(keyword in user_message.lower() for keyword in triggers)
+        
+        if is_trigger and not force_ai_response:
+            session['stored_message'] = user_message # Mesajı sakla
+            session['chat_state'] = 'confirming_contact' # Teyit moduna geç
+            
+            if lang_code == 'tr': ai_reply = "Bana mesaj bırakmak mı istiyorsunuz? (Evet / Hayır)"
+            elif lang_code == 'de': ai_reply = "Möchten Sie eine Nachricht hinterlassen? (Ja / Nein)"
+            else: ai_reply = "Do you want to leave a message? (Yes / No)"
+            return jsonify({'reply': ai_reply})
+        
+        else:
+            # --- YAPAY ZEKA (HUGGING FACE) ---
+            if not HF_API_KEY: return jsonify({'reply': error_message}), 500
 
----
-**Facts about Vedat Koylahisar (from CV/Manual Entry):**
+            try:
+                lang_name = LANGUAGE_NAMES.get(lang_code, 'English')
+                vedat_context = current_texts.get("chatbot_context", "")
+                
+                project_context = "\n**Key Projects:**\n"
+                projects_list = PROJECTS.get(lang_code, PROJECTS.get('en', []))
+                if projects_list:
+                    for proj in projects_list: project_context += f" - {proj['title']}: {proj['desc']}\n"
+                else:
+                    project_context = "\n(No projects listed.)\n"
+                
+                system_prompt = f"""
+You are a professional portfolio assistant for Vedat Koylahisar.
+Answer ONLY based on the facts below. Respond in {lang_name}.
+
+**Facts:**
 {vedat_context}
----
-**Facts about Vedat's Projects (from PROJECTS dictionary):**
+**Projects:**
 {project_context}
----
 """
+                headers = {"Authorization": f"Bearer {HF_API_KEY}", "Content-Type": "application/json"}
+                payload = {
+                    "model": "meta-llama/Llama-3.1-8B-Instruct",
+                    "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_message}],
+                    "max_tokens": 150, "temperature": 0.2
+                }
+                
+                response = requests.post("https://router.huggingface.co/v1/chat/completions", headers=headers, json=payload)
+                if response.status_code != 200: return jsonify({'reply': "Model loading..."}), 503
 
-        headers = {
-            "Authorization": f"Bearer {HF_API_KEY}",
-            "Content-Type": "application/json"
-        }
+                ai_reply = response.json()['choices'][0]['message']['content'].strip()
+                return jsonify({'reply': ai_reply})
 
-        # 4. PAYLOAD'u olustur
-        payload = {
-            "model": "meta-llama/Llama-3.1-8B-Instruct",
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ],
-            "max_tokens": 150,
-            "temperature": 0.2 # Yaratıcılık DÜŞÜK
-        }
+            except Exception as e:
+                print(f"AI Hata: {e}")
+                return jsonify({'reply': error_message}), 500
 
-        response = requests.post("https://router.huggingface.co/v1/chat/completions",
-                                 headers=headers, json=payload)
-
-        if response.status_code != 200:
-            print(f"Hugging Face API Hatasi: {response.status_code} - {response.text}")
-            if response.status_code == 503:
-                loading_msg = "Model su anda yukleniyor, lutfen birkac saniye sonra tekrar deneyin."
-                if lang_code == 'en': loading_msg = "The model is currently loading, please try again in a few seconds."
-                elif lang_code == 'de': loading_msg = "Das Modell wird gerade geladen, bitte versuchen Sie es in wenigen Sekunden erneut."
-                return jsonify({'reply': loading_msg}), 503
-            raise Exception("API request failed")
-
-        data = response.json()
-        ai_reply = data['choices'][0]['message']['content'].strip()
-
+    # ------------------------------------------------------------------
+    # FORM ADIMLARI
+    # ------------------------------------------------------------------
+    elif current_state == 'waiting_name':
+        session['contact_name'] = user_message
+        session['chat_state'] = 'waiting_email'
+        if lang_code == 'tr': ai_reply = f"Memnun oldum {user_message}. E-posta adresinizi yazar mısınız?"
+        elif lang_code == 'de': ai_reply = f"Freut mich, {user_message}. Ihre E-Mail-Adresse bitte?"
+        else: ai_reply = f"Nice to meet you {user_message}. Your email address please?"
         return jsonify({'reply': ai_reply})
 
-    except Exception as e:
-        print(f"Chatbot Hata: {e}")
-        return jsonify({'reply': error_message}), 500
+    elif current_state == 'waiting_email':
+        session['contact_email'] = user_message
+        session['chat_state'] = 'waiting_message'
+        if lang_code == 'tr': ai_reply = "Son olarak mesajınızı yazabilir misiniz?"
+        elif lang_code == 'de': ai_reply = "Und schließlich Ihre Nachricht?"
+        else: ai_reply = "Finally, your message?"
+        return jsonify({'reply': ai_reply})
+
+    elif current_state == 'waiting_message':
+        message_body = str(user_message)
+        name = str(session.get('contact_name', 'Anonim'))
+        email = str(session.get('contact_email', 'Anonim'))
+        
+        mail_content = f"Chatbot Uzerinden Yeni Mesaj\n\nIsim: {name}\nEmail: {email}\nMesaj:\n{message_body}"
+        
+        # .env dosyasındaki MAIL_FROM adresine (sana) mail atıyoruz.
+        target_email = os.getenv("MAIL_FROM")
+        
+        print(f"--- Chatbot Mail Denemesi ---\nHedef: {target_email}\nİçerik: {message_body}\n-----------------------------")
+
+        try:
+            success = send_mail(to_email=target_email, subject=f"Chatbot: {name}", message_text=mail_content)
+            
+            if success:
+                if lang_code == 'tr': ai_reply = "Mesajınız alındı ve Vedat'a iletildi!"
+                elif lang_code == 'de': ai_reply = "Nachricht gesendet!"
+                else: ai_reply = "Message forwarded!"
+            else:
+                raise Exception("send_mail False dondu")
+        except Exception as e:
+            print(f"KRITIK MAIL HATASI: {e}")
+            if lang_code == 'tr': ai_reply = "Mesajınız kaydedildi ancak sistemsel bir hata nedeniyle mail atılamadı."
+            else: ai_reply = "Message saved but email failed due to system error."
+        
+        session['chat_state'] = 'idle'
+        session.pop('stored_message', None)
+        return jsonify({'reply': ai_reply})
+
+    return jsonify({'reply': "..."})
 
 def fetch_kaggle_projects():
     try:

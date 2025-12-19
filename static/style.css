@@ -1,5 +1,5 @@
 /* ========================================= */
-/* 1. GENEL AYARLAR (SENÝN MEVCUT KODLARIN)  */
+/* 1. GENEL AYARLAR                          */
 /* ========================================= */
 * {
     margin: 0;
@@ -11,7 +11,7 @@
 body {
     background: #121212;
     color: white;
-    overflow-x: hidden; /* Yatay kaydýrmayý engelle */
+    overflow-x: hidden; /* Yatay taþmayý engelle */
 }
 
 /* Üst Menü */
@@ -111,7 +111,7 @@ nav ul {
     align-items: center;
     justify-content: space-between;
     padding: 50px 10%;
-    min-height: 100vh; /* height yerine min-height daha güvenlidir */
+    min-height: 100vh;
 }
 
 .hero-image {
@@ -185,7 +185,7 @@ nav ul {
 }
 
 /* ========================================= */
-/* 2. ÝLETÝÞÝM SAYFASI (YENÝ EKLENDÝ)        */
+/* 2. ÝLETÝÞÝM SAYFASI                       */
 /* ========================================= */
 .contact-section {
     padding: 50px 10%;
@@ -199,7 +199,8 @@ nav ul {
     width: 100%;
     gap: 50px;
     justify-content: space-between;
-    flex-wrap: wrap; /* Mobilde alt alta geçsin */
+    align-items: flex-start; /* Elemanlarý yukarý hizala */
+    flex-wrap: wrap;
 }
 
 /* Sol Kolon (Form) */
@@ -294,7 +295,9 @@ nav ul {
         color: #00d9ff;
     }
 
-/* Sað Kolon (Chatbot) */
+/* ========================================= */
+/* 3. CHATBOT (SABÝTLENMÝÞ YÜKSEKLÝK)        */
+/* ========================================= */
 .contact-right {
     flex: 1;
     min-width: 300px;
@@ -308,10 +311,12 @@ nav ul {
     background: #1e1e1e;
     border: 1px solid #00d9ff;
     border-radius: 10px;
+    /* YÜKSEKLÝK SABÝTLEME */
     height: 500px;
+    max-height: 500px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; /* Kutunun dýþýna taþmayý engelle */
     box-shadow: 0 0 20px rgba(0, 217, 255, 0.1);
 }
 
@@ -321,12 +326,15 @@ nav ul {
     text-align: center;
     font-weight: bold;
     color: white;
+    flex-shrink: 0; /* Baþlýðýn sýkýþmasýný engelle */
 }
 
 .chatbot-messages {
-    flex: 1;
+    flex: 1; /* Kalan tüm alaný kapla */
     padding: 15px;
-    overflow-y: auto;
+    /* SCROLL AYARI */
+    overflow-y: auto; /* Yazý taþarsa kaydýrma çubuðu çýkar */
+
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -357,6 +365,8 @@ nav ul {
 .chatbot-input-form {
     display: flex;
     border-top: 1px solid #333;
+    flex-shrink: 0; /* Input alanýnýn kaybolmasýný engelle */
+    background: #1e1e1e;
 }
 
     .chatbot-input-form input {
@@ -381,20 +391,37 @@ nav ul {
             background: #00bcd4;
         }
 
+/* --- ÖZEL KAYDIRMA ÇUBUÐU (SCROLLBAR) --- */
+.chatbot-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+    background: #00d9ff;
+    border-radius: 4px;
+}
+
+    .chatbot-messages::-webkit-scrollbar-thumb:hover {
+        background: #00bcd4;
+    }
+
 
 /* ========================================= */
-/* 3. MODAL (BÝLDÝRÝM KUTUSU) - DÜZELTÝLDÝ   */
+/* 4. MODAL (BÝLDÝRÝM KUTUSU)                */
 /* ========================================= */
 .modal-overlay {
-    display: none; /* JS ile 'flex' yapýlacak */
-    position: fixed; /* Sayfaya sabitler */
+    display: none;
+    position: fixed; /* Fixed: Ekraný takip eder */
     top: 0;
     left: 0;
-    width: 100%; /* Tüm geniþlik */
-    height: 100%; /* Tüm yükseklik */
-    background: rgba(0, 0, 0, 0.85); /* Arka planý karart */
-    z-index: 10000; /* Her þeyin üstünde */
-    /* Ortalamayý saðlayan kritik kodlar */
+    width: 100vw; /* Viewport Width */
+    height: 100vh; /* Viewport Height */
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 99999; /* En üstte */
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(5px);
@@ -402,7 +429,7 @@ nav ul {
 
 .modal-content {
     background: #1e1e1e;
-    border: 2px solid #00d9ff; /* Mavi Çerçeve */
+    border: 2px solid #00d9ff;
     padding: 40px;
     border-radius: 15px;
     text-align: center;
@@ -434,7 +461,6 @@ nav ul {
     font-weight: 500;
 }
 
-/* Ýkonlar */
 .success-icon {
     color: #2ecc71;
     font-size: 4rem;

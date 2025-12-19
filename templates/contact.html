@@ -5,7 +5,9 @@
 {% block content %}
 
 <style>
-    /* Modal Karartma Arka Planı */
+    /* ========================================= */
+    /* 1. MODAL (BİLDİRİM KUTUSU) AYARLARI       */
+    /* ========================================= */
     #flash-modal.modal-overlay {
         display: none; /* JS ile flex yapılacak */
         position: fixed !important;
@@ -20,7 +22,6 @@
         backdrop-filter: blur(8px) !important;
     }
 
-    /* Ortadaki Kutu */
     #flash-modal .modal-content {
         background: #1e1e1e !important;
         border: 2px solid #00d9ff !important;
@@ -36,7 +37,6 @@
         gap: 20px !important;
     }
 
-    /* Yazı */
     #flash-modal #modal-message {
         color: #ffffff !important;
         font-size: 1.3rem !important;
@@ -45,7 +45,6 @@
         display: block !important;
     }
 
-    /* İkonlar */
     #flash-modal .success-icon {
         color: #2ecc71 !important;
         font-size: 4rem !important;
@@ -56,11 +55,102 @@
         font-size: 4rem !important;
     }
 
-    /* Buton */
     #flash-modal .btn {
         margin-top: 15px !important;
         min-width: 120px !important;
         cursor: pointer !important;
+        background: #00d9ff !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        color: white !important;
+        border-radius: 5px !important;
+    }
+
+    /* ========================================= */
+    /* 2. CHATBOT SABİTLEME (SCROLL) AYARLARI    */
+    /* ========================================= */
+
+    /* Ana Kutu: Boyutu kilitliyoruz */
+    #chatbot-container.chatbot-container {
+        width: 100% !important;
+        max-width: 400px !important;
+        /* YÜKSEKLİK KİLİDİ */
+        height: 500px !important;
+        max-height: 500px !important;
+        background: #1e1e1e !important;
+        border: 1px solid #00d9ff !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        flex-direction: column !important; /* Alt alta diz */
+        overflow: hidden !important; /* Dışarı taşanı gizle */
+        box-shadow: 0 0 20px rgba(0, 217, 255, 0.1) !important;
+    }
+
+    /* Başlık */
+    .chatbot-header {
+        background: #00d9ff !important;
+        padding: 15px !important;
+        color: white !important;
+        text-align: center !important;
+        font-weight: bold !important;
+        flex-shrink: 0 !important; /* Sıkışmayı önle */
+    }
+
+        .chatbot-header p {
+            margin: 0 !important;
+        }
+
+    /* Mesaj Alanı: Burası kaydırılabilir olacak */
+    #chatbot-messages.chatbot-messages {
+        flex: 1 !important; /* Kalan tüm alanı kapla */
+        padding: 15px !important;
+        /* Scroll Ayarı */
+        overflow-y: auto !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    /* Input Alanı */
+    #chatbot-form.chatbot-input-form {
+        display: flex !important;
+        border-top: 1px solid #333 !important;
+        flex-shrink: 0 !important; /* Aşağı itilip kaybolmasın */
+        background: #1e1e1e !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #chatbot-input {
+        flex: 1 !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 15px !important;
+        color: white !important;
+        outline: none !important;
+    }
+
+    #chatbot-form button {
+        background: #00d9ff !important;
+        border: none !important;
+        padding: 0 20px !important;
+        color: white !important;
+        cursor: pointer !important;
+    }
+
+    /* Kaydırma Çubuğu Güzelleştirme */
+    .chatbot-messages::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .chatbot-messages::-webkit-scrollbar-thumb {
+        background: #00d9ff;
+        border-radius: 4px;
+    }
+
+    .chatbot-messages::-webkit-scrollbar-track {
+        background: #121212;
     }
 </style>
 
@@ -116,7 +206,7 @@
     <div class="modal-content">
         <div id="modal-icon"></div>
         <p id="modal-message"></p>
-        <button onclick="closeModal()" class="btn">Okay</button>
+        <button onclick="closeModal()" class="btn">Tamam</button>
     </div>
 </div>
 
@@ -124,7 +214,6 @@
   {% if messages %}
 <script>
       window.addEventListener('load', function() {
-        // Tarayıcının cache'ini atlatmak için setTimeout kullanıyoruz
         setTimeout(function() {
             {% for category, message in messages %}
               if (typeof showModal === "function") {
