@@ -1102,3 +1102,191 @@ nav ul {
         overflow-y: auto;
     }
 }
+
+/* =================================== */
+/* MODAL (POPUP) STİLLERİ              */
+/* =================================== */
+
+/* Arka Plan (Siyah Karartma) */
+.modal {
+    display: none; /* Başlangıçta mutlaka gizli olmalı */
+    position: fixed;
+    z-index: 10000; /* Menünün bile üstünde durmalı */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Arkası yarı saydam siyah */
+    backdrop-filter: blur(5px); /* Arka planı hafifçe buzlar */
+    overflow: auto; /* Küçük ekranlarda taşarsa kaydırma açar */
+}
+
+/* Modal Kutusu (Ortadaki Kart) */
+.modal-content {
+    background-color: #1e1e1e; /* Sitenin kart rengiyle aynı */
+    margin: 5vh auto; /* Dikeyde ortalamaya yakın konum */
+    padding: 20px;
+    border: 1px solid #333;
+    width: 90%;
+    max-width: 600px; /* Çok geniş olmasın */
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.2); /* Hafif mavi neon gölge */
+    position: relative;
+    animation: slideDown 0.3s ease-out; /* Açılış animasyonu */
+}
+
+/* Kapatma Butonu (X) */
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .close-btn:hover {
+        color: #00d9ff; /* Üzerine gelince mavi olsun */
+    }
+
+/* Modal İçindeki Başlık */
+#modalTitle {
+    color: #00d9ff;
+    font-size: 28px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+/* Modal İçindeki Açıklama Metni */
+#modalDesc {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 25px;
+}
+
+/* Teknoloji Etiketleri Alanı */
+.modal-tech-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Etiketlerin Tasarımı */
+.tech-tag {
+    background-color: rgba(0, 217, 255, 0.1); /* Çok şeffaf mavi */
+    color: #00d9ff;
+    border: 1px solid #00d9ff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Alt Taraftaki Buton Grubu */
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Mobilde butonlar sığmazsa alt alta geçsin */
+}
+
+/* Buton Tasarımları - DÜZELTİLMİŞ HALİ */
+.btn-modal {
+    text-decoration: none;
+    background-color: #00d9ff;
+    color: #121212;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .btn-modal:hover {
+        background-color: #00bcd4;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3); /* Eksik parça tamamlandı */
+    }
+/* <--- BURADAKİ KAPATMA PARANTEZİ EKSİKTİ */
+
+/* =================================== */
+/* KAGGLE LİSTE TASARIMI (MODAL İÇİ)   */
+/* =================================== */
+.kaggle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-top: 15px; /* Listeyi biraz aşağı itelim */
+}
+
+    /* Scrollbar Tasarımı */
+    .kaggle-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .kaggle-list::-webkit-scrollbar-thumb {
+        background-color: #333;
+        border-radius: 4px;
+    }
+
+.kaggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #252525;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: 0.2s;
+}
+
+    .kaggle-item:hover {
+        background: #2a2a2a;
+        border-color: #00d9ff;
+    }
+
+.k-info {
+    display: flex;
+    flex-direction: column;
+}
+
+    .k-info strong {
+        color: #fff;
+        font-size: 15px;
+    }
+
+.k-desc {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 3px;
+}
+
+.btn-kaggle-mini {
+    background: transparent;
+    border: 1px solid #00d9ff;
+    color: #00d9ff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+    .btn-kaggle-mini:hover {
+        background: #00d9ff;
+        color: #121212;
+    }
+
+

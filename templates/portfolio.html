@@ -11,29 +11,61 @@
 
     <div class="portfolio-grid">
         {% for project in projects %}
-        <div class="portfolio-item">
-            <div class="portfolio-item-content">
-                <!-- Baslik (duz metin, tiklanamaz) -->
-                <h3>{{ project.title }}</h3>
+        <div class="portfolio-item"
+             onclick="openModal(this)"
+             data-type="{{ project.type or 'project' }}"
+             data-title="{{ project.title }}"
+             data-desc="{{ project.description or project.desc }}"
+             data-tech="{{ project.tech or '' }}"
+             data-github="{{ project.github or '' }}"
+             data-demo="{{ project.demo or '' }}"
+             data-kaggle="{{ project.url or '' }}"
+             data-subprojects='{{ project.sub_projects | tojson if project.sub_projects else "[]" }}'>
 
-                <!-- Aciklama -->
+            <div class="portfolio-item-content">
+                <h3>
+                    {% if project.type == 'folder' %}
+                    <i class="fas fa-folder-open" style="color: #00d9ff; margin-right: 5px;"></i>
+                    {% endif %}
+                    {{ project.title }}
+                </h3>
+
                 <p>{{ project.description or project.desc }}</p>
 
-                <!-- Linkler -->
-                <div class="portfolio-item-links">
-                    {% if project.github %}
-                    <a href="{{ project.github }}" class="btn-outline" target="_blank"><i class="fab fa-github"></i> {{ texts.githubButton }}</a>
-                    {% endif %}
-                    {% if project.demo %}
-                    <a href="{{ project.demo }}" class="btn" target="_blank">{{ texts.demoButton }}</a>
-                    {% endif %}
-                    {% if project.url %}
-                    <a href="{{ project.url }}" class="btn" target="_blank">View Kaggle</a>
-                    {% endif %}
+                <div style="margin-top: 15px; color: #0ea5e9; font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i>
+                    {{ project.custom_btn or texts.viewDetails }}
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </section>
+
+<div id="projectModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+
+        <h2 id="modalTitle">Project Title</h2>
+
+        <div id="modalTech" class="modal-tech-container"></div>
+
+        <p id="modalDesc">Project description...</p>
+
+        <div class="modal-actions">
+            <a id="modalGithub" href="#" target="_blank" class="btn-modal">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a id="modalDemo" href="#" target="_blank" class="btn-modal">
+                <i class="fas fa-external-link-alt"></i> Live Demo
+            </a>
+            <a id="modalKaggle" href="#" target="_blank" class="btn-modal">
+                <i class="fab fa-kaggle"></i> Kaggle
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+
 {% endblock %}

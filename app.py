@@ -284,20 +284,24 @@ def fetch_kaggle_projects():
 
         username = os.getenv("KAGGLE_USERNAME") or "vedatkoylahisar"
 
-        # Son 10 projeyi al
-        kernels = api.kernels_list(user=username, page_size=10)
-        kernels = list(kernels)  # iterable -> liste
+        # 100 projeye kadar çek, tarihe göre sırala
+        kernels = api.kernels_list(user=username, page_size=100, sort_by='dateRun')
+        kernels = list(kernels) 
 
         projects = []
         for k in kernels:
-            desc = getattr(k, 'description', None) or "No description provided."
+            if getattr(k, 'isPrivate', False):
+                continue 
+
+            # Açıklama kontrolü
+            desc = getattr(k, 'description', None) 
+            
             projects.append({
-                    "title": getattr(k, 'title', 'Untitled'),
-                    # Description boşsa hiç yazma
-                    "description": getattr(k, 'description', None),
-                    "url": f"https://www.kaggle.com/code/{username}/{k.ref.split('/')[-1]}",
-                    "image": "/static/images/kaggle_logo.png"
-                            })
+                "title": getattr(k, 'title', 'Untitled'),
+                "description": desc,
+                "url": f"https://www.kaggle.com/code/{username}/{k.ref.split('/')[-1]}",
+                "image": "/static/images/kaggle_logo.png"
+            })
         return projects
     except Exception as e:
         print("Kaggle API error:", e)
@@ -336,21 +340,76 @@ def services():
 def portfolio():
     lang_code = session.get('lang', 'en')
     
-    # Yerel projeleri al (data.json'dan)
-    # Eğer lang_code için proje yoksa, default olarak 'en' kullan
+    # 1. Yerel projeleri (data.json) al
     projects_from_json = PROJECTS.get(lang_code, PROJECTS.get('en', []))
     
-    # Kaggle projelerini çek (Bu projelerin 'desc' yerine 'description' kullandığını varsayıyoruz)
-    kaggle_projects = fetch_kaggle_projects()
+    # 2. Kaggle projelerini çek
+    kaggle_list = fetch_kaggle_projects()
+
+    # 3. LeetCode çözümlerini çek
+    leetcode_solutions = fetch_leetcode_solutions()
     
-    # Tüm projeleri birleştir
-    all_projects = projects_from_json + kaggle_projects
+    # 4. Klasör yapısını oluştur (Eğer Kaggle'dan veri geldiyse)
+    if kaggle_list:
+        # Dil ayarları (Klasör kartının üzerindeki yazılar)
+        folder_texts = {
+            "tr": {
+                "title": "Kaggle Projeleri",
+                "desc": "Veri bilimi ve makine öğrenimi üzerine son çalışmalarım.", # Yazım hatası düzeltildi
+                "tech": "Python, Pandas, NumPy, Scikit-Learn, PyTorch, Matplotlib, Seaborn",
+                "btn_text": "Projeleri İncele"  # <-- YENİ EKLENEN KISIM
+            },
+            "en": {
+                "title": "Kaggle Projects",
+                "desc": "My latest work on data science and machine learning.",
+                "tech": "Python, Pandas, NumPy, Scikit-Learn, PyTorch, Matplotlib, Seaborn",
+                "btn_text": "Browse Projects"   # <-- YENİ EKLENEN KISIM
+            },
+            "de": {
+                "title": "Kaggle Projekte",
+                "desc": "Meine neuesten Arbeiten zu Data Science und maschinellem Lernen.",
+                "tech": "Python, Pandas, NumPy, Scikit-Learn, PyTorch, Matplotlib, Seaborn",
+                "btn_text": "Projekte ansehen"  # <-- YENİ EKLENEN KISIM
+            }
+        }
+        
+        txt = folder_texts.get(lang_code, folder_texts['en'])
+        
+        # Klasör Objesi
+        kaggle_folder = {
+            "title": txt["title"],
+            "description": txt["desc"], 
+            "desc": txt["desc"],
+            
+            "type": "folder",            # <--- JS buna bakıp listeyi açacak
+            "tech": txt["tech"],         
+            
+            # Profil linki
+            "url": f"https://www.kaggle.com/{os.getenv('KAGGLE_USERNAME') or 'vedatkoylahisar'}", 
+            
+            # Alt projeler
+            "sub_projects": kaggle_list,
 
-    # HATA AYIKLAMA (DEBUG) İÇİN: Konsola kaç proje çekildiğini yazdırın
-    print(f"DEBUG: {len(projects_from_json)} JSON projesi ve {len(kaggle_projects)} Kaggle projesi çekildi. Toplam: {len(all_projects)}")
+            # Buton Yazısı (HTML'de kullanılacak)
+            "custom_btn": txt["btn_text"] 
+        }
+        
+        # Listeyi Birleştir: [Normal Projeler] + [Kaggle Klasörü]
+        all_projects = projects_from_json + [kaggle_folder]
+    else:
+        # Veri çekilemediyse sadece yerel projeleri göster
+        all_projects = projects_from_json
 
-    # Eğer all_projects listesi boşsa, şablonunuzda hiçbir şey görünmez.
-    return render_template("portfolio.html", active='portfolio', projects=all_projects)
+    # Konsola bilgi bas (Debug için)
+    print(f"DEBUG: {len(projects_from_json)} JSON projesi ve {len(kaggle_list)} Kaggle projesi klasöre eklendi.")
+
+    # 5. RETURN
+    return render_template(
+        'portfolio.html', 
+        active='portfolio', 
+        projects=all_projects, 
+        leetcode=leetcode_solutions
+    )
 
 
 def send_mail(to_email, subject, message_text):
@@ -413,6 +472,42 @@ Mesaj:
     # GET request
     return render_template("contact.html", active='contact')
 
+
+def fetch_leetcode_solutions():
+    # GitHub API URL'si
+    github_user = "vedatkoylahisar"
+    repo_name = "leetcode-problems"
+    url = f"https://api.github.com/repos/{github_user}/{repo_name}/contents"
+
+    try:
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            files = response.json()
+            solutions = []
+            
+            for file in files:
+                # Sadece kod dosyalarını alalım (.py, .cpp, .java vs.)
+                # README.md veya .gitignore gibi dosyaları atlayalım
+                if file['name'].endswith(('.py', '.cpp', '.java', '.js')) and file['type'] == 'file':
+                    
+                    # Dosya ismini temizleyelim (Örn: "two_sum.py" -> "Two Sum")
+                    clean_name = file['name'].rsplit('.', 1)[0].replace('_', ' ').replace('-', ' ').title()
+                    
+                    solutions.append({
+                        'title': clean_name,       # Ekranda görünecek isim
+                        'filename': file['name'],  # Orijinal dosya ismi
+                        'url': file['html_url'],   # GitHub'daki kodun linki
+                        'language': file['name'].split('.')[-1] # py, cpp vs.
+                    })
+            return solutions
+        else:
+            print(f"GitHub Hatası: {response.status_code}")
+            return []
+            
+    except Exception as e:
+        print("GitHub Bağlantı Hatası:", e)
+        return []
 
 
 
