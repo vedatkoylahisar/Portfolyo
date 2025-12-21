@@ -189,3 +189,18 @@ window.addEventListener('load', () => {
         }, 1000);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const langToggle = document.getElementById('mobileLangToggle');
+    const langDropdown = document.getElementById('mobileLangDropdown');
+
+    if (langToggle && langDropdown) {
+        langToggle.addEventListener('click', function (e) {
+            // Sadece ekran geniþliði 768px altýndaysa (mobilse) týklamayý iþle
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                langDropdown.classList.toggle('show');
+            }
+        });
+    }
+});

@@ -19,6 +19,10 @@
 
             <h2 class="logo">Portfolio.</h2>
         </div>
+
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="hamburger-icon">☰</label>
+
         <nav>
             <ul>
                 {% for item in menu %}
@@ -28,18 +32,22 @@
                     </a>
                 </li>
                 {% endfor %}
+
+                <li class="lang-menu-item">
+                    <a href="javascript:void(0)" id="mobileLangToggle">
+                        {{ language_names[lang] }} <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
+                    </a>
+
+                    <div class="mobile-lang-dropdown" id="mobileLangDropdown">
+                        {% for code, name in language_names.items() %}
+                        <a href="{{ url_for('set_language', lang_code=code) }}">
+                            {{ name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </li>
             </ul>
         </nav>
-        <div class="language-selector">
-            <button id="langButton" class="lang-button">
-                {{ language_names[lang] }} <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-            </button>
-            <div id="langDropdown" class="lang-dropdown">
-                {% for code, name in language_names.items() %}
-                <a href="{{ url_for('set_language', lang_code=code) }}">{{ name }}</a>
-                {% endfor %}
-            </div>
-        </div>
     </header>
     <main>
         {% block content %}{% endblock %}

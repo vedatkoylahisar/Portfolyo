@@ -35,13 +35,19 @@ header {
     font-weight: bold;
 }
 
+/* --- GENEL NAVİGASYON YAPISI (Hizalama Ustası) --- */
 nav ul {
     list-style: none;
     display: flex;
+    align-items: center; /* Dikeyde her şeyi (yazı, ikon, buton) ortalar */
+    gap: 25px; /* Ögeler arası EŞİT boşluk (Jilet gibi yapar) */
+    margin: 0;
+    padding: 0;
 }
 
+    /* Eski marginleri sıfırla, kontrol artık gap'te */
     nav ul li {
-        margin: 0 15px;
+        margin: 0 !important;
     }
 
         nav ul li a {
@@ -51,6 +57,7 @@ nav ul {
             transition: 0.3s;
             padding: 5px 10px;
             border-radius: 5px;
+            white-space: nowrap; /* Yazıların alt satıra kaymasını engeller */
         }
 
             nav ul li a:hover,
@@ -58,6 +65,7 @@ nav ul {
                 background: #00d9ff;
                 color: #121212;
             }
+
 
 /* =================================== */
 /* Dil Seçici                          */
@@ -820,3 +828,277 @@ nav ul {
         margin-right: 8px;
     }
 
+/* ========================================= */
+/* 5. DÜZELTİLMİŞ HAMBURGER MENÜ */
+/* ========================================= */
+
+/* 1. MASAÜSTÜ İÇİN SIKI GİZLEME (Masaüstü düzenini korur) */
+#menu-toggle {
+    display: none !important; /* Checkbox asla görünmesin */
+}
+
+.hamburger-icon {
+    display: none !important; /* İkon masaüstünde görünmesin */
+}
+
+/* 2. MOBİL AYARLARI (Sadece 768px altında çalışır) */
+@media (max-width: 768px) {
+
+    /* Header ayarı: Logoyu ve ikonu kenarlara it */
+    header {
+        justify-content: space-between;
+        position: relative;
+    }
+
+    /* Hamburger ikonunu görünür yap */
+    .hamburger-icon {
+        display: block !important;
+        font-size: 30px;
+        cursor: pointer;
+        color: white;
+        /* İkonu sağa, logoyu sola, dil seçiciyi gizle veya ayarla */
+        order: 2;
+    }
+
+    /* Mobilde Dil Seçiciyi Gizle (Menü kalabalıklaşmasın diye) */
+    .language-selector {
+        display: none;
+    }
+
+    /* Menü (NAV) Başlangıçta Gizli */
+    nav {
+        position: absolute;
+        top: 100%; /* Header'ın hemen altı */
+        left: 0;
+        width: 100%;
+        background-color: #1e1e1e;
+        border-top: 1px solid #333;
+        overflow: hidden;
+        max-height: 0; /* Kapalı durum */
+        transition: max-height 0.4s ease-out; /* Kayma efekti */
+        z-index: 999;
+    }
+
+        /* Linkleri alt alta diz */
+        nav ul {
+            flex-direction: column;
+            padding: 0;
+            width: 100%;
+        }
+
+            nav ul li {
+                margin: 0;
+                text-align: center;
+                border-bottom: 1px solid #333;
+            }
+
+                nav ul li a {
+                    display: block;
+                    padding: 20px;
+                }
+
+    /* --- SİHİRLİ TETİKLEYİCİ --- */
+    /* Input seçiliyken, hemen sonrasındaki nav etiketini aç */
+    #menu-toggle:checked ~ nav {
+        max-height: 400px; /* Menü açıldığında ne kadar uzasın */
+    }
+}
+
+/* ========================================= */
+/* DİL MENÜSÜ HİBRİT YAPI (MASAÜSTÜ & MOBİL) */
+/* ========================================= */
+
+/* --- DİL MENÜSÜ (MASAÜSTÜ AYARLARI) --- */
+.lang-menu-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    /* Mavi Buton Tasarımı */
+    .lang-menu-item > a {
+        background: #00d9ff;
+        color: #121212 !important;
+        padding: 10px 20px; /* Buton içi dolgunluk */
+        border-radius: 30px; /* Daha modern, yuvarlak hatlar */
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 5px; /* Yazı ile ok ikonu arasındaki boşluk */
+        transition: transform 0.2s ease, background 0.3s;
+    }
+
+        .lang-menu-item > a:hover {
+            background: #00bcd4;
+            transform: translateY(-2px); /* Üzerine gelince hafif yukarı kalkar */
+        }
+
+/* Dropdown Menü (Açılır Kutu) */
+.mobile-lang-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* Tam butonun altında başlar */
+    right: 0;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    min-width: 140px;
+    z-index: 1000;
+    flex-direction: column;
+    /* GÖRÜNÜM AYARI: Butondan 15px aşağıda dursun */
+    margin-top: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+    /* --- KRİTİK ÇÖZÜM: GÖRÜNMEZ KÖPRÜ --- */
+    /* Bu kod, buton ile menü arasındaki boşluğu görünmez bir alanla doldurur. */
+    /* Böylece mouse aradaki boşluktan geçerken menü kapanmaz. */
+    .mobile-lang-dropdown::before {
+        content: "";
+        position: absolute;
+        top: -20px; /* Menünün üzerinden yukarı doğru uzan */
+        left: 0;
+        width: 100%;
+        height: 20px; /* Boşluğu dolduracak yükseklik */
+        background: transparent; /* Görünmez olsun */
+    }
+
+    /* Menü Linkleri */
+    .mobile-lang-dropdown a {
+        color: #ccc !important;
+        background: transparent !important; /* Mavi arka planı ez */
+        display: block;
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #2a2a2a;
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+        .mobile-lang-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-lang-dropdown a:hover {
+            background: #00d9ff !important;
+            color: #121212 !important;
+        }
+
+/* Masaüstünde Hover ile Açılma */
+@media (min-width: 769px) {
+    .lang-menu-item:hover .mobile-lang-dropdown {
+        display: flex;
+        animation: fadeIn 0.3s ease; /* Yumuşak açılış */
+    }
+}
+
+/* Yumuşak Açılma Animasyonu */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* --- MOBİL GÖRÜNÜM (DOKUNUNCA AÇILAN) --- */
+@media (max-width: 768px) {
+    header {
+        justify-content: space-between;
+        padding: 15px 5%;
+    }
+
+    /* Hamburger İkonu */
+    .hamburger-icon {
+        display: block !important;
+        font-size: 28px;
+        cursor: pointer;
+        color: white;
+        order: 2;
+    }
+
+    /* Mobilde Nav Düzeni */
+    nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #121212;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        border-bottom: 2px solid #00d9ff;
+        z-index: 999;
+    }
+
+        nav ul {
+            flex-direction: column;
+            gap: 0; /* Mobilde boşluk margin/padding ile verilir */
+            width: 100%;
+        }
+
+            nav ul li {
+                width: 100%;
+                border-top: 1px solid #333;
+                text-align: center;
+            }
+
+                nav ul li a {
+                    display: block;
+                    padding: 15px;
+                    width: 100%;
+                    border-radius: 0; /* Köşeleri düzelt */
+                }
+
+    /* Mobilde Dil Butonunu Normale Çevir */
+    .lang-menu-item {
+        flex-direction: column;
+        background: #1a1a1a;
+    }
+
+        .lang-menu-item > a {
+            background: transparent;
+            color: white !important;
+            border-radius: 0;
+            font-weight: normal;
+            width: 100%;
+            justify-content: center;
+        }
+
+    /* Mobilde Dropdown (Akordeon) */
+    .mobile-lang-dropdown {
+        position: static; /* İçeriği aşağı iter */
+        width: 100%;
+        border: none;
+        margin-top: 0;
+        border-top: 1px solid #333;
+        box-shadow: none;
+    }
+
+        /* Mobilde görünmez köprüyü iptal et */
+        .mobile-lang-dropdown::before {
+            display: none;
+        }
+
+        .mobile-lang-dropdown a {
+            padding-left: 0;
+            background: #252525 !important;
+            color: #ccc !important;
+            text-align: center; /* Mobilde ortala */
+        }
+
+        /* JS ile açılma */
+        .mobile-lang-dropdown.show {
+            display: flex !important;
+        }
+
+    #menu-toggle:checked ~ nav {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+}
