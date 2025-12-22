@@ -1,34 +1,109 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}
-    {{ texts.aboutTitle }} - {{ texts.name }}
-{% endblock %}
+{% block title %} {{ texts.aboutTitle }} - {{ texts.name }} {% endblock %}
 
 {% block content %}
-<section class="skills-section">
-   
-    <p class="skills-intro">
-    {{ skillsIntro }}
-    </p>
+<div class="about-page-wrapper">
 
+    <section class="skills-section container">
+        <p class="skills-intro scroll-element fade-in-up">
+            {{ texts.skillsIntro }}
+        </p>
 
-    <div class="skills-grid">
-        {% for skill in skills %}
-            <div class="skill-card">
+        <div class="skills-grid">
+            {% for skill in skills %}
+            <div class="skill-card scroll-element fade-in-up">
                 <i class="{{ skill.icon_class }} skill-icon"></i>
                 <h3 class="skill-title">{{ texts[skill.title_key] }}</h3>
                 <ul class="skill-list">
                     {% for item in skill["items"] %}
-                        <li>
-                            <i class="fas fa-check check-icon"></i>
-                            {{ item }}
-                        </li>
+                    <li><i class="fas fa-check check-icon"></i> {{ item }}</li>
                     {% endfor %}
                 </ul>
             </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    </section>
 
-</section>
+    {% if texts.experience %}
+    <section class="experience-section container">
+        <h2 class="section-title scroll-element fade-in-up">Deneyimler</h2>
+        
+        <div class="timeline">
+            <div class="timeline-line"></div>
 
+            {% for job in texts.experience %}
+            <div class="timeline-item scroll-element {{ 'slide-left' if loop.index % 2 != 0 else 'slide-right' }}">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content dark-card">
+                    <span class="date-badge">{{ job.date }}</span>
+                    <h3 class="company-title">{{ job.company }}</h3>
+                    <h4 class="role-title">{{ job.role }}</h4>
+                    <p class="description-text">{{ job.description }}</p>
+                    
+                    {% if job.technologies %}
+                    <div class="tech-tags">
+                        {% for tech in job.technologies %}
+                        <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if texts.education %}
+    <section class="education-section container">
+        <h2 class="section-title scroll-element fade-in-up">Eğitim</h2>
+        <div class="education-grid">
+            {% for edu in texts.education %}
+            <div class="education-card dark-card scroll-element fade-in-up">
+                <div class="edu-icon-box">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="edu-info">
+                    <h3>{{ edu.school }}</h3>
+                    <span class="edu-degree">{{ edu.degree }}</span>
+                    <span class="edu-date">{{ edu.date }}</span>
+                    <p class="description-text">{{ edu.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</div>
+
+<script>
+    // Sayfa kaydırıldıkça elementleri gösteren script
+    const scrollElements = document.querySelectorAll(".scroll-element");
+
+    const elementInView = (el, dividend = 1) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
+    };
+
+    const displayScrollElement = (element) => {
+        element.classList.add("scrolled");
+    };
+
+    const handleScrollAnimation = () => {
+        scrollElements.forEach((el) => {
+            if (elementInView(el, 1.25)) {
+                displayScrollElement(el);
+            }
+        });
+    };
+
+    window.addEventListener("scroll", () => { 
+        handleScrollAnimation();
+    });
+    
+    // Sayfa yüklendiğinde de çalıştır (üsttekiler görünsün)
+    handleScrollAnimation();
+</script>
 {% endblock %}

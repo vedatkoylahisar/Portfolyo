@@ -126,6 +126,30 @@
           }
         ]
       },
+      "education": [
+        {
+          "school": "Kocaeli Universitesi",
+          "degree": "Bilgisayar Muhendisligi",
+          "date": "2021 - 2026",
+          "description": "5. sinif ogrencisi olarak yapay zeka ve web teknolojileri uzerine odaklaniyorum."
+        }
+      ],
+      "experience": [
+        {
+          "company": "Bimser Cozum",
+          "role": "Yazilim Stajyeri",
+          "date": "Yaz 2024",
+          "description": "Dusuk kodlu (Low-code) platform gelistirmeleri ve kurumsal surec yonetimi uzerine calistim.",
+          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
+        },
+        {
+          "company": "Keep Games",
+          "role": "Oyun Gelistirme Stajyeri",
+          "date": "Yaz 2023",
+          "description": "Oyun mekanikleri, optimizasyon ve oyun motoru surecleri uzerine deneyim kazandim.",
+          "technologies": [ "Unity", "C#", "Game Design" ]
+        }
+      ],
       "comingSoonMessage": "Bu bolum cok yakinda sizlerle olacak...",
       "contactIntro": "Aklinizda bir proje mi var veya sadece merhaba mi demek istiyorsunuz? Bana ulasmaktan cekinmeyin...",
       "contactFormTitle": "Mesaj Gonderin",

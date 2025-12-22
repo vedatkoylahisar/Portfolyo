@@ -414,8 +414,11 @@ nav ul {
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.85);
     text-align: center;
-    margin-top: -100px; /* Yukarı taşır */
-    margin-bottom: 30px; /* Kartlarla aradaki boşluk */
+    margin-top: 0; 
+    margin-bottom: 50px; 
+    max-width: 900px; 
+    margin-left: auto; 
+    margin-right: auto; 
 }
 
 
@@ -1290,3 +1293,273 @@ nav ul {
     }
 
 
+/* --- MEVCUT YAPIYI KORUYAN GENEL AYARLAR --- */
+/* Arka planın senin sitendeki gibi koyu olduğunu varsayıyorum */
+/* Değilse body background-color ekleyebilirsin */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #ffffff; /* Beyaz başlık */
+    margin: 80px 0 50px;
+    font-weight: 700;
+}
+
+/* --- ORTAK KART TASARIMI (DARK MODE) --- */
+.dark-card {
+    background-color: #111; /* Görseldeki gibi çok koyu gri/siyah */
+    border: 1px solid #333; /* Hafif gri çerçeve */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+    .dark-card:hover {
+        transform: translateY(-5px);
+        border-color: #00d2d3; /* Senin temanın mavi/turkuaz rengi */
+    }
+
+.description-text {
+    color: #b2bec3; /* Okunabilir gri metin */
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* --- TIMELINE (DENEYİM) BÖLÜMÜ --- */
+.experience-section {
+    position: relative;
+    padding-bottom: 50px;
+}
+
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Dikey Çizgi */
+.timeline-line {
+    position: absolute;
+    width: 2px;
+    background-color: #333;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    margin-bottom: 40px;
+    position: relative;
+    width: 50%;
+}
+
+    /* Sol ve Sağ Yerleşim */
+    .timeline-item:nth-child(odd) {
+        left: 0;
+        padding-right: 40px;
+        text-align: right;
+    }
+
+    .timeline-item:nth-child(even) {
+        left: 50%;
+        padding-left: 40px;
+        text-align: left;
+    }
+
+    /* İçerik Kutusu Düzenlemeleri */
+    .timeline-item:nth-child(odd) .tech-tags {
+        justify-content: flex-end;
+    }
+
+    .timeline-item:nth-child(even) .tech-tags {
+        justify-content: flex-start;
+    }
+
+/* Ortadaki Nokta */
+.timeline-dot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: #00d2d3; /* Turkuaz nokta */
+    border-radius: 50%;
+    top: 20px;
+    box-shadow: 0 0 10px rgba(0, 210, 211, 0.5);
+    z-index: 2;
+}
+
+.timeline-item:nth-child(odd) .timeline-dot {
+    right: -8px;
+}
+
+.timeline-item:nth-child(even) .timeline-dot {
+    left: -8px;
+}
+
+/* Yazı Stilleri */
+.date-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    background-color: rgba(0, 210, 211, 0.1);
+    color: #00d2d3;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.company-title {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.role-title {
+    color: #00d2d3;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Teknoloji Etiketleri */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.tech-tag {
+    background-color: #2d3436;
+    color: #dfe6e9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    border: 1px solid #444;
+}
+
+/* --- EĞİTİM BÖLÜMÜ --- */
+.education-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.education-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.edu-icon-box {
+    background-color: #2d3436;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #00d2d3;
+    flex-shrink: 0;
+}
+
+.edu-info h3 {
+    color: #fff;
+    margin: 0 0 5px 0;
+}
+
+.edu-degree {
+    display: block;
+    color: #00d2d3;
+    margin-bottom: 5px;
+}
+
+.edu-date {
+    display: block;
+    color: #636e72;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+
+/* --- SCROLL ANIMASYONLARI (KAYDIRDIKÇA GELME) --- */
+.scroll-element {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Aşağıdan Yukarı Süzülme */
+.fade-in-up {
+    transform: translateY(50px);
+}
+
+    .fade-in-up.scrolled {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* Soldan Sağa */
+.slide-left {
+    transform: translateX(-50px);
+}
+
+    .slide-left.scrolled {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+/* Sağdan Sola */
+.slide-right {
+    transform: translateX(50px);
+}
+
+    .slide-right.scrolled {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+
+/* --- MOBİL UYUMLULUK --- */
+@media screen and (max-width: 768px) {
+    .timeline-line {
+        left: 20px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 50px !important;
+        padding-right: 0 !important;
+        text-align: left !important;
+    }
+
+        .timeline-item:nth-child(even) {
+            left: 0;
+        }
+
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 12px;
+                right: auto;
+            }
+
+        .timeline-item:nth-child(odd) .tech-tags {
+            justify-content: flex-start;
+        }
+
+    .education-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .edu-icon-box {
+        margin: 0 auto;
+    }
+}
