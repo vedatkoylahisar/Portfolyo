@@ -15,7 +15,7 @@
              onclick="openModal(this)"
              data-type="{{ project.type or 'project' }}"
              data-title="{{ project.title }}"
-             data-desc="{{ project.description or project.desc }}"
+             data-desc="{{ project.details or project.description or project.desc }}"
              data-tags='{{ project.tags | tojson if project.tags else "[]" }}'
              data-github="{{ project.github_link or '' }}"
              data-demo="{{ project.demo_link or '' }}"

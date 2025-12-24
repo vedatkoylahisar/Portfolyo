@@ -94,11 +94,35 @@
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
         {
-          "title": "Data Analysis Dashboard",
-          "description": "A dashboard built with Python (Pandas) and Flask for visualizing sales data.",
-          "tags": [ "Python", "Pandas", "Flask" ],
-          "github_link": "https://github.com/vedatkoylahisar",
-          "demo_link": "#"
+          "title": "Sign Language Recognition",
+          "description": "Real-time sign language detection system using Computer Vision and Deep Learning techniques.",
+          "tags": [ "Python", "OpenCV", "TensorFlow", "MediaPipe" ],
+          "github_link": "https://github.com/vedatkoylahisar/SIGN_LANGUAGE",
+          "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
+        },
+        {
+          "title": "Academic Article Search (Web Scraping)",
+          "description": "A web application that searches for academic articles from platforms like Google Scholar using web scraping techniques and saves them to a database.",
+          "details": "I developed a web application that searches for academic articles from platforms like Google Scholar using web scraping techniques. The obtained article information is saved to a database.<br><br><strong>Features:</strong><ul><li>Automatic data extraction via web scraping.</li><li>Saving data to MongoDB database.</li><li>Querying articles based on specific attributes (author, year, keyword).</li></ul><br><strong>Technologies:</strong><ul><li>Scraping: Python (BeautifulSoup, Scrapy, etc.)</li><li>Database: MongoDB (NoSQL)</li><li>Search/Filtering: Elasticsearch-based queries.</li></ul>",
+          "tags": [ "Python", "Web Scraping", "MongoDB", "Elasticsearch", "Scrapy" ],
+          "github_link": "",
+          "demo_link": ""
+        },
+        {
+          "title": "Transportation Route Planning System",
+          "description": "A desktop application developed with C# and Google Maps API that optimizes public transport and taxi routes for Kocaeli/Izmit.",
+          "details": "This project is a desktop application that integrates public transport and taxi systems in Kocaeli/Izmit to calculate the most efficient route (shortest/fastest) from a user's current location. It is developed using Object-Oriented Programming (OOP) principles.<br><br><strong>Features:</strong><ul><li>Live route drawing and location tracking on the map using Google Maps API.</li><li>Calculation of distance, estimated arrival time, and cost (taxi/fare).</li><li>Dynamic pricing based on user profiles like Students/Elderly.</li><li>Logging of past route searches to a database.</li></ul><br><strong>Technologies:</strong><ul><li>Language/Framework: C#, .NET (Windows Forms), ASP.NET Core MVC</li><li>API: Google Maps API</li><li>Database: SQL, JSON</li><li>Architecture: OOP (Object Oriented Programming)</li></ul>",
+          "tags": [ "C#", ".NET", "Google Maps API", "Windows Forms", "SQL", "OOP" ],
+          "github_link": "https://github.com/vedatkoylahisar/RotaHesaplama",
+          "demo_link": ""
+        },
+        {
+          "title": "LeetCode Solutions (Algorithms & Data Structures)",
+          "description": "A comprehensive archive containing source codes of algorithm and data structure problems I solved on the LeetCode platform.",
+          "details": "A collection of hundreds of problems I solved on LeetCode to enhance my algorithmic thinking skills and prepare for technical interviews.<br><br><strong>Content:</strong><ul><li>Arrays, Linked Lists, Trees, and Graph Algorithms.</li><li>Dynamic Programming and Recursion solutions.</li><li>Time and space complexity (Big O) optimized approaches.</li></ul><br><strong>Focus Areas:</strong><ul><li>Problem Solving</li><li>Data Structures</li><li>Algorithm Optimization</li></ul>",
+          "tags": [ "Algorithms", "Data Structures", "Python", "Problem Solving", "LeetCode" ],
+          "github_link": "https://github.com/vedatkoylahisar/leetcode-problems",
+          "demo_link": ""
         }
       ],
       "comingSoonMessage": "This section will be available very soon...",
@@ -199,11 +223,35 @@
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
         {
-          "title": "Veri Analiz Paneli",
-          "description": "Satis verilerini gorsellestirmek icin Python (Pandas) ve Flask ile olusturulmus bir panel.",
-          "tags": [ "Python", "Pandas", "Flask" ],
-          "github_link": "https://github.com/vedatkoylahisar",
-          "demo_link": "#"
+          "title": "İşaret Dili Algılama Sistemi",
+          "description": "Kamera görüntülerini işleyerek işaret dilini algılayan ve çeviren, Görüntü İşleme ve Derin Öğrenme tabanlı proje.",
+          "tags": [ "Python", "OpenCV", "TensorFlow", "MediaPipe" ],
+          "github_link": "https://github.com/vedatkoylahisar/SIGN_LANGUAGE",
+          "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
+        },
+        {
+          "title": "Akademik Makale Arama (Web Scraping)",
+          "description": "Google Scholar gibi platformlardan akademik makaleleri web scraping teknikleriyle arayan ve veritabanına kaydeden bir web uygulaması.",
+          "details": "Google Scholar gibi platformlardan akademik makaleleri web scraping teknikleriyle arayan bir web uygulaması geliştirdim. Elde edilen makale bilgileri bir veritabanına kaydedilmektedir.<br><br><strong>Özellikler:</strong><ul><li>Web scraping ile otomatik veri çıkarımı.</li><li>Verilerin MongoDB veritabanına kaydedilmesi.</li><li>Kullanıcıların belirli niteliklere (yazar, yıl, anahtar kelime) göre makale sorgulaması.</li></ul><br><strong>Teknolojiler:</strong><ul><li>Scraping: Python (BeautifulSoup, Scrapy vb.)</li><li>Veritabanı: MongoDB (NoSQL)</li><li>Arama/Filtreleme: Elasticsearch tabanlı sorgular.</li></ul>",
+          "tags": [ "Python", "Web Scraping", "MongoDB", "Elasticsearch", "Scrapy" ],
+          "github_link": "",
+          "demo_link": ""
+        },
+        {
+          "title": "Ulaşım Rota Planlama Sistemi",
+          "description": "Kocaeli/İzmit için otobüs, tramvay ve taksi seçeneklerini entegre ederek en uygun rotayı hesaplayan, C# ve Google Maps API tabanlı masaüstü uygulaması.",
+          "details": "Bu proje, Kocaeli/İzmit ilçesinde toplu taşıma ve taksi sistemini entegre ederek, kullanıcının mevcut konumundan hedefe en uygun (en kısa/en hızlı) rota ile ulaşmasını sağlayan bir masaüstü uygulamasıdır. Nesne Yönelimli Programlama (OOP) prensipleriyle geliştirilmiştir.<br><br><strong>Özellikler:</strong><ul><li>Google Maps API ile harita üzerinde canlı rota çizimi ve konum takibi.</li><li>Mesafe, tahmini varış süresi ve maliyet (taksi/bilet) hesaplaması.</li><li>Öğrenci ve yaşlı gibi kullanıcı profillerine göre dinamik fiyatlandırma.</li><li>Geçmiş rota aramalarının veritabanına kaydedilmesi.</li></ul><br><strong>Teknolojiler:</strong><ul><li>Dil/Framework: C#, .NET (Windows Forms), ASP.NET Core MVC</li><li>API: Google Maps API</li><li>Veritabanı: SQL, JSON</li><li>Mimari: OOP (Nesne Yönelimli Programlama)</li></ul>",
+          "tags": [ "C#", ".NET", "Google Maps API", "Windows Forms", "SQL", "OOP" ],
+          "github_link": "https://github.com/vedatkoylahisar/RotaHesaplama",
+          "demo_link": ""
+        },
+        {
+          "title": "LeetCode Çözümleri (Algoritma & Veri Yapıları)",
+          "description": "LeetCode platformunda çözdüğüm algoritma ve veri yapısı problemlerinin kaynak kodlarını içeren kapsamlı arşiv.",
+          "details": "Algoritmik düşünme becerilerimi geliştirmek ve teknik mülakatlara hazırlık amacıyla LeetCode üzerinde çözdüğüm yüzlerce problemin derlemesidir.<br><br><strong>İçerik:</strong><ul><li>Diziler, Bağlı Listeler, Ağaçlar ve Graf Algoritmaları.</li><li>Dinamik Programlama ve Özyineleme (Recursion) çözümleri.</li><li>Zaman ve alan karmaşıklığı (Big O) optimize edilmiş yaklaşımlar.</li></ul><br><strong>Odak Alanları:</strong><ul><li>Problem Çözme</li><li>Veri Yapıları (Data Structures)</li><li>Algoritma Optimizasyonu</li></ul>",
+          "tags": [ "Algorithms", "Data Structures", "Python", "Problem Solving", "LeetCode" ],
+          "github_link": "https://github.com/vedatkoylahisar/leetcode-problems",
+          "demo_link": ""
         }
       ],
       "comingSoonMessage": "Bu bolum cok yakinda sizlerle olacak...",
@@ -304,11 +352,35 @@
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
         {
-          "title": "Datenanalyse-Dashboard",
-          "description": "Ein mit Python (Pandas) und Flask erstelltes Dashboard zur Visualisierung von Verkaufsdaten.",
-          "tags": [ "Python", "Pandas", "Flask" ],
-          "github_link": "https://github.com/vedatkoylahisar",
-          "demo_link": "#"
+          "title": "Gebärdenspracherkennung",
+          "description": "Echtzeit-System zur Erkennung von Gebärdensprache unter Verwendung von Computer Vision und Deep Learning.",
+          "tags": [ "Python", "OpenCV", "TensorFlow", "MediaPipe" ],
+          "github_link": "https://github.com/vedatkoylahisar/SIGN_LANGUAGE",
+          "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
+        },
+        {
+          "title": "Akademische Artikelsuche (Web Scraping)",
+          "description": "Eine Webanwendung, die akademische Artikel von Plattformen wie Google Scholar mithilfe von Web-Scraping-Techniken sucht und in einer Datenbank speichert.",
+          "details": "Ich habe eine Webanwendung entwickelt, die akademische Artikel von Plattformen wie Google Scholar mithilfe von Web-Scraping-Techniken sucht. Die gewonnenen Artikelinformationen werden in einer Datenbank gespeichert.<br><br><strong>Funktionen:</strong><ul><li>Automatische Datenextraktion durch Web Scraping.</li><li>Speicherung der Daten in einer MongoDB-Datenbank.</li><li>Abfrage von Artikeln basierend auf bestimmten Attributen (Autor, Jahr, Stichwort).</li></ul><br><strong>Technologien:</strong><ul><li>Scraping: Python (BeautifulSoup, Scrapy usw.)</li><li>Datenbank: MongoDB (NoSQL)</li><li>Suche/Filterung: Elasticsearch-basierte Abfragen.</li></ul>",
+          "tags": [ "Python", "Web Scraping", "MongoDB", "Elasticsearch", "Scrapy" ],
+          "github_link": "",
+          "demo_link": ""
+        },
+        {
+          "title": "Transport-Routenplanungssystem",
+          "description": "Eine mit C# und Google Maps API entwickelte Desktop-Anwendung zur Optimierung von ÖPNV- und Taxi-Routen für Kocaeli/Izmit.",
+          "details": "Dieses Projekt ist eine Desktop-Anwendung, die öffentliche Verkehrsmittel und Taxisysteme in Kocaeli/Izmit integriert, um die effizienteste Route (kürzeste/schnellste) vom aktuellen Standort des Benutzers zu berechnen. Es wurde unter Verwendung von Prinzipien der objektorientierten Programmierung (OOP) entwickelt.<br><br><strong>Funktionen:</strong><ul><li>Live-Routenzeichnung und Standortverfolgung auf der Karte mittels Google Maps API.</li><li>Berechnung von Entfernung, geschätzter Ankunftszeit und Kosten (Taxi/Fahrpreis).</li><li>Dynamische Preisgestaltung basierend auf Benutzerprofilen wie Studenten/Senioren.</li><li>Speicherung vergangener Routensuchen in einer Datenbank.</li></ul><br><strong>Technologien:</strong><ul><li>Sprache/Framework: C#, .NET (Windows Forms), ASP.NET Core MVC</li><li>API: Google Maps API</li><li>Datenbank: SQL, JSON</li><li>Architektur: OOP</li></ul>",
+          "tags": [ "C#", ".NET", "Google Maps API", "Windows Forms", "SQL", "OOP" ],
+          "github_link": "https://github.com/vedatkoylahisar/RotaHesaplama",
+          "demo_link": ""
+        },
+        {
+          "title": "LeetCode Lösungen (Algorithmen & Datenstrukturen)",
+          "description": "Ein umfassendes Archiv mit Quellcodes von Algorithmus- und Datenstrukturproblemen, die ich auf der LeetCode-Plattform gelöst habe.",
+          "details": "Eine Sammlung von Hunderten von Problemen, die ich auf LeetCode gelöst habe, um meine algorithmischen Denkfähigkeiten zu verbessern und mich auf technische Interviews vorzubereiten.<br><br><strong>Inhalt:</strong><ul><li>Arrays, verknüpfte Listen, Bäume und Graphenalgorithmen.</li><li>Lösungen für dynamische Programmierung und Rekursion.</li><li>Zeit- und raumkomplexitätsoptimierte (Big O) Ansätze.</li></ul><br><strong>Schwerpunkte:</strong><ul><li>Problemlösung</li><li>Datenstrukturen</li><li>Algorithmus-Optimierung</li></ul>",
+          "tags": [ "Algorithms", "Data Structures", "Python", "Problem Solving", "LeetCode" ],
+          "github_link": "https://github.com/vedatkoylahisar/leetcode-problems",
+          "demo_link": ""
         }
       ],
       "comingSoonMessage": "Dieser Bereich wird in Kurze verfugbar sein...",
