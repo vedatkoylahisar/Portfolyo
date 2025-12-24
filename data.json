@@ -85,6 +85,22 @@
           "technologies": [ "Unity", "C#", "Game Design" ]
         }
       ],
+      "projects": [
+        {
+          "title": "Personal Portfolio Website",
+          "description": "Portfolio web project built with Flask, featuring a multi-lingual AI assistant powered by Hugging Face.",
+          "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
+          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
+          "demo_link": "https://vedatkoylahisar.com.tr"
+        },
+        {
+          "title": "Data Analysis Dashboard",
+          "description": "A dashboard built with Python (Pandas) and Flask for visualizing sales data.",
+          "tags": [ "Python", "Pandas", "Flask" ],
+          "github_link": "https://github.com/vedatkoylahisar",
+          "demo_link": "#"
+        }
+      ],
       "comingSoonMessage": "This section will be available very soon...",
       "contactIntro": "Have a project in mind or just want to say hello? Feel free to reach out...",
       "contactFormTitle": "Send a Message",
@@ -172,6 +188,22 @@
           "date": "Yaz 2024",
           "description": "Oyun mekanikleri, optimizasyon ve oyun motoru surecleri uzerine deneyim kazandim.",
           "technologies": [ "Unity", "C#", "Game Design" ]
+        }
+      ],
+      "projects": [
+        {
+          "title": "Kişisel Portfolyo Websitesi",
+          "description": "Flask altyapısı ile geliştirilen, Hugging Face destekli çok dilli yapay zeka asistanını barındıran interaktif web projesi.",
+          "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
+          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
+          "demo_link": "https://vedatkoylahisar.com.tr"
+        },
+        {
+          "title": "Veri Analiz Paneli",
+          "description": "Satis verilerini gorsellestirmek icin Python (Pandas) ve Flask ile olusturulmus bir panel.",
+          "tags": [ "Python", "Pandas", "Flask" ],
+          "github_link": "https://github.com/vedatkoylahisar",
+          "demo_link": "#"
         }
       ],
       "comingSoonMessage": "Bu bolum cok yakinda sizlerle olacak...",
@@ -263,6 +295,22 @@
           "technologies": [ "Unity", "C#", "Game Design" ]
         }
       ],
+      "projects": [
+        {
+          "title": "Persönliche Portfolio-Website",
+          "description": "Interaktives Webprojekt auf Flask-Basis, das einen mehrsprachigen KI-Assistenten mit Hugging Face integriert.",
+          "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
+          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
+          "demo_link": "https://vedatkoylahisar.com.tr"
+        },
+        {
+          "title": "Datenanalyse-Dashboard",
+          "description": "Ein mit Python (Pandas) und Flask erstelltes Dashboard zur Visualisierung von Verkaufsdaten.",
+          "tags": [ "Python", "Pandas", "Flask" ],
+          "github_link": "https://github.com/vedatkoylahisar",
+          "demo_link": "#"
+        }
+      ],
       "comingSoonMessage": "Dieser Bereich wird in Kurze verfugbar sein...",
       "contactIntro": "Haben Sie ein Projekt im Sinn oder mochten Sie einfach nur Hallo sagen? Zogern Sie nicht, mich zu kontaktieren...",
       "contactFormTitle": "Nachricht Senden",
@@ -341,7 +389,6 @@
         ]
       }
     ],
-
     "tr": [
       {
         "icon_class": "fas fa-code",
@@ -386,7 +433,6 @@
         ]
       }
     ],
-
     "de": [
       {
         "icon_class": "fas fa-code",
@@ -429,51 +475,6 @@
           "Cloudflare DNS & Domain-Management",
           "Firebase-Grundlagen (Vorerfahrung)"
         ]
-      }
-    ]
-
-  },
-  "PROJECTS": {
-    "en": [
-      {
-        "title": "AI Chatbot Integration",
-        "desc": "A Flask-based portfolio website featuring a multi-language AI chatbot using Hugging Face.",
-        "github": "https://github.com/vedatkoylahisar/Portfolyo",
-        "demo": "https://vedatkoylahisar.com.tr"
-      },
-      {
-        "title": "Data Analysis Dashboard",
-        "desc": "A dashboard built with Python (Pandas) and Flask for visualizing sales data.",
-        "github": "https://github.com/vedatkoylahisar",
-        "demo": "#"
-      }
-    ],
-    "tr": [
-      {
-        "title": "Yapay Zeka Chatbot Entegrasyonu",
-        "desc": "Hugging Face kullanan, cok dilli bir yapay zeka chatbot'u iceren Flask tabanli portfolyo sitesi.",
-        "github": "https://github.com/vedatkoylahisar/Portfolyo",
-        "demo": "https://vedatkoylahisar.com.tr"
-      },
-      {
-        "title": "Veri Analiz Paneli",
-        "desc": "Satis verilerini gorsellestirmek icin Python (Pandas) ve Flask ile olusturulmus bir panel.",
-        "github": "https://github.com/vedatkoylahisar",
-        "demo": "#"
-      }
-    ],
-    "de": [
-      {
-        "title": "KI-Chatbot-Integration",
-        "desc": "Eine Flask-basierte Portfolio-Website mit einem mehrsprachigen KI-Chatbot, der Hugging Face verwendet.",
-        "github": "https://github.com/vedatkoylahisar/Portfolyo",
-        "demo": "https://vedatkoylahisar.com.tr"
-      },
-      {
-        "title": "Datenanalyse-Dashboard",
-        "desc": "Ein mit Python (Pandas) und Flask erstelltes Dashboard zur Visualisierung von Verkaufsdaten.",
-        "github": "https://github.com/vedatkoylahisar",
-        "demo": "#"
       }
     ]
   }

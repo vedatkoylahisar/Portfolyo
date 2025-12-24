@@ -232,6 +232,7 @@ nav ul {
 
 .chatbot-messages {
     flex-grow: 1;
+    height: auto;
     padding: 15px;
     overflow-y: auto;
     display: flex;
@@ -362,7 +363,7 @@ nav ul {
 
 .skills-section {
     max-width: 1350px;
-    margin: 50px auto 100px auto; /* Üstten 50px, alttan 100px boşluk */
+    margin: 50px auto 100px auto; 
     padding: 0 40px;
     background-color: var(--dark-bg); 
     color: white;
@@ -557,8 +558,12 @@ nav ul {
 
 .contact-section {
     max-width: 1200px;
-    margin: 80px auto;
-    padding: 40px;
+    margin: 10px auto 20px auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding: 10px 20px;
+    min-height: auto;
 }
 
 .contact-header {
@@ -582,8 +587,10 @@ nav ul {
 .contact-wrapper {
     display: flex;
     gap: 40px;
-    flex-wrap: wrap; /* Kucuk ekranlar icin */
+    flex-wrap: wrap;
+    align-items: stretch; 
 }
+
 
 /* Sol ve Sag Sutunlar */
 .contact-left, .contact-right {
@@ -598,6 +605,12 @@ nav ul {
         border-left: 4px solid #00d9ff;
         padding-left: 10px;
     }
+
+.contact-right {
+    display: flex; 
+    flex-direction: column; 
+    height: 100%;
+}
 
 /* Iletisim Formu */
 .contact-form {
@@ -716,16 +729,26 @@ nav ul {
 
 /* Sag Sutundaki Chatbot */
 .contact-right .chatbot-container {
+    width: 100%;
     height: 100%;
-    min-height: 550px;
-    opacity: 1; /* Chatbot'un gorunur olmasi icin */
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    /* Kalan boşluğu doldur */
+    flex-grow: 1;
+    opacity: 1;
     transform: scale(1);
 }
 
-/* Responsive Ayarlar */
-@media (max-width: 992px) {
+/* MOBİL DÜZENLEME (Üst üste binmesin) */
+@media (max-width: 900px) {
     .contact-wrapper {
-        flex-direction: column;
+        flex-direction: column; /* Alt alta al */
+    }
+
+    .contact-left, .contact-right {
+        width: 100%;
+        margin-bottom: 20px;
     }
 }
 /* =================================== */
@@ -735,7 +758,9 @@ nav ul {
 .portfolio-section {
     max-width: 1200px;
     margin: 80px auto;
+    margin-top: 20px;
     padding: 40px;
+    min-height: auto;
 }
 
 .portfolio-header {
@@ -1607,3 +1632,87 @@ nav ul {
         margin: 0 auto;
     }
 }
+
+
+/* =================================== */
+/* HAKKINDA SAYFASI - PROJELER BÖLÜMÜ */
+/* (about.html için özel eklemeler)   */
+/* =================================== */
+
+.projects-section {
+    padding-bottom: 80px;
+}
+
+/* Kartların Grid Yapısı */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Kartlar biraz daha geniş olsun */
+    gap: 30px;
+}
+
+/* Proje Kartı İç Düzeni */
+.project-card {
+    /* dark-card özelliklerini miras alır, ek olarak bunları ekliyoruz */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* İçeriği yayar, butonları alta iter */
+    min-height: 280px;
+}
+
+.project-title {
+    color: #00d9ff;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* --- KAGGLE TARZI ETİKETLER (Esas İstediğin Kısım) --- */
+.project-tag {
+    display: inline-block;
+    font-size: 0.85rem; /* Yazı boyutu */
+    padding: 4px 12px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    border-radius: 20px; /* Kenarları yuvarlat */
+    /* Kaggle renkleri (Cyan/Turkuaz tonları) */
+    background-color: rgba(64, 224, 208, 0.08); /* Çok hafif saydam arka plan */
+    border: 1px solid #00d9ff; /* İnce mavi çerçeve */
+    color: #00d9ff; /* Yazı rengi */
+
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+    .project-tag:hover {
+        background-color: rgba(0, 217, 255, 0.2); /* Üstüne gelince parlasın */
+        transform: translateY(-2px); /* Hafif yukarı zıplama */
+        box-shadow: 0 2px 8px rgba(0, 217, 255, 0.2);
+    }
+
+/* Link Butonları (GitHub & Demo) */
+.project-links {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    border-top: 1px solid #333; /* Butonların üstüne ince çizgi */
+    padding-top: 15px;
+}
+
+.btn-link {
+    text-decoration: none;
+    color: #ccc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: #2d3436;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .btn-link:hover {
+        background-color: #00d9ff;
+        color: #121212;
+        transform: translateY(-2px);
+    }

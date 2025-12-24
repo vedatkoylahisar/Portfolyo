@@ -1,28 +1,28 @@
 /* ==========================================================================
-   PORTFOLIO MODAL LOGIC (Multi-Language Support)
+   PORTFOLIO MODAL LOGIC (Multi-Language Support & Fixes)
    ========================================================================== */
 
 // Global Deðiþkenler
-let projectModal, modalTitle, modalDesc, modalTech, modalGithub, modalDemo, modalKaggle, projectCloseBtn;
+let projectModal, modalTitle, modalDesc, modalTech, modalGithub, modalDemo, modalProfile, modalSubProjectsList, projectCloseBtn;
 
-// 1. DÝL SÖZLÜÐÜ: JS tarafýnda kullanýlacak metinler
+// 1. DÝL SÖZLÜÐÜ
 const uiTranslations = {
     tr: {
-        viewProfile: 'Profili Gor', // Türkçe
+        viewProfile: 'Profili Gor',
         viewProject: 'Incele',
         loading: 'Yukleniyor...',
         error: 'Hata olustu.',
         folderInfo: 'Kaggle uzerindeki proje koleksiyonum.'
     },
     en: {
-        viewProfile: 'View Profile',     // Ýngilizce
+        viewProfile: 'View Profile',
         viewProject: 'View',
         loading: 'Loading...',
         error: 'Error occurred.',
         folderInfo: 'My project collection on Kaggle.'
     },
     de: {
-        viewProfile: 'Profil ansehen',   // Almanca
+        viewProfile: 'Profil ansehen',
         viewProject: 'Ansehen',
         loading: 'Laden...',
         error: 'Fehler aufgetreten.',
@@ -35,10 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
     projectModal = document.getElementById("projectModal");
     modalTitle = document.getElementById("modalTitle");
     modalDesc = document.getElementById("modalDesc");
-    modalTech = document.getElementById("modalTech");
+    modalTech = document.getElementById("modalTech"); // Etiket Konteyneri
+    modalSubProjectsList = document.getElementById("modalSubProjects"); // Kaggle Listesi Konteyneri
+
+    // Butonlar
     modalGithub = document.getElementById("modalGithub");
     modalDemo = document.getElementById("modalDemo");
-    modalKaggle = document.getElementById("modalKaggle");
+    modalProfile = document.getElementById("modalProfile"); // HTML'deki ID ile eþleþti
+
     projectCloseBtn = document.querySelector("#projectModal .close-btn");
 
     if (projectCloseBtn) {
@@ -62,106 +66,117 @@ function closeProjectModal() {
 function openModal(element) {
     if (!projectModal) return;
 
-    // 2. MEVCUT DÝLÝ ALGILA
-    // HTML etiketindeki lang özelliðini okur (Örn: <html lang="en">)
-    // Eðer bulamazsa varsayýlan olarak 'en' seçer.
+    // 2. DÝLÝ ALGILA
     const currentLang = document.documentElement.lang || 'en';
-
-    // O dile ait metinleri seç, yoksa Ýngilizce'yi al
     const t = uiTranslations[currentLang] || uiTranslations['en'];
 
-    // Verileri HTML'den Çek
+    // 3. VERÝLERÝ HTML'DEN ÇEK (data- attributes)
     const type = element.getAttribute("data-type");
     const title = element.getAttribute("data-title");
     const desc = element.getAttribute("data-desc");
-    const tech = element.getAttribute("data-tech");
-    const subProjectsRaw = element.getAttribute("data-subprojects");
-    const kaggleUrl = element.getAttribute("data-kaggle");
 
-    // Baþlýðý ve Teknolojileri Doldur
-    modalTitle.innerHTML = type === 'folder' ? '<i class="fas fa-folder-open"></i> ' + title : title;
+    // HTML'de data-url olarak göndermiþtik, onu alýyoruz
+    const profileUrl = element.getAttribute("data-url");
 
+    // Linkler
+    const githubLink = element.getAttribute("data-github");
+    const demoLink = element.getAttribute("data-demo");
+
+    // JSON Veriler (Tags ve SubProjects)
+    let tags = [];
+    let subProjects = [];
+    try {
+        tags = JSON.parse(element.getAttribute("data-tags") || "[]");
+    } catch (e) { console.error("Tags parse error", e); }
+
+    try {
+        subProjects = JSON.parse(element.getAttribute("data-subprojects") || "[]");
+    } catch (e) { console.error("Subprojects parse error", e); }
+
+
+    // --- A. ÝÇERÝÐÝ DOLDUR ---
+
+    // Baþlýk
+    modalTitle.innerHTML = type === 'folder' ? '<i class="fas fa-folder-open" style="color:#00d9ff"></i> ' + title : title;
+
+    // Açýklama
+    modalDesc.innerHTML = desc;
+
+    // Etiketler (Tags)
     modalTech.innerHTML = "";
-    if (tech && tech !== "None") {
-        tech.split(',').forEach(item => {
-            if (item.trim()) {
-                let tag = document.createElement("span");
-                tag.className = "tech-tag";
-                tag.innerText = item.trim();
-                modalTech.appendChild(tag);
-            }
-        });
-    }
+    tags.forEach(tag => {
+        let span = document.createElement("span");
+        span.className = "project-tag"; // CSS'teki class ile uyumlu
+        span.innerText = tag;
+        modalTech.appendChild(span);
+    });
 
-    // --- KLASÖR MANTIÐI ---
+
+    // --- B. GÖRÜNÜM MANTIÐI (FOLDER vs PROJECT) ---
+
+    // Temizlik: Önce listeyi temizle
+    if (modalSubProjectsList) modalSubProjectsList.innerHTML = "";
+    if (modalSubProjectsList) modalSubProjectsList.style.display = "none";
+
     if (type === 'folder') {
-        let listHtml = `<p style="margin-bottom: 20px; color: #ccc;">${desc}</p>`;
+        // --- KLASÖR (KAGGLE) MODU ---
 
-        try {
-            const subProjects = JSON.parse(subProjectsRaw || "[]");
+        // 1. GitHub ve Demo butonlarýný gizle
+        updateModalButton(modalGithub, null);
+        updateModalButton(modalDemo, null);
 
-            if (subProjects.length > 0) {
-                listHtml += `<div class="kaggle-list">`;
-
-                subProjects.forEach(proj => {
-                    // DÝNAMÝK METÝN KULLANIMI: t.viewProject
-                    listHtml += `
-                        <div class="kaggle-item">
-                            <div class="k-info">
-                                <span class="k-title"><i class="fas fa-code"></i> ${proj.title}</span>
-                                <span class="k-desc">${proj.description ? proj.description.substring(0, 60) + '...' : ''}</span>
-                            </div>
-                            <a href="${proj.url}" target="_blank" class="btn-kaggle-mini">
-                                ${t.viewProject} <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    `;
-                });
-                listHtml += `</div>`;
-            } else {
-                listHtml += `<p>${t.error}</p>`;
-            }
-        } catch (e) {
-            console.error("JSON Hatasý:", e);
-            listHtml += `<p>${t.error}</p>`;
+        // 2. Profil Butonunu Göster (En Altta)
+        if (modalProfile) {
+            modalProfile.style.display = "inline-flex";
+            modalProfile.href = profileUrl;
+            modalProfile.innerHTML = `<i class="fas fa-user-circle"></i> ${t.viewProfile}`;
         }
 
-        modalDesc.innerHTML = listHtml;
+        // 3. Kaggle Listesini Oluþtur ve Göster
+        if (subProjects.length > 0 && modalSubProjectsList) {
+            modalSubProjectsList.style.display = "flex"; // Listeyi görünür yap
 
-        // Butonlarý Gizle/Göster
-        if (modalGithub) modalGithub.style.display = "none";
-        if (modalDemo) modalDemo.style.display = "none";
+            subProjects.forEach(proj => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "kaggle-item"; // CSS class
 
-        if (modalKaggle) {
-            modalKaggle.style.display = "inline-flex";
-            modalKaggle.href = kaggleUrl;
-            // DÝNAMÝK METÝN KULLANIMI: t.viewProfile
-            modalKaggle.innerHTML = `<i class="fab fa-kaggle"></i> ${t.viewProfile}`;
-            modalKaggle.style.marginTop = "15px";
+                // Link kontrolü
+                const itemLink = proj.url || proj.link || "#";
+
+                itemDiv.innerHTML = `
+                    <div class="k-info">
+                        <strong><i class="fas fa-code"></i> ${proj.title || "Project"}</strong>
+                        <div class="k-desc" style="font-size:0.8rem; color:#aaa;">${proj.description ? proj.description.substring(0, 50) + '...' : ''}</div>
+                    </div>
+                    <a href="${itemLink}" target="_blank" class="btn-kaggle-mini">
+                        ${t.viewProject} <i class="fas fa-arrow-right"></i>
+                    </a>
+                `;
+                modalSubProjectsList.appendChild(itemDiv);
+            });
         }
 
-    }
-    // --- NORMAL PROJE ---
-    else {
-        modalDesc.innerHTML = desc;
+    } else {
+        // --- NORMAL PROJE MODU ---
 
-        const github = element.getAttribute("data-github");
-        const demo = element.getAttribute("data-demo");
+        // 1. Profil butonunu ve Listeyi gizle
+        if (modalProfile) modalProfile.style.display = "none";
+        if (modalSubProjectsList) modalSubProjectsList.style.display = "none";
 
-        updateModalButton(modalGithub, github);
-        updateModalButton(modalDemo, demo);
-
-        if (modalKaggle) modalKaggle.style.display = "none";
+        // 2. GitHub ve Demo butonlarýný ayarla
+        updateModalButton(modalGithub, githubLink);
+        updateModalButton(modalDemo, demoLink);
     }
 
-    // Göster
+    // Modalý Aç
     projectModal.style.display = "block";
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "hidden"; // Arka plan kaymasýný engelle
 }
 
+// Yardýmcý Fonksiyon: Buton Göster/Gizle
 function updateModalButton(btn, link) {
     if (btn) {
-        if (link && link !== "None" && link !== "") {
+        if (link && link !== "None" && link !== "" && link !== "#") {
             btn.style.display = "inline-flex";
             btn.href = link;
         } else {

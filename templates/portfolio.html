@@ -16,10 +16,11 @@
              data-type="{{ project.type or 'project' }}"
              data-title="{{ project.title }}"
              data-desc="{{ project.description or project.desc }}"
-             data-tech="{{ project.tech or '' }}"
-             data-github="{{ project.github or '' }}"
-             data-demo="{{ project.demo or '' }}"
-             data-kaggle="{{ project.url or '' }}"
+             data-tags='{{ project.tags | tojson if project.tags else "[]" }}'
+             data-github="{{ project.github_link or '' }}"
+             data-demo="{{ project.demo_link or '' }}"
+             data-url="{{ project.url or '' }}"
+             data-btn="{{ project.custom_btn or texts.viewDetails }}"
              data-subprojects='{{ project.sub_projects | tojson if project.sub_projects else "[]" }}'>
 
             <div class="portfolio-item-content">
@@ -32,7 +33,15 @@
 
                 <p>{{ project.description or project.desc }}</p>
 
-                <div style="margin-top: 15px; color: #0ea5e9; font-size: 0.9rem;">
+                {% if project.tags %}
+                <div class="tech-tags" style="margin-top: 15px; margin-bottom: 10px;">
+                    {% for tag in project.tags %}
+                    <span class="project-tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div style="margin-top: auto; color: #00d9ff; font-size: 0.9rem; font-weight: bold;">
                     <i class="fas fa-info-circle"></i>
                     {{ project.custom_btn or texts.viewDetails }}
                 </div>
@@ -52,6 +61,8 @@
 
         <p id="modalDesc">Project description...</p>
 
+        <div id="modalSubProjects" class="kaggle-list"></div>
+
         <div class="modal-actions">
             <a id="modalGithub" href="#" target="_blank" class="btn-modal">
                 <i class="fab fa-github"></i> GitHub
@@ -59,8 +70,8 @@
             <a id="modalDemo" href="#" target="_blank" class="btn-modal">
                 <i class="fas fa-external-link-alt"></i> Live Demo
             </a>
-            <a id="modalKaggle" href="#" target="_blank" class="btn-modal">
-                <i class="fab fa-kaggle"></i> Kaggle
+            <a id="modalProfile" href="#" target="_blank" class="btn-modal" style="display: none;">
+                <i class="fas fa-user-circle"></i> <span id="modalProfileText">Profili Gor</span>
             </a>
         </div>
     </div>

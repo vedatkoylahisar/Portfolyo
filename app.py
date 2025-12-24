@@ -22,7 +22,7 @@ app.secret_key = "supersecretkey"
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
-# === Hugging Face API Ayarlari (Degisiklik Yok) ===
+# === Hugging Face API Ayarlari ===
 HF_API_KEY = os.environ.get("HUGGINGFACE_API_KEY")
 
 if not HF_API_KEY:
@@ -40,7 +40,7 @@ MENU_ITEMS = []
 LANGUAGE_NAMES = {}
 TRANSLATIONS = {}
 PROJECTS = {}
-SKILLS = {}  # <<< SKILLS değişkeni
+SKILLS = {}  
 
 with open("chatbot_contact_flow.json", "r", encoding="utf-8") as f:
     CONTACT_FLOW = json.load(f)
@@ -53,14 +53,14 @@ def load_data_from_json():
         with open('data.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Global degiskenlere ata
+   
         MENU_ITEMS = data.get("MENU_ITEMS", [])
         LANGUAGE_NAMES = data.get("LANGUAGE_NAMES", {})
         TRANSLATIONS = data.get("TRANSLATIONS", {})
         PROJECTS = data.get("PROJECTS", {})
         SKILLS = data.get("SKILLS", {})
 
-        # Kontrol ve uyarı
+      
         if not TRANSLATIONS:
             print("UYARI: TRANSLATIONS eksik olabilir.")
         if not PROJECTS:
@@ -68,7 +68,7 @@ def load_data_from_json():
         if not SKILLS:
             print("UYARI: SKILLS eksik olabilir.")
         
-        # skillsIntro eksikse boş string olarak ekle
+    
         for lang_code, texts in TRANSLATIONS.items():
             if "skillsIntro" not in texts:
                 texts["skillsIntro"] = ""
@@ -90,14 +90,12 @@ load_data_from_json()
 
 
 #======================================================================
-# 2. CONTEXT PROCESSOR (Degisiklik Yok)
+# 2. CONTEXT PROCESSOR 
 #======================================================================
 
 @app.context_processor
 def inject_global_vars():
-    # ... (Degisiklik yok) ...
     lang_code = session.get('lang', 'en')
-    # Veriler artik global degiskenden geliyor
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
     return dict(
         menu=MENU_ITEMS,
@@ -107,24 +105,22 @@ def inject_global_vars():
     )
 
 #======================================================================
-# 3. DIL YONETIMI VE SAYFA ROUTE'LARI (Degisiklik Yok)
+# 3. DIL YONETIMI VE SAYFA ROUTE'LARI 
 #======================================================================
 
 @app.before_request
 def ensure_lang_in_session():
-    # ... (Degisiklik yok) ...
     if 'lang' not in session:
         session['lang'] = 'en'
 
 @app.route("/set_language/<lang_code>")
 def set_language(lang_code):
-    # ... (Degisiklik yok) ...
     if lang_code in LANGUAGE_NAMES:
         session['lang'] = lang_code
     return redirect(request.referrer or url_for('home'))
 
 # ======================================================================
-# GUNCEL CHAT ROTASI (FIXED: Başlangıç Durumu Hatası Giderildi)
+# GUNCEL CHAT ROTASI 
 # ======================================================================
 @app.route("/chat", methods=['POST'])
 def chat():
@@ -162,13 +158,11 @@ def chat():
             session['chat_state'] = 'idle'
             user_message = session.get('stored_message', user_message)
             force_ai_response = True 
-            # DİKKAT: Burada current_state'i de güncellemeliyiz ki aşağıdaki IF bloğuna girsin
             current_state = 'idle' 
 
     # ------------------------------------------------------------------
     # DURUM 1: NORMAL SOHBET MODU (IDLE)
     # ------------------------------------------------------------------
-    # HATA BURADAYDI: session.get('chat_state') yerine current_state kullanıyoruz.
     if current_state == 'idle':
         
         triggers = ['mesaj', 'message', 'mail', 'iletişim', 'contact', 'ulas', 'ulaş', 'email']
@@ -185,7 +179,7 @@ def chat():
         
         else:
             # --- YAPAY ZEKA (HUGGING FACE) ---
-            # 1. API KEY KONTROLÜ (Loglara bakarak hatayı gör)
+            # 1. API KEY KONTROLÜ 
             if not HF_API_KEY: 
                 print("HATA: HUGGINGFACE_API_KEY sunucuda bulunamadi!")
                 return jsonify({'reply': error_message}), 500
@@ -308,7 +302,7 @@ def fetch_kaggle_projects():
         return []
 
 
-# --- Sayfa Route'lari (Degisiklik Yok) ---
+# --- Sayfa Route'lari  ---
 @app.route("/")
 def home():
     return render_template("index.html", active='home')
@@ -319,14 +313,14 @@ def about():
 
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS["en"])
     current_skills_data = SKILLS.get(lang_code, SKILLS["en"])
-    current_skills_intro = current_texts.get("skillsIntro", "")  # <<< BURASI EKLENDİ
+    current_skills_intro = current_texts.get("skillsIntro", "")  
 
     return render_template(
         "about.html",
         active='about',
         texts=current_texts,
         skills=current_skills_data,
-        skillsIntro=current_skills_intro  # <<< BURASI EKLENDİ
+        skillsIntro=current_skills_intro 
     )
 
 
@@ -340,74 +334,76 @@ def services():
 def portfolio():
     lang_code = session.get('lang', 'en')
     
-    # 1. Yerel projeleri (data.json) al
-    projects_from_json = PROJECTS.get(lang_code, PROJECTS.get('en', []))
-    
-    # 2. Kaggle projelerini çek
-    kaggle_list = fetch_kaggle_projects()
+    # 1. O dile ait genel çevirileri çek (Menü, başlıklar vb. için)
+    current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS["en"])
 
-    # 3. LeetCode çözümlerini çek
+    # 2. Yerel projeleri (JSON içindeki 'projects' listesinden) al
+    # DİKKAT: Artık PROJECTS global değişkeninden değil, current_texts içinden alıyoruz
+    projects_from_json = current_texts.get("projects", [])
+    
+    # 3. Kaggle ve LeetCode verilerini çek
+    kaggle_list = fetch_kaggle_projects()
     leetcode_solutions = fetch_leetcode_solutions()
     
-    # 4. Klasör yapısını oluştur (Eğer Kaggle'dan veri geldiyse)
+    # 4. Klasör yapısını oluştur (Kaggle Projeleri Varsa)
     if kaggle_list:
-        # Dil ayarları (Klasör kartının üzerindeki yazılar)
+        # Klasör kartı için dil ayarları (Burayı hardcode bırakabiliriz veya JSON'a taşıyabilirsin)
         folder_texts = {
             "tr": {
                 "title": "Kaggle Projeleri",
-                "desc": "Veri bilimi ve makine öğrenimi üzerine son çalışmalarım.", # Yazım hatası düzeltildi
+                "desc": "Veri bilimi ve makine ogrenimi uzerine son calismalarim.", 
                 "tech": "Python, Pandas, NumPy, Scikit-Learn, PyTorch, Matplotlib, Seaborn",
-                "btn_text": "Projeleri İncele"  # <-- YENİ EKLENEN KISIM
+                "btn_text": "Projeleri Incele"  
             },
             "en": {
                 "title": "Kaggle Projects",
                 "desc": "My latest work on data science and machine learning.",
                 "tech": "Python, Pandas, NumPy, Scikit-Learn, PyTorch, Matplotlib, Seaborn",
-                "btn_text": "Browse Projects"   # <-- YENİ EKLENEN KISIM
+                "btn_text": "Browse Projects"   
             },
             "de": {
                 "title": "Kaggle Projekte",
                 "desc": "Meine neuesten Arbeiten zu Data Science und maschinellem Lernen.",
                 "tech": "Python, Pandas, NumPy, Scikit-Learn, PyTorch, Matplotlib, Seaborn",
-                "btn_text": "Projekte ansehen"  # <-- YENİ EKLENEN KISIM
+                "btn_text": "Projekte ansehen"  
             }
         }
         
         txt = folder_texts.get(lang_code, folder_texts['en'])
         
-        # Klasör Objesi
+        # Kaggle Klasör Objesi
         kaggle_folder = {
             "title": txt["title"],
             "description": txt["desc"], 
-            "desc": txt["desc"],
-            
-            "type": "folder",            # <--- JS buna bakıp listeyi açacak
+            "desc": txt["desc"],      
+            "type": "folder",            
             "tech": txt["tech"],         
+            "tags": ["Data Science", "Machine Learning", "Python"], # Kartta etiket görünsün diye
             
-            # Profil linki
-            "url": f"https://www.kaggle.com/{os.getenv('KAGGLE_USERNAME') or 'vedatkoylahisar'}", 
+            # Profil linki (os modülünü import etmeyi unutma veya direkt string yaz)
+            "url": "https://www.kaggle.com/vedatkoylahisar", 
             
-            # Alt projeler
+            # Alt projeler (Modal içinde gösterilecek liste)
             "sub_projects": kaggle_list,
 
-            # Buton Yazısı (HTML'de kullanılacak)
+            # Buton Yazısı 
             "custom_btn": txt["btn_text"] 
         }
         
         # Listeyi Birleştir: [Normal Projeler] + [Kaggle Klasörü]
         all_projects = projects_from_json + [kaggle_folder]
     else:
-        # Veri çekilemediyse sadece yerel projeleri göster
         all_projects = projects_from_json
 
-    # Konsola bilgi bas (Debug için)
-    print(f"DEBUG: {len(projects_from_json)} JSON projesi ve {len(kaggle_list)} Kaggle projesi klasöre eklendi.")
+
+    print(f"DEBUG: {len(projects_from_json)} JSON projesi ve {len(kaggle_list) if kaggle_list else 0} Kaggle projesi yüklendi.")
 
     # 5. RETURN
     return render_template(
         'portfolio.html', 
-        active='portfolio', 
-        projects=all_projects, 
+        active='portfolio',
+        texts=current_texts,       # HTML'deki menülerin çalışması için ŞART
+        projects=all_projects,     # Birleştirilmiş liste
         leetcode=leetcode_solutions
     )
 
@@ -487,11 +483,9 @@ def fetch_leetcode_solutions():
             solutions = []
             
             for file in files:
-                # Sadece kod dosyalarını alalım (.py, .cpp, .java vs.)
-                # README.md veya .gitignore gibi dosyaları atlayalım
                 if file['name'].endswith(('.py', '.cpp', '.java', '.js')) and file['type'] == 'file':
                     
-                    # Dosya ismini temizleyelim (Örn: "two_sum.py" -> "Two Sum")
+                   
                     clean_name = file['name'].rsplit('.', 1)[0].replace('_', ' ').replace('-', ' ').title()
                     
                     solutions.append({
