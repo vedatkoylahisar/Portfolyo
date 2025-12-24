@@ -69,6 +69,32 @@
           "description": "Software developer focused on artificial intelligence and web technologies."
         }
       ],
+      "certificates": [
+        {
+          "title": "AI Bootcamp Certificate",
+          "issuer": "Pupilica",
+          "date": "03-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/overlay/1740865801134/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        },
+        {
+          "title": "Version Control: Git and GitHub",
+          "issuer": "BTK Akademi",
+          "date": "12-2025",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/overlay/1765654720852/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        },
+        {
+          "title": "Pre-Incubation Entrepreneurship Training Certificate",
+          "issuer": "Kocaeli University TECHNOPARK",
+          "date": "12-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/details/certifications/1076957291/multiple-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ&treasuryMediaId=1734440325546"
+        },
+        {
+          "title": "Luxoft Parking Hackathon - Certificate of Participation",
+          "issuer": "Techcareer.net & Luxoft",
+          "date": "11-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/details/certifications/1734436512447/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        }
+      ],
       "experience": [
         {
           "company": "Bimser Cozum",
@@ -99,6 +125,14 @@
           "tags": [ "Python", "OpenCV", "TensorFlow", "MediaPipe" ],
           "github_link": "https://github.com/vedatkoylahisar/SIGN_LANGUAGE",
           "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
+        },
+        {
+          "title": "EEG-Based Emotion Recognition (TÜBİTAK 2209-A)",
+          "description": "A senior research project funded by TÜBİTAK 2209-A, comparing deep learning models for emotion recognition from EEG signals.",
+          "details": "This project, supported by the TÜBİTAK 2209-A Undergraduate Research Projects Program, investigates the effectiveness of various deep learning architectures in recognizing emotions from EEG data.<br><br><strong>Project Scope:</strong><ul><li>Preprocessing and denoising of EEG signals.</li><li>Time-frequency analysis and feature extraction.</li><li>Comparative analysis of CNN, LSTM, and Hybrid models.</li></ul><br><strong>Achievements:</strong><ul><li>TÜBİTAK Project Leadership Experience</li><li>Academic Research and Literature Review</li><li>Biomedical Signal Processing Proficiency</li></ul>",
+          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
+          "github_link": "",
+          "demo_link": ""
         },
         {
           "title": "Academic Article Search (Web Scraping)",
@@ -198,6 +232,32 @@
           "description": "Yapay zeka ve web teknolojileri üzerine çözümler üreten bir yazılım geliştiricisi."
         }
       ],
+      "certificates": [
+        {
+          "title": "Yapay Zeka Bootcamp Sertifkası",
+          "issuer": "Pupilica",
+          "date": "03-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/overlay/1740865801134/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        },
+        {
+          "title": "Versiyon Kontrolleri: Git ve GitHub",
+          "issuer": "BTK Akademi",
+          "date": "12-2025",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/overlay/1765654720852/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        },
+        {
+          "title": "Ön kuluçka girişimcilik eğitim sertifkası",
+          "issuer": "Kocaeli Üniversitesi TEKNOPARK A.Ş.",
+          "date": "12-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/details/certifications/1076957291/multiple-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ&treasuryMediaId=1734440325546"
+        },
+        {
+          "title": "Luxoft Parking Hackathon - Certificate of Participation",
+          "issuer": "Techcareer.net & Luxoft",
+          "date": "11-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/details/certifications/1734436512447/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        }
+      ],
       "experience": [
         {
           "company": "Bimser Cozum",
@@ -228,6 +288,14 @@
           "tags": [ "Python", "OpenCV", "TensorFlow", "MediaPipe" ],
           "github_link": "https://github.com/vedatkoylahisar/SIGN_LANGUAGE",
           "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
+        },
+        {
+          "title": "EEG Tabanlı Duygu Tanıma (TÜBİTAK 2209-A)",
+          "description": "TÜBİTAK 2209-A desteğiyle gerçekleştirilen, EEG sinyalleri üzerinden duygu analizi yapan derin öğrenme modellerinin karşılaştırıldığı bitirme projesi.",
+          "details": "TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı kapsamında hibe almaya hak kazanan bu proje, EEG sinyalleri kullanılarak duygu tanıma üzerine çeşitli derin öğrenme yöntemlerinin performansını karşılaştırır.<br><br><strong>Proje Kapsamı:</strong><ul><li>EEG sinyallerinin işlenmesi ve gürültüden arındırılması.</li><li>Zaman-frekans analizi ve öznitelik çıkarımı.</li><li>CNN, LSTM ve Hibrit modellerin başarı oranlarının kıyaslanması.</li></ul><br><strong>Kazanımlar:</strong><ul><li>TÜBİTAK Proje Yürütücülüğü Deneyimi</li><li>Akademik Araştırma ve Literatür Tarama</li><li>Biyomedikal Sinyal İşleme Yetkinliği</li></ul>",
+          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
+          "github_link": "",
+          "demo_link": ""
         },
         {
           "title": "Akademik Makale Arama (Web Scraping)",
@@ -327,6 +395,32 @@
           "description": "Softwareentwickler mit Schwerpunkt auf künstliche Intelligenz und Webtechnologien."
         }
       ],
+      "certificates": [
+        {
+          "title": "KI-Bootcamp-Zertifikat",
+          "issuer": "Pupilica",
+          "date": "03-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/overlay/1740865801134/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        },
+        {
+          "title": "Versionskontrolle: Git und GitHub",
+          "issuer": "BTK Akademi",
+          "date": "12-2025",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/overlay/1765654720852/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        },
+        {
+          "title": "Zertifikat für Vorinkubations-Gründerschulung",
+          "issuer": "Kocaeli Universität TECHNOPARK",
+          "date": "12-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/details/certifications/1076957291/multiple-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ&treasuryMediaId=1734440325546"
+        },
+        {
+          "title": "Luxoft Parking Hackathon - Teilnahmezertifikat",
+          "issuer": "Techcareer.net & Luxoft",
+          "date": "11-2024",
+          "link": "https://www.linkedin.com/in/vedat-koylahisar-98790b238/details/certifications/1734436512447/single-media-viewer/?profileId=ACoAADs5O7cBQTfngVXHVEPUNBKNmTwLwxnLKwQ"
+        }
+      ],
       "experience": [
         {
           "company": "Bimser Cozum",
@@ -357,6 +451,14 @@
           "tags": [ "Python", "OpenCV", "TensorFlow", "MediaPipe" ],
           "github_link": "https://github.com/vedatkoylahisar/SIGN_LANGUAGE",
           "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
+        },
+        {
+          "title": "EEG-basierte Emotionserkennung (TÜBİTAK 2209-A)",
+          "description": "Ein von TÜBİTAK 2209-A gefördertes Forschungsprojekt, das Deep-Learning-Modelle zur Emotionserkennung aus EEG-Signalen vergleicht.",
+          "details": "Dieses Abschlussprojekt, unterstützt durch das TÜBİTAK 2209-A Programm, untersucht die Effektivität verschiedener Deep-Learning-Methoden bei der Erkennung von Emotionen aus EEG-Daten.<br><br><strong>Projektumfang:</strong><ul><li>Vorverarbeitung und Rauschunterdrückung von EEG-Signalen.</li><li>Zeit-Frequenz-Analyse und Merkmalsextraktion.</li><li>Vergleichsanalyse von CNN-, LSTM- und Hybridmodellen.</li></ul><br><strong>Erfolge:</strong><ul><li>Erfahrung in der TÜBİTAK-Projektleitung</li><li>Akademische Forschung und Literaturrecherche</li><li>Kompetenz in der biomedizinischen Signalverarbeitung</li></ul>",
+          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
+          "github_link": "",
+          "demo_link": ""
         },
         {
           "title": "Akademische Artikelsuche (Web Scraping)",

@@ -1716,3 +1716,93 @@ nav ul {
         color: #121212;
         transform: translateY(-2px);
     }
+
+
+
+/* =================================== */
+/* SERTİFİKALAR BÖLÜMÜ STİLLERİ       */
+/* =================================== */
+
+.certificates-section {
+    padding-bottom: 80px;
+    margin-top: 40px;
+}
+
+.certificates-grid {
+    display: grid;
+    /* Ekran genişliğine göre otomatik sığdırır */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.certificate-card {
+    display: flex;
+    align-items: center; /* İkon ve yazıyı ortalar */
+    gap: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+    /* Karta hover yapınca hafif yukarı kalksın */
+    .certificate-card:hover {
+        transform: translateY(-5px);
+        border-color: #00d9ff;
+    }
+
+.cert-icon-box {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 217, 255, 0.1); /* Hafif mavi arka plan */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #00d9ff;
+    flex-shrink: 0; /* İkonun sıkışmasını engeller */
+}
+
+.cert-info {
+    display: flex;
+    flex-direction: column;
+}
+
+    .cert-info h3 {
+        font-size: 1.1rem;
+        color: #fff;
+        margin-bottom: 5px;
+        line-height: 1.3;
+    }
+
+.cert-issuer {
+    color: #00d9ff;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.cert-date {
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.cert-link {
+    font-size: 0.85rem;
+    color: #ccc;
+    text-decoration: none;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .cert-link:hover {
+        color: #00d9ff;
+    }
+
+/* Mobil Uyumluluk */
+@media (max-width: 600px) {
+    .certificates-grid {
+        grid-template-columns: 1fr; /* Mobilde tek sütun */
+    }
+}

@@ -78,6 +78,31 @@
     </section>
     {% endif %}
 
+    {% if texts.certificates %}
+    <section class="certificates-section container">
+        <h2 class="section-title scroll-element fade-in-up">Sertifikalar</h2>
+        <div class="certificates-grid">
+            {% for cert in texts.certificates %}
+            <div class="certificate-card dark-card scroll-element fade-in-up">
+                <div class="cert-icon-box">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <div class="cert-info">
+                    <h3>{{ cert.title }}</h3>
+                    <span class="cert-issuer">{{ cert.issuer }}</span>
+                    <span class="cert-date">{{ cert.date }}</span>
+                    {% if cert.link %}
+                    <a href="{{ cert.link }}" target="_blank" class="cert-link">
+                        Görüntüle <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
 </div>
 
 
