@@ -6,9 +6,11 @@
 <div class="about-page-wrapper">
 
     <section class="skills-section container">
-        <p class="skills-intro scroll-element fade-in-up">
-            {{ texts.skillsIntro }}
-        </p>
+        <div class="intro-wrapper scroll-element fade-in-up">
+          <h3 class="intro-title"></h3> <p class="skills-intro-text">
+          {{ texts.skillsIntro }}
+          </p>
+        </div>
 
         <div class="skills-grid">
             {% for skill in skills %}
@@ -77,6 +79,8 @@
     {% endif %}
 
 </div>
+
+
 
 <script>
     // Sayfa kaydırıldıkça elementleri gösteren script

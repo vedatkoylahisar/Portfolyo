@@ -362,10 +362,10 @@ nav ul {
 
 .skills-section {
     max-width: 1350px;
-    margin: 100px auto;
-    padding: 60px 40px;
-    background-color: var(--dark-bg);
-    color: var(--text-light);
+    margin: 50px auto 100px auto; /* Üstten 50px, alttan 100px boşluk */
+    padding: 0 40px;
+    background-color: var(--dark-bg); 
+    color: white;
 }
 
 .skills-title {
@@ -1306,14 +1306,14 @@ nav ul {
 .section-title {
     text-align: center;
     font-size: 2rem;
-    color: #ffffff; /* Beyaz başlık */
-    margin: 80px 0 50px;
+    color: #ffffff;
+    margin: 60px 0 40px; 
     font-weight: 700;
 }
 
 /* --- ORTAK KART TASARIMI (DARK MODE) --- */
 .dark-card {
-    background-color: #111; /* Görseldeki gibi çok koyu gri/siyah */
+    background-color: #111; 
     border: 1px solid #333; /* Hafif gri çerçeve */
     padding: 25px;
     border-radius: 12px;
@@ -1335,22 +1335,23 @@ nav ul {
 /* --- TIMELINE (DENEYİM) BÖLÜMÜ --- */
 .experience-section {
     position: relative;
-    padding-bottom: 50px;
+    padding-top: 80px;
+    padding-bottom: 40px; 
 }
 
 .timeline {
     position: relative;
     max-width: 1000px;
     margin: 0 auto;
+    padding-bottom: 20px; 
 }
 
-/* Dikey Çizgi */
 .timeline-line {
     position: absolute;
     width: 2px;
     background-color: #333;
     top: 0;
-    bottom: 0;
+    bottom: 0; 
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1487,6 +1488,49 @@ nav ul {
     color: #636e72;
     font-size: 0.9rem;
     margin-bottom: 10px;
+}
+.education-section {
+    padding-bottom: 80px; 
+    margin-top: -20px; 
+}
+
+/* --- INTRO (GİRİŞ YAZISI) DÜZENLEMESİ --- */
+
+/* Kapsayıcı: Yazıyı ortalar ve genişliğini sınırlar */
+.intro-wrapper {
+    max-width: 800px; /* Yazının çok yayılmasını engeller (Kilit nokta burası) */
+    margin: 0 auto 60px auto; /* Ortalar ve alttan boşluk bırakır */
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Küçük Başlık (Opsiyonel) */
+.intro-title {
+    font-size: 1.1rem;
+    color: #00d9ff; /* Senin mavi rengin */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* Paragrafın Kendisi */
+.skills-intro-text {
+    font-size: 1.2rem; /* Yazı boyutunu büyüttük, daha rahat okunur */
+    line-height: 1.8; /* Satır aralarını açtık, ferahladı */
+    color: #bdc3c7; /* Göz yormayan hafif gri */
+    font-weight: 300; /* Daha ince ve modern font kalınlığı */
+}
+
+/* Mobilde kenarlardan çok sıkışmasın */
+@media (max-width: 768px) {
+    .intro-wrapper {
+        margin-bottom: 40px;
+    }
+
+    .skills-intro-text {
+        font-size: 1rem;
+    }
 }
 
 
