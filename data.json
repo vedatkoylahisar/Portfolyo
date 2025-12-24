@@ -36,12 +36,12 @@
       "greeting": "Hello, It's Me",
       "name": "Vedat Koylahisar",
       "profession": "And I'm a",
-      "description": "I am a software developer.",
+      "description": "",
       "downloadCV": "Download CV",
-      "typingText": [ "AI Developer", "Data Analyst", "Freelancer" ],
+      "typingText": [ "Software Developer", "AI Developer", "Full-Stack Developer" ],
       "aboutTitle": "About Me",
       "aboutContent": {
-        "paragraph": "Hello! I am Vedat Koylahisar, a 4th year Computer Engineering student at Kocaeli University. I have been actively interested in software development for about four years, working on projects for desktop, web, and mobile platforms. Software for me is not just a profession but a creative process that offers solutions and turns ideas into reality.",
+        "paragraph": "I am a senior Computer Engineering student at Kocaeli University. I define myself as a versatile Software Developer who does not limit myself to a single field. I create solutions across a wide spectrum, ranging from web technologies to desktop applications and AI integrations. Using modern tools, primarily C# and Python, I focus on developing scalable, clean, and sustainable systems by selecting the most suitable technology for each need.",
         "cards": [
           {
             "number": "4+",
@@ -199,12 +199,12 @@
       "greeting": "Merhaba, Ben",
       "name": "Vedat Koylahisar",
       "profession": "Ve Ben bir",
-      "description": "Ben yazilim gelistiricisiyim.",
+      "description": "",
       "downloadCV": "CV Indir",
-      "typingText": [ "Yapay Zeka Gelistiricisi", "Veri Analisti", "Freelancer" ],
+      "typingText": [ "Yazilim Gelistiricisiyim", "Yapay Zeka Gelistiricisiyim", "Full-stack Gelistiriciyim" ],
       "aboutTitle": "Hakkimda",
       "aboutContent": {
-        "paragraph": "Merhaba! Ben Vedat Koylahisar, Kocaeli Universitesi Bilgisayar Muhendisligi 4. sinif ogrencisiyim. Yaklasik dort yildir aktif olarak yazilim gelistirme ile ilgileniyor; masaustu, web ve mobil platformlar icin projeler yapiyorum. Yazilim benim icin sadece bir meslek degil, cozum sunan, fikirleri gercege donusturen bir yaratim sureci.",
+        "paragraph": "Kocaeli Üniversitesi Bilgisayar Mühendisliği son sınıf öğrencisiyim. Kendimi tek bir alanla sınırlamayan, çok yönlü bir Yazılım Geliştirici olarak tanımlıyorum. Web teknolojilerinden masaüstü uygulamalarına, yapay zeka entegrasyonlarından veri analizine kadar geniş bir yelpazede çözümler üretiyorum. C# ve Python başta olmak üzere modern araçları kullanarak, ihtiyaca en uygun teknolojiyle ölçeklenebilir, temiz ve sürdürülebilir sistemler geliştirmeye odaklanıyorum.",
         "cards": [
           {
             "number": "4+",
@@ -362,12 +362,12 @@
       "greeting": "Hallo, Ich bin",
       "name": "Vedat Koylahisar",
       "profession": "Und ich bin ein",
-      "description": "Ich bin Softwareentwickler.",
+      "description": "",
       "downloadCV": "Lebenslauf herunterladen",
-      "typingText": [ "KI-Entwickler", "Datenanalyst", "Freiberufler" ],
+      "typingText": [ "Softwareentwickler", "KI-Entwickler", "Full-Stack-Entwickler" ],
       "aboutTitle": "Uber Mich",
       "aboutContent": {
-        "paragraph": "Hallo! Ich bin Vedat Koylahisar, ein Student der Informatik im 4. Jahr an der Universitat Kocaeli. Seit etwa vier Jahren beschaftige ich mich aktiv mit Softwareentwicklung und arbeite an Projekten fur Desktop-, Web- und Mobilplattformen. Software ist fur mich nicht nur ein Beruf, sondern ein kreativer Prozess, der Losungen bietet und Ideen verwirklicht.",
+        "paragraph": "Ich bin Informatikstudent im letzten Jahr an der Universität Kocaeli. Ich definiere mich als vielseitigen Softwareentwickler, der sich nicht auf einen einzigen Bereich beschränkt. Ich entwickle Lösungen in einem breiten Spektrum, das von Webtechnologien über Desktop-Anwendungen bis hin zu KI-Integrationen reicht. Unter Verwendung moderner Tools, vor allem C# und Python, konzentriere ich mich darauf, skalierbare, saubere und nachhaltige Systeme zu entwickeln.",
         "cards": [
           {
             "number": "4+",

@@ -119,32 +119,25 @@ def set_language(lang_code):
         session['lang'] = lang_code
     return redirect(request.referrer or url_for('home'))
 
-# ======================================================================
-# GUNCEL CHAT ROTASI 
-# ======================================================================
 @app.route("/chat", methods=['POST'])
 def chat():
     # 1. Temel Ayarlar ve Dil
     lang_code = session.get('lang', 'en')
+    # data.json içindeki verileri çekiyoruz
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
-    error_message = current_texts.get('chat_general_knowledge_decline', 'Sorry, I cannot help with that.')
     
     user_message = request.json.get('message', '').strip()
     if not user_message:
         return jsonify({'error': 'Mesaj bulunamadi'}), 400
 
-    # 2. Durum Kontrolü (Varsayılan 'idle')
+    # 2. Durum Kontrolü
     current_state = session.get('chat_state', 'idle')
     ai_reply = ""
-    
     force_ai_response = False 
 
-    # ------------------------------------------------------------------
-    # ÖZEL DURUM: TEYİT AŞAMASI (CONFIRMING)
-    # ------------------------------------------------------------------
+    # --- TEYİT AŞAMASI (CONFIRMING) ---
     if current_state == 'confirming_contact':
         affirmative = ['evet', 'yes', 'ja', 'onay', 'istiyorum', 'tabii', 'ok', 'hıhı', 'yep']
-        
         msg_lower = user_message.lower()
 
         if any(word in msg_lower for word in affirmative):
@@ -153,16 +146,13 @@ def chat():
             elif lang_code == 'de': ai_reply = "Super. Darf ich zuerst Ihren Namen erfahren?"
             else: ai_reply = "Great. May I have your name first?"
             return jsonify({'reply': ai_reply})
-        
         else:
             session['chat_state'] = 'idle'
             user_message = session.get('stored_message', user_message)
             force_ai_response = True 
             current_state = 'idle' 
 
-    # ------------------------------------------------------------------
-    # DURUM 1: NORMAL SOHBET MODU (IDLE)
-    # ------------------------------------------------------------------
+    # --- NORMAL SOHBET MODU (IDLE) ---
     if current_state == 'idle':
         
         triggers = ['mesaj', 'message', 'mail', 'iletişim', 'contact', 'ulas', 'ulaş', 'email']
@@ -179,54 +169,85 @@ def chat():
         
         else:
             # --- YAPAY ZEKA (HUGGING FACE) ---
-            # 1. API KEY KONTROLÜ 
             if not HF_API_KEY: 
-                print("HATA: HUGGINGFACE_API_KEY sunucuda bulunamadi!")
-                return jsonify({'reply': error_message}), 500
+                return jsonify({'reply': "Error: API Key missing."}), 500
 
             try:
                 lang_name = LANGUAGE_NAMES.get(lang_code, 'English')
-                vedat_context = current_texts.get("chatbot_context", "")
                 
-                project_context = "\n**Key Projects:**\n"
-                projects_list = PROJECTS.get(lang_code, PROJECTS.get('en', []))
-                if projects_list:
-                    for proj in projects_list: project_context += f" - {proj['title']}: {proj['desc']}\n"
-                else:
-                    project_context = "\n(No projects listed.)\n"
+                # --- VERİ HAZIRLAMA (Sadece JSON Kullanarak) ---
                 
-                system_prompt = f"""
-You are a professional portfolio assistant for Vedat Koylahisar.
-Answer ONLY based on the facts below. Respond in {lang_name}.
+                # Verileri data.json'dan çekiyoruz
+                projects = current_texts.get('projects', [])
+                experience = current_texts.get('experience', [])
+                education = current_texts.get('education', [])
+                certificates = current_texts.get('certificates', [])
+                
+                # Bağlamı (Context) oluşturuyoruz
+                context_str = f"**Current Language:** {lang_name}\n\n"
+                
+                context_str += "**ABOUT VEDAT:**\n"
+                # Hakkımda paragrafını ekleyelim ki AI genel bilgiye sahip olsun
+                about_content = current_texts.get('aboutContent', {})
+                if isinstance(about_content, dict):
+                    context_str += f"{about_content.get('paragraph', '')}\n"
 
-**Facts:**
-{vedat_context}
-**Projects:**
-{project_context}
-"""
+                context_str += "\n**PROJECTS:**\n"
+                for p in projects:
+                    # Detaylı açıklama varsa onu, yoksa kısa açıklamayı kullan
+                    desc = p.get('details') or p.get('description')
+                    # HTML etiketlerini temizlemek iyi olabilir ama LLM'ler genelde anlar.
+                    # Basitçe ekliyoruz:
+                    context_str += f"- {p.get('title')}: {desc} (Technologies: {', '.join(p.get('tags', []))})\n"
+                
+                context_str += "\n**EXPERIENCE:**\n"
+                for e in experience:
+                    context_str += f"- {e.get('company')} ({e.get('role')}, {e.get('date')}): {e.get('description')}\n"
+
+                context_str += "\n**EDUCATION:**\n"
+                for edu in education:
+                    context_str += f"- {edu.get('school')} - {edu.get('degree')} ({edu.get('date')})\n"
+
+                context_str += "\n**CERTIFICATES:**\n"
+                for cert in certificates:
+                    context_str += f"- {cert.get('title')} - {cert.get('issuer')} ({cert.get('date')})\n"
+
+                # Sistem Mesajı
+                system_prompt = f"""
+                You are a professional portfolio assistant for Vedat Koylahisar.
+                Answer questions based ONLY on the structured data provided below.
+                
+                INFORMATION SOURCE:
+                {context_str}
+                
+                INSTRUCTIONS:
+                1. Respond in the user's language ({lang_name}).
+                2. Be friendly, professional, and concise.
+                3. If asked about contact info, guide them to the contact form or email (vedatkylhsr@gmail.com).
+                4. Do not make up facts not present in the data.
+                """
+
+                # API İsteği
                 headers = {"Authorization": f"Bearer {HF_API_KEY}", "Content-Type": "application/json"}
                 payload = {
                     "model": "meta-llama/Llama-3.1-8B-Instruct",
                     "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_message}],
-                    "max_tokens": 150, "temperature": 0.2
+                    "max_tokens": 250, "temperature": 0.3
                 }
                 
                 response = requests.post("https://router.huggingface.co/v1/chat/completions", headers=headers, json=payload)
                 
                 if response.status_code != 200: 
-                    print(f"HF API Hatasi: {response.status_code} - {response.text}")
-                    return jsonify({'reply': "Model loading..."}), 503
+                    return jsonify({'reply': "AI Model loading... Please try again."}), 503
 
                 ai_reply = response.json()['choices'][0]['message']['content'].strip()
                 return jsonify({'reply': ai_reply})
 
             except Exception as e:
                 print(f"AI Kod Hatasi: {e}")
-                return jsonify({'reply': error_message}), 500
+                return jsonify({'reply': "Error processing request."}), 500
 
-    # ------------------------------------------------------------------
-    # FORM ADIMLARI
-    # ------------------------------------------------------------------
+    # --- FORM ADIMLARI (DEĞİŞMEDİ) ---
     elif current_state == 'waiting_name':
         session['contact_name'] = user_message
         session['chat_state'] = 'waiting_email'
@@ -268,7 +289,6 @@ Answer ONLY based on the facts below. Respond in {lang_name}.
         session.pop('stored_message', None)
         return jsonify({'reply': ai_reply})
 
-    # HİÇBİR ŞARTA UYMAZSA (DEBUG İÇİN)
     return jsonify({'reply': "..."})
 
 def fetch_kaggle_projects():
