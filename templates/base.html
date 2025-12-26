@@ -17,7 +17,9 @@
             <img src="{{ url_for('static', filename='img/vedatpp.jpg') }}" alt="Profil Fotografi" class="header-profile-pic-static" />
             {% endif %}
 
-            <h2 class="logo">Portfolio.</h2>
+            <h2 class="logo">
+                <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Portfolio.</a>
+            </h2>
         </div>
 
         <input type="checkbox" id="menu-toggle">
