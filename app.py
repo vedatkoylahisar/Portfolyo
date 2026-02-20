@@ -7,8 +7,8 @@ import requests # HTTP istekleri icin
 import smtplib
 import re
 from email.message import EmailMessage
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail, Email
+import resend
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 os.environ["KAGGLE_CONFIG_DIR"] = basedir
@@ -34,6 +34,44 @@ if not HF_API_KEY:
 #======================================================================
 # 1. TUM VERILER `data.json` DOSYASINDAN YUKLENIYOR
 #======================================================================
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_portfolio_data",
+            "description": "Fetch specific information about Vedat's projects, skills, or background from the local database.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "data_type": {
+                        "type": "string",
+                        "enum": ["projects", "skills", "experience", "education"],
+                        "description": "The category of information needed."
+                    }
+                },
+                "required": ["data_type"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "send_contact_email",
+            "description": "Call this when the user wants to leave a message or contact Vedat.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sender_name": {"type": "string"},
+                    "sender_email": {"type": "string"},
+                    "message_content": {"type": "string"}
+                },
+                "required": ["sender_name", "sender_email", "message_content"]
+            }
+        }
+    }
+]
+
 
 # Veri degiskenlerini global olarak tanimla
 MENU_ITEMS = []
@@ -119,194 +157,147 @@ def set_language(lang_code):
         session['lang'] = lang_code
     return redirect(request.referrer or url_for('home'))
 
+
+def get_portfolio_data(data_type):
+    lang_code = session.get('lang', 'en')
+    # Use global TRANSLATIONS and SKILLS loaded at app start
+    
+    try:
+        # 1. Projects search
+        if data_type == "projects":
+            content = TRANSLATIONS.get(lang_code, {}).get("projects", [])
+            return json.dumps(content, ensure_ascii=True)
+            
+        # 2. Skills search
+        elif data_type == "skills":
+            content = SKILLS.get(lang_code, [])
+            return json.dumps(content, ensure_ascii=True)
+            
+        # 3. Experience search
+        elif data_type == "experience":
+            content = TRANSLATIONS.get(lang_code, {}).get("experience", [])
+            return json.dumps(content, ensure_ascii=True)
+
+        # 4. Education & Certificates search
+        elif data_type == "education":
+            edu = TRANSLATIONS.get(lang_code, {}).get("education", [])
+            cert = TRANSLATIONS.get(lang_code, {}).get("certificates", [])
+            return json.dumps({"education": edu, "certificates": cert}, ensure_ascii=True)
+
+    except Exception as e:
+        print(f"DEBUG - Data Fetch Error: {e}")
+        return "System could not retrieve the data."
+        
+    return "No information found for this category."
+
+def send_contact_email(sender_name, sender_email, message_content):
+    # Your existing send_mail logic
+    success = send_mail(
+        to_email=os.getenv("MAIL_FROM"),
+        subject=f"New Message from {sender_name}",
+        message_text=f"Email: {sender_email}\nMessage: {message_content}"
+    )
+    return "Success" if success else "Failed"
+
+
 @app.route("/chat", methods=['POST'])
 def chat():
-    # 1. Temel Ayarlar ve Dil
-    lang_code = session.get('lang', 'en')
-    # data.json içindeki verileri çekiyoruz
-    current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
+    api_key = os.getenv('CUSTOM_API_KEY')
+    api_base = os.getenv('CUSTOM_API_BASE', '').rstrip('/')
+    api_url = f"{api_base}/chat/completions"
     
-    user_message = request.json.get('message', '').strip()
-    if not user_message:
-        return jsonify({'error': 'Mesaj bulunamadi'}), 400
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    user_msg = request.json.get('message', '').strip()
+    if not user_msg:
+        return jsonify({'error': 'No message provided'}), 400
 
-    # 2. Durum Kontrolü
-    current_state = session.get('chat_state', 'idle')
-    ai_reply = ""
-    force_ai_response = False 
+    # 1. Hafizayi (History) Yukle veya Olustur
+    if 'chat_history' not in session:
+        session['chat_history'] = [
+            {"role": "system", "content": "You are Vedat's personal AI assistant. Use 'get_portfolio_data' for info. If the user provides name, email and message, call 'send_contact_email' tool immediately after their confirmation. Do not forget previously shared info."}
+        ]
+    
+    # Kullanicinin yeni mesajini hafizaya ekle
+    session['chat_history'].append({"role": "user", "content": user_msg})
 
-    # --- TEYİT AŞAMASI (CONFIRMING) ---
-    if current_state == 'confirming_contact':
-        affirmative = ['evet', 'yes', 'ja', 'onay', 'istiyorum', 'tabii', 'ok', 'hıhı', 'yep']
-        msg_lower = user_message.lower()
+    api_url = os.getenv('CUSTOM_API_BASE', '').rstrip('/')
+    if not api_url.endswith('/chat/completions'):
+        api_url = f"{api_url}/chat/completions"
+    
+    headers = {
+        "Authorization": f"Bearer {os.getenv('CUSTOM_API_KEY')}",
+        "Content-Type": "application/json"
+    }
 
-        if any(word in msg_lower for word in affirmative):
-            session['chat_state'] = 'waiting_name'
-            if lang_code == 'tr': ai_reply = "Harika. Öncelikle adınızı öğrenebilir miyim?"
-            elif lang_code == 'de': ai_reply = "Super. Darf ich zuerst Ihren Namen erfahren?"
-            else: ai_reply = "Great. May I have your name first?"
-            return jsonify({'reply': ai_reply})
-        else:
-            session['chat_state'] = 'idle'
-            user_message = session.get('stored_message', user_message)
-            force_ai_response = True 
-            current_state = 'idle' 
-
-    # --- NORMAL SOHBET MODU (IDLE) ---
-    if current_state == 'idle':
+    try:
+        # STEP 1: Hafizadaki TUM mesajlari gonderiyoruz (Sadece sonuncuyu degil!)
+        payload = {
+            "model": os.getenv("CUSTOM_MODEL_NAME"),
+            "messages": session['chat_history'],
+            "tools": tools,
+            "tool_choice": "auto"
+        }
         
-        triggers = ['mesaj', 'message', 'mail', 'iletişim', 'contact', 'ulas', 'ulaş', 'email']
-        is_trigger = any(keyword in user_message.lower() for keyword in triggers)
-        
-        if is_trigger and not force_ai_response:
-            session['stored_message'] = user_message
-            session['chat_state'] = 'confirming_contact'
+        response = requests.post(api_url, json=payload, headers=headers, timeout=30)
+        res_json = response.json()
+        response_msg = res_json['choices'][0]['message']
+
+        # STEP 2: Tool Handling
+        if response_msg.get("tool_calls"):
+            # AI'in tool cagrisini hafizaya ekle
+            session['chat_history'].append(response_msg)
             
-            if lang_code == 'tr': ai_reply = "Bana mesaj bırakmak mı istiyorsunuz? (Evet / Hayır)"
-            elif lang_code == 'de': ai_reply = "Möchten Sie eine Nachricht hinterlassen? (Ja / Nein)"
-            else: ai_reply = "Do you want to leave a message? (Yes / No)"
-            return jsonify({'reply': ai_reply})
-        
-        else:
-            # --- YAPAY ZEKA (HUGGING FACE) ---
-            if not HF_API_KEY: 
-                return jsonify({'reply': "Error: API Key missing."}), 500
-
-            try:
-                lang_name = LANGUAGE_NAMES.get(lang_code, 'English')
+            for tool_call in response_msg["tool_calls"]:
+                func_name = tool_call["function"]["name"]
+                args = json.loads(tool_call["function"]["arguments"])
                 
-                # --- VERİ HAZIRLAMA (Sadece JSON Kullanarak) ---
+                print(f"DEBUG - Executing: {func_name}")
                 
-                # Verileri data.json'dan çekiyoruz
-                projects = current_texts.get('projects', [])
-                experience = current_texts.get('experience', [])
-                education = current_texts.get('education', [])
-                certificates = current_texts.get('certificates', [])
-                
-                # Bağlamı (Context) oluşturuyoruz
-                context_str = f"**Current Language:** {lang_name}\n\n"
-                
-                context_str += "**ABOUT VEDAT:**\n"
-                # Hakkımda paragrafını ekleyelim ki AI genel bilgiye sahip olsun
-                about_content = current_texts.get('aboutContent', {})
-                if isinstance(about_content, dict):
-                    context_str += f"{about_content.get('paragraph', '')}\n"
+                if func_name == "get_portfolio_data":
+                    result_content = get_portfolio_data(args.get('data_type'))
+                elif func_name == "send_contact_email":
+                    # Tool icindeki arguman isimlerine dikkat (name, email, message)
+                    result_content = send_contact_email(
+                        name=args.get('name') or args.get('sender_name'), 
+                        email=args.get('email') or args.get('sender_email'), 
+                        message=args.get('message') or args.get('message_content')
+                    )
+                else:
+                    result_content = "Function not found."
 
-                context_str += "\n**PROJECTS:**\n"
-                for p in projects:
-                    # Detaylı açıklama varsa onu, yoksa kısa açıklamayı kullan
-                    desc = p.get('details') or p.get('description')
-                    # HTML etiketlerini temizlemek iyi olabilir ama LLM'ler genelde anlar.
-                    # Basitçe ekliyoruz:
-                    context_str += f"- {p.get('title')}: {desc} (Technologies: {', '.join(p.get('tags', []))})\n"
-                
-                context_str += "\n**EXPERIENCE:**\n"
-                for e in experience:
-                    context_str += f"- {e.get('company')} ({e.get('role')}, {e.get('date')}): {e.get('description')}\n"
+                # Tool sonucunu hafizaya ekle
+                session['chat_history'].append({
+                    "role": "tool",
+                    "tool_call_id": tool_call["id"],
+                    "name": func_name,
+                    "content": result_content
+                })
+            
+            # STEP 3: Final Response
+            final_payload = {
+                "model": os.getenv("CUSTOM_MODEL_NAME"),
+                "messages": session['chat_history']
+            }
+            final_res = requests.post(api_url, json=final_payload, headers=headers, timeout=30)
+            final_ans = final_res.json()['choices'][0]['message']
+            
+            # Final cevabi da hafizaya ekle ve don
+            session['chat_history'].append(final_ans)
+            session.modified = True # Flask session'i guncelle
+            return jsonify({'reply': final_ans['content']})
 
-                context_str += "\n**EDUCATION:**\n"
-                for edu in education:
-                    context_str += f"- {edu.get('school')} - {edu.get('degree')} ({edu.get('date')})\n"
+        # Tool cagrisi yoksa, direkt cevabi hafizaya ekle ve don
+        session['chat_history'].append(response_msg)
+        session.modified = True
+        return jsonify({'reply': response_msg.get('content', '...')})
 
-                context_str += "\n**CERTIFICATES:**\n"
-                for cert in certificates:
-                    context_str += f"- {cert.get('title')} - {cert.get('issuer')} ({cert.get('date')})\n"
+    except Exception as e:
+        print(f"DEBUG - Fatal Error: {str(e)}")
+        return jsonify({'reply': "Something went wrong. Let's try again."}), 500
 
-                # Sistem Mesajı - Revize Edilmiş (Katı Mod)
-                system_prompt = f"""
-                You are an AI assistant for Vedat Koylahisar's portfolio website.
-
-                You must answer questions ONLY using the CONTEXT DATA provided.
-
-                --- CONTEXT DATA START ---
-                {context_str}
-                --- CONTEXT DATA END ---
-
-                BEHAVIOR RULES:
-                1. Keep all answers VERY SHORT and to the point.
-                2. Do NOT list technologies unless explicitly asked.
-                3. When asked "Does Vedat know X?", answer in one of these formats only:
-                   - "Yes, Vedat has experience in X."
-                   - "Vedat has basic knowledge of X."
-                   - "No, there is no information about X."
-                4. When asked about project suitability, answer using:
-                   - "Yes, this matches his experience."
-                   - "Partially, some required skills are present."
-                   - "No, this is outside his documented experience."
-                   (Optionally add ONE short sentence explanation.)
-                5. Never guess or assume.
-                6. If the information is missing, reply:
-                   "I don't have information about that in my current database, but you can contact Vedat directly."
-                7. You are NOT Vedat. Always refer to him as "Vedat" or "He".
-                8. Respond in the same language as the user's question ({lang_name}).
-
-                Wait for the user's question.
-                """
-
-
-                # API İsteği
-                headers = {"Authorization": f"Bearer {HF_API_KEY}", "Content-Type": "application/json"}
-                payload = {
-                    "model": "meta-llama/Llama-3.1-8B-Instruct",
-                    "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_message}],
-                    "max_tokens": 250, "temperature": 0.3
-                }
-                
-                response = requests.post("https://router.huggingface.co/v1/chat/completions", headers=headers, json=payload)
-                
-                if response.status_code != 200: 
-                    return jsonify({'reply': "AI Model loading... Please try again."}), 503
-
-                ai_reply = response.json()['choices'][0]['message']['content'].strip()
-                return jsonify({'reply': ai_reply})
-
-            except Exception as e:
-                print(f"AI Kod Hatasi: {e}")
-                return jsonify({'reply': "Error processing request."}), 500
-
-    # --- FORM ADIMLARI (DEĞİŞMEDİ) ---
-    elif current_state == 'waiting_name':
-        session['contact_name'] = user_message
-        session['chat_state'] = 'waiting_email'
-        if lang_code == 'tr': ai_reply = f"Memnun oldum {user_message}. E-posta adresinizi yazar mısınız?"
-        elif lang_code == 'de': ai_reply = f"Freut mich, {user_message}. Ihre E-Mail-Adresse bitte?"
-        else: ai_reply = f"Nice to meet you {user_message}. Your email address please?"
-        return jsonify({'reply': ai_reply})
-
-    elif current_state == 'waiting_email':
-        session['contact_email'] = user_message
-        session['chat_state'] = 'waiting_message'
-        if lang_code == 'tr': ai_reply = "Son olarak mesajınızı yazabilir misiniz?"
-        elif lang_code == 'de': ai_reply = "Und schließlich Ihre Nachricht?"
-        else: ai_reply = "Finally, your message?"
-        return jsonify({'reply': ai_reply})
-
-    elif current_state == 'waiting_message':
-        message_body = str(user_message)
-        name = str(session.get('contact_name', 'Anonim'))
-        email = str(session.get('contact_email', 'Anonim'))
-        
-        mail_content = f"Chatbot Uzerinden Yeni Mesaj\n\nIsim: {name}\nEmail: {email}\nMesaj:\n{message_body}"
-        target_email = os.getenv("MAIL_FROM")
-        
-        try:
-            success = send_mail(to_email=target_email, subject=f"Chatbot: {name}", message_text=mail_content)
-            if success:
-                if lang_code == 'tr': ai_reply = "Mesajınız alındı ve Vedat'a iletildi!"
-                elif lang_code == 'de': ai_reply = "Nachricht gesendet!"
-                else: ai_reply = "Message forwarded!"
-            else:
-                raise Exception("send_mail False dondu")
-        except Exception as e:
-            print(f"MAIL HATASI: {e}")
-            if lang_code == 'tr': ai_reply = "Mesajınız kaydedildi ancak sistemsel bir hata nedeniyle mail atılamadı."
-            else: ai_reply = "Message saved but email failed due to system error."
-        
-        session['chat_state'] = 'idle'
-        session.pop('stored_message', None)
-        return jsonify({'reply': ai_reply})
-
-    return jsonify({'reply': "..."})
 
 def fetch_kaggle_projects():
     try:
@@ -342,6 +333,8 @@ def fetch_kaggle_projects():
 # --- Sayfa Route'lari  ---
 @app.route("/")
 def home():
+
+    session.pop('chat_history', None)
     return render_template("index.html", active='home')
 
 @app.route("/about")
@@ -445,21 +438,35 @@ def portfolio():
     )
 
 
-def send_mail(to_email, subject, message_text):
-    message = Mail(
-        from_email=os.getenv("MAIL_FROM"),
-        to_emails=to_email,
-        subject=subject,
-        plain_text_content=message_text
-    )
+def send_contact_email(name, email, message):
+    api_key = os.getenv("RESEND_API_KEY")
+    target_email = os.getenv("MAIL_FROM") # Mesajın gideceği kendi mailin
+    
+    if not api_key:
+        print("ERROR: RESEND_API_KEY not found.")
+        return "Error: API Key missing."
+
+    resend.api_key = api_key
 
     try:
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-        sg.send(message)
-        return True
+        params = {
+            "from": "Portfolio Assistant <onboarding@resend.dev>",
+            "to": [target_email],
+            "subject": f"New Message from {name}",
+            "html": f"""
+                <h3>New Contact Request</h3>
+                <p><strong>Name:</strong> {name}</p>
+                <p><strong>Email:</strong> {email}</p>
+                <p><strong>Message:</strong> {message}</p>
+            """
+        }
+
+        email_response = resend.Emails.send(params)
+        print(f"Resend Success! ID: {email_response}")
+        return "Success: Your message has been delivered to Vedat."
     except Exception as e:
-        print("Mail gonderme hatasi:", e)
-        return False
+        print(f"Resend Error: {str(e)}")
+        return f"Error: {str(e)}"
 
 
 
@@ -473,36 +480,23 @@ def contact():
         email = request.form.get("email")
         message = request.form.get("message")
 
-        mail_content = f"""
-Yeni Iletisim Formu Mesaji
-
-Isim: {name}
-Email: {email}
-
-Mesaj:
-{message}
-        """
-
-        # Mail gönderme işlemini dene
-        success = send_mail(
-            to_email=os.getenv("MAIL_FROM"),
-            subject="Yeni portfolyo iletisim mesaji",
-            message_text=mail_content
+        # BURASI DEGISTI: Fonksiyonun bekledigi 3 parametreyi gonderiyoruz
+        success_msg = send_contact_email(
+            name=name,
+            email=email,
+            message=message
         )
 
-        if success:
-            # JSON dosyanızdaki "contactSuccess" anahtarını kullanır, yoksa default mesaj döner
-            msg = current_texts.get("contactSuccess", "Mesajınız başarıyla gönderildi!")
+        # send_contact_email "Success..." diye baslayan bir string donuyor
+        if "Success" in success_msg:
+            msg = current_texts.get("contactSuccess", "Your message has been sent!")
             flash(msg, "success")
         else:
-            # JSON dosyanızdaki "contactError" anahtarını kullanır
-            msg = current_texts.get("contactError", "Mesaj gönderilirken bir hata oluştu.")
+            msg = current_texts.get("contactError", "An error occurred.")
             flash(msg, "error")
 
-        # ÖNEMLİ: Form gönderildikten sonra aynı sayfaya yönlendiriyoruz (Redirect-After-Post)
         return redirect(url_for('contact'))
 
-    # GET request
     return render_template("contact.html", active='contact')
 
 
