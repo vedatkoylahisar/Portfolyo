@@ -12,3 +12,4 @@ numpy
 urllib3
 certifi
 sendgrid
+resend
