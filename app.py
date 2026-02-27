@@ -14,22 +14,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 os.environ["KAGGLE_CONFIG_DIR"] = basedir
 
 from kaggle.api.kaggle_api_extended import KaggleApi
-# .env dosyasindaki degiskenleri yukle
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-
-# === Hugging Face API Ayarlari ===
-HF_API_KEY = os.environ.get("HUGGINGFACE_API_KEY")
-
-if not HF_API_KEY:
-    print("="*50)
-    print("HATA: HUGGINGFACE_API_KEY bulunamadi.")
-    print("Lutfen .env dosyasini kontrol edin.")
-    print("="*50)
 
 #======================================================================
 # 1. TUM VERILER `data.json` DOSYASINDAN YUKLENIYOR
@@ -85,42 +75,29 @@ with open("chatbot_contact_flow.json", "r", encoding="utf-8") as f:
 
 
 def load_data_from_json():
-    """data.json dosyasindaki tum verileri global degiskenlere yukler."""
     global MENU_ITEMS, LANGUAGE_NAMES, TRANSLATIONS, PROJECTS, SKILLS
     try:
         with open('data.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-   
         MENU_ITEMS = data.get("MENU_ITEMS", [])
         LANGUAGE_NAMES = data.get("LANGUAGE_NAMES", {})
         TRANSLATIONS = data.get("TRANSLATIONS", {})
-        PROJECTS = data.get("PROJECTS", {})
         SKILLS = data.get("SKILLS", {})
 
-      
-        if not TRANSLATIONS:
-            print("UYARI: TRANSLATIONS eksik olabilir.")
-        if not PROJECTS:
-            print("UYARI: PROJECTS eksik olabilir.")
-        if not SKILLS:
-            print("UYARI: SKILLS eksik olabilir.")
-        
-    
-        for lang_code, texts in TRANSLATIONS.items():
-            if "skillsIntro" not in texts:
-                texts["skillsIntro"] = ""
+        # PROJELERİ BURADAN ÇEKİYORUZ:
+        # JSON yapında projeler TRANSLATIONS'ın içinde dil bazlı tutuluyor.
+        # Eğer özel bir PROJECTS anahtarı yoksa hata vermemesi için:
+        PROJECTS = data.get("PROJECTS", {}) 
 
-    except FileNotFoundError:
-        print("="*50)
-        print("HATA: data.json dosyasi bulunamadi! Lutfen app.py ile ayni dizinde oldugundan emin olun.")
-        print("="*50)
-    except json.JSONDecodeError:
-        print("="*50)
-        print("HATA: data.json hatali formatta. Gecerli bir JSON oldugundan emin olun.")
-        print("="*50)
+        # Log uyarılarını susturmak için kontrolü dile göre yapalım
+        if not PROJECTS and TRANSLATIONS:
+             print("Bilgi: Projeler TRANSLATIONS içinden dinamik olarak okunacak.")
+             # İstersen PROJECTS değişkenini burada doldurabilirsin:
+             PROJECTS = {lang: content.get("projects", []) for lang, content in TRANSLATIONS.items()}
+
     except Exception as e:
-        print(f"data.json okunurken beklenmedik bir hata olustu: {e}")
+        print(f"Hata: {e}")
 
 # Uygulama basladiginda verileri yukle
 load_data_from_json()
@@ -535,6 +512,6 @@ def fetch_leetcode_solutions():
         return []
 
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
