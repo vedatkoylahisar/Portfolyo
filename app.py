@@ -179,98 +179,88 @@ def send_contact_email(sender_name, sender_email, message_content):
 
 @app.route("/chat", methods=['POST'])
 def chat():
-    api_key = os.getenv('CUSTOM_API_KEY')
-    api_base = os.getenv('CUSTOM_API_BASE', '').rstrip('/')
-    api_url = f"{api_base}/chat/completions"
-    
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
     user_msg = request.json.get('message', '').strip()
     if not user_msg:
         return jsonify({'error': 'No message provided'}), 400
 
-    # 1. Hafizayi (History) Yukle veya Olustur
-    if 'chat_history' not in session:
-        session['chat_history'] = [
-            {"role": "system", "content": "You are Vedat's personal AI assistant. Use 'get_portfolio_data' for info. If the user provides name, email and message, call 'send_contact_email' tool immediately after their confirmation. Do not forget previously shared info."}
-        ]
-    
-    # Kullanicinin yeni mesajini hafizaya ekle
-    session['chat_history'].append({"role": "user", "content": user_msg})
-
     api_url = os.getenv('CUSTOM_API_BASE', '').rstrip('/')
     if not api_url.endswith('/chat/completions'):
         api_url = f"{api_url}/chat/completions"
-    
+
     headers = {
         "Authorization": f"Bearer {os.getenv('CUSTOM_API_KEY')}",
         "Content-Type": "application/json"
     }
 
+    if 'chat_history' not in session:
+        session['chat_history'] = [
+            {"role": "system", "content": "You are Vedat's personal AI assistant. Use 'get_portfolio_data' for info. If the user provides name, email and message, call 'send_contact_email' tool immediately after their confirmation."}
+        ]
+
+    session['chat_history'].append({"role": "user", "content": user_msg})
+
     try:
-        # STEP 1: Hafizadaki TUM mesajlari gonderiyoruz (Sadece sonuncuyu degil!)
+        # STEP 1: İlk istek — timeout artırıldı
         payload = {
             "model": os.getenv("CUSTOM_MODEL_NAME"),
             "messages": session['chat_history'],
             "tools": tools,
             "tool_choice": "auto"
         }
-        
-        response = requests.post(api_url, json=payload, headers=headers, timeout=30)
+        response = requests.post(api_url, json=payload, headers=headers, timeout=90)  # 30 → 90
+        response.raise_for_status()
         res_json = response.json()
         response_msg = res_json['choices'][0]['message']
 
         # STEP 2: Tool Handling
         if response_msg.get("tool_calls"):
-            # AI'in tool cagrisini hafizaya ekle
             session['chat_history'].append(response_msg)
-            
+
             for tool_call in response_msg["tool_calls"]:
                 func_name = tool_call["function"]["name"]
                 args = json.loads(tool_call["function"]["arguments"])
-                
-                print(f"DEBUG - Executing: {func_name}")
-                
+                print(f"DEBUG - Executing: {func_name} | Args: {args}")
+
                 if func_name == "get_portfolio_data":
                     result_content = get_portfolio_data(args.get('data_type'))
                 elif func_name == "send_contact_email":
-                    # Tool icindeki arguman isimlerine dikkat (name, email, message)
                     result_content = send_contact_email(
-                        name=args.get('name') or args.get('sender_name'), 
-                        email=args.get('email') or args.get('sender_email'), 
-                        message=args.get('message') or args.get('message_content')
+                        name=args.get('sender_name'),
+                        email=args.get('sender_email'),
+                        message=args.get('message_content')
                     )
                 else:
                     result_content = "Function not found."
 
-                # Tool sonucunu hafizaya ekle
                 session['chat_history'].append({
                     "role": "tool",
                     "tool_call_id": tool_call["id"],
                     "name": func_name,
-                    "content": result_content
+                    "content": str(result_content)
                 })
-            
-            # STEP 3: Final Response
+
+            # STEP 3: Final response — ayrı timeout
             final_payload = {
                 "model": os.getenv("CUSTOM_MODEL_NAME"),
                 "messages": session['chat_history']
             }
-            final_res = requests.post(api_url, json=final_payload, headers=headers, timeout=30)
+            final_res = requests.post(api_url, json=final_payload, headers=headers, timeout=90)  # 30 → 90
+            final_res.raise_for_status()
             final_ans = final_res.json()['choices'][0]['message']
-            
-            # Final cevabi da hafizaya ekle ve don
             session['chat_history'].append(final_ans)
-            session.modified = True # Flask session'i guncelle
+            session.modified = True
             return jsonify({'reply': final_ans['content']})
 
-        # Tool cagrisi yoksa, direkt cevabi hafizaya ekle ve don
         session['chat_history'].append(response_msg)
         session.modified = True
         return jsonify({'reply': response_msg.get('content', '...')})
 
+    except requests.exceptions.Timeout:
+        print("DEBUG - Timeout hatası")
+        return jsonify({'reply': "The server took too long to respond. Please try again."}), 504
+    except requests.exceptions.RequestException as e:
+        print(f"DEBUG - Request Error: {str(e)}")
+        return jsonify({'reply': "Connection error. Please try again."}), 500
     except Exception as e:
         print(f"DEBUG - Fatal Error: {str(e)}")
         return jsonify({'reply': "Something went wrong. Let's try again."}), 500
