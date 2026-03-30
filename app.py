@@ -323,9 +323,9 @@ def about():
 
 
 
-@app.route("/services")
-def services():
-    return render_template("services.html", active='services')
+@app.route("/articles")  # Burası URL adresi
+def articles():           # BURASI ÖNEMLİ: Fonksiyon ismi 'articles' olmalı
+    return render_template("services.html", active='articles')
 
 @app.route("/portfolio")
 def portfolio():

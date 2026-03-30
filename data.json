@@ -9,8 +9,8 @@
       "endpoint": "about"
     },
     {
-      "name_key": "services",
-      "endpoint": "services"
+      "name_key": "articles",
+      "endpoint": "articles"
     },
     {
       "name_key": "portfolio",
@@ -30,7 +30,7 @@
     "en": {
       "home": "Home",
       "about": "About",
-      "services": "Services",
+      "articles": "Articles",
       "portfolio": "Portfolio",
       "contact": "Contact",
       "greeting": "Hello, It's Me",
@@ -113,6 +113,14 @@
       ],
       "projects": [
         {
+          "title": "MicroCommerce — Microservices E-Commerce Platform",
+          "description": "A scalable e-commerce platform built with microservices architecture using .NET 8, featuring a React frontend (SwiftShop), inter-service messaging, caching, and API gateway.",
+          "details": "An actively developed microservices-based e-commerce platform designed for scalability and modularity.<br><br><strong>Architecture:</strong><ul><li>Independent microservices for Catalog, Basket, Order, Discount, and Cargo.</li><li>Ocelot API Gateway for centralized routing and load balancing.</li><li>RabbitMQ for asynchronous inter-service communication.</li><li>Redis for distributed caching (basket, session data).</li></ul><br><strong>Backend:</strong><ul><li>.NET 8 Web API with clean architecture principles.</li><li>MongoDB for catalog service, PostgreSQL for order/discount services.</li><li>Docker & Docker Compose for containerized deployment.</li></ul><br><strong>Frontend:</strong><ul><li>React-based SPA (SwiftShop) with Turkish-language UI.</li><li>User profile, orders, and messaging pages.</li></ul>",
+          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React" ],
+          "github_link": "",
+          "demo_link": ""
+        },
+        {
           "title": "Personal Portfolio Website",
           "description": "Portfolio web project built with Flask, featuring a multi-lingual AI assistant powered by Hugging Face.",
           "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
@@ -193,7 +201,7 @@
     "tr": {
       "home": "Anasayfa",
       "about": "Hakkimda",
-      "services": "Hizmetler",
+      "articles": "Yazilarim",
       "portfolio": "Portfolyo",
       "contact": "Iletisim",
       "greeting": "Merhaba, Ben",
@@ -276,6 +284,14 @@
       ],
       "projects": [
         {
+          "title": "MicroCommerce — Mikroservis E-Ticaret Platformu",
+          "description": ".NET 8 ve mikroservis mimarisi ile geliştirilen, React frontend (SwiftShop), servisler arası mesajlaşma, önbellekleme ve API Gateway içeren ölçeklenebilir e-ticaret platformu.",
+          "details": "Aktif olarak geliştirilen, ölçeklenebilirlik ve modülerlik odaklı mikroservis tabanlı e-ticaret platformu.<br><br><strong>Mimari:</strong><ul><li>Katalog, Sepet, Sipariş, İndirim ve Kargo için bağımsız mikroservisler.</li><li>Ocelot API Gateway ile merkezi yönlendirme ve yük dengeleme.</li><li>RabbitMQ ile servisler arası asenkron iletişim.</li><li>Redis ile dağıtık önbellekleme (sepet, oturum verileri).</li></ul><br><strong>Backend:</strong><ul><li>.NET 8 Web API, temiz mimari prensipleri.</li><li>Katalog servisi için MongoDB, sipariş/indirim servisleri için PostgreSQL.</li><li>Docker & Docker Compose ile konteynerize dağıtım.</li></ul><br><strong>Frontend:</strong><ul><li>React tabanlı SPA (SwiftShop), Türkçe arayüz.</li><li>Kullanıcı profili, siparişler ve mesajlaşma sayfaları.</li></ul>",
+          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React" ],
+          "github_link": "",
+          "demo_link": ""
+        },
+        {
           "title": "Kişisel Portfolyo Websitesi",
           "description": "Flask altyapısı ile geliştirilen, Hugging Face destekli çok dilli yapay zeka asistanını barındıran interaktif web projesi.",
           "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
@@ -356,7 +372,7 @@
     "de": {
       "home": "Startseite",
       "about": "Uber Mich",
-      "services": "Dienstleistungen",
+      "articles": "Beiträge",
       "portfolio": "Portfolio",
       "contact": "Kontakt",
       "greeting": "Hallo, Ich bin",
@@ -438,6 +454,14 @@
         }
       ],
       "projects": [
+        {
+          "title": "MicroCommerce — Mikroservice E-Commerce-Plattform",
+          "description": "Eine skalierbare E-Commerce-Plattform mit Mikroservice-Architektur auf Basis von .NET 8, mit React-Frontend (SwiftShop), Inter-Service-Messaging, Caching und API-Gateway.",
+          "details": "Eine aktiv entwickelte, auf Skalierbarkeit und Modularität ausgelegte Mikroservice-basierte E-Commerce-Plattform.<br><br><strong>Architektur:</strong><ul><li>Unabhängige Mikroservices für Katalog, Warenkorb, Bestellung, Rabatt und Versand.</li><li>Ocelot API Gateway für zentralisiertes Routing und Lastverteilung.</li><li>RabbitMQ für asynchrone Inter-Service-Kommunikation.</li><li>Redis für verteiltes Caching (Warenkorb, Sitzungsdaten).</li></ul><br><strong>Backend:</strong><ul><li>.NET 8 Web API mit Clean-Architecture-Prinzipien.</li><li>MongoDB für den Katalogservice, PostgreSQL für Bestell-/Rabattservices.</li><li>Docker & Docker Compose für containerisierte Bereitstellung.</li></ul><br><strong>Frontend:</strong><ul><li>React-basierte SPA (SwiftShop) mit türkischer Benutzeroberfläche.</li><li>Benutzerprofil-, Bestell- und Nachrichtenseiten.</li></ul>",
+          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React" ],
+          "github_link": "",
+          "demo_link": ""
+        },
         {
           "title": "Persönliche Portfolio-Website",
           "description": "Interaktives Webprojekt auf Flask-Basis, das einen mehrsprachigen KI-Assistenten mit Hugging Face integriert.",
@@ -525,6 +549,7 @@
         "items": [
           "C# & ASP.NET Core MVC",
           "Python & Flask",
+          "React (SPA Development)",
           "MVC Architecture",
           "HTML5 / CSS3",
           "JavaScript"
@@ -536,6 +561,9 @@
         "items": [
           "Relational Databases (MSSQL & PostgreSQL)",
           "NoSQL Systems (MongoDB)",
+          "Redis (Distributed Caching)",
+          "RabbitMQ (Message Queuing)",
+          "Ocelot API Gateway",
           "RESTful API Design & Integration",
           "Data Exchange (JSON & Python Requests)"
         ]
@@ -553,10 +581,18 @@
         ]
       },
       {
+        "icon_class": "fas fa-server",
+        "title_key": "devOpsInfra",
+        "items": [
+          "Docker & Docker Compose",
+          "Microservices Architecture",
+          "Git & GitHub (Version Control)"
+        ]
+      },
+      {
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
         "items": [
-          "Git & GitHub (Version Control)",
           "Cloud Deployment with Render",
           "Cloudflare DNS & Domain Management",
           "Firebase Fundamentals (Previous Experience)"
@@ -570,6 +606,7 @@
         "items": [
           "C# & ASP.NET Core MVC",
           "Python & Flask Framework",
+          "React (SPA Geliştirme)",
           "MVC Mimarisi",
           "HTML5 / CSS3 & JavaScript"
         ]
@@ -580,6 +617,9 @@
         "items": [
           "İlişkisel Veritabanları (MSSQL & PostgreSQL)",
           "NoSQL Sistemler (MongoDB)",
+          "Redis (Dağıtık Önbellekleme)",
+          "RabbitMQ (Mesaj Kuyruğu)",
+          "Ocelot API Gateway",
           "RESTful API Tasarımı & Entegrasyonu",
           "Veri Alışverişi (JSON & Python Requests)"
         ]
@@ -597,10 +637,18 @@
         ]
       },
       {
+        "icon_class": "fas fa-server",
+        "title_key": "devOpsInfra",
+        "items": [
+          "Docker & Docker Compose",
+          "Mikroservis Mimarisi",
+          "Git & GitHub (Versiyon Kontrol)"
+        ]
+      },
+      {
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
         "items": [
-          "Git & GitHub (Versiyon Kontrol)",
           "Render ile Cloud Dağıtımı",
           "Cloudflare DNS & Domain Yönetimi",
           "Firebase Temelleri (Önceki Deneyim)"
@@ -614,6 +662,7 @@
         "items": [
           "C# & ASP.NET Core MVC",
           "Python & Flask Framework",
+          "React (SPA-Entwicklung)",
           "MVC-Architektur",
           "HTML5 / CSS3 & JavaScript"
         ]
@@ -624,6 +673,9 @@
         "items": [
           "Relationale Datenbanken (MSSQL & PostgreSQL)",
           "NoSQL-Systeme (MongoDB)",
+          "Redis (Verteiltes Caching)",
+          "RabbitMQ (Nachrichtenwarteschlange)",
+          "Ocelot API Gateway",
           "RESTful API Design & Integration",
           "Datenaustausch (JSON & Python Requests)"
         ]
@@ -641,10 +693,18 @@
         ]
       },
       {
+        "icon_class": "fas fa-server",
+        "title_key": "devOpsInfra",
+        "items": [
+          "Docker & Docker Compose",
+          "Mikroservice-Architektur",
+          "Git & GitHub (Versionskontrolle)"
+        ]
+      },
+      {
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
         "items": [
-          "Git & GitHub (Versionskontrolle)",
           "Cloud-Deployment mit Render",
           "Cloudflare DNS & Domain-Management",
           "Firebase-Grundlagen (Vorerfahrung)"

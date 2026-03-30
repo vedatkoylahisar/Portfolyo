@@ -383,8 +383,10 @@ nav ul {
 
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 30px;
+    /* 5 eşit sütun oluşturur, her biri 1 birim genişlikte */
+    grid-template-columns: repeat(5, 1fr);
+    /* Kutular arası boşluğu 10px'e düşür */
+    gap: 10px;
     justify-items: center;
 }
 
