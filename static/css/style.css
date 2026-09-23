@@ -9,6 +9,7 @@
 body {
     background: #121212;
     color: white;
+    overflow-x: hidden;
 }
 
 /* =================================== */
@@ -468,6 +469,10 @@ nav ul {
     .hero-text h3 {
         font-size: 20px;
     }
+
+    .skills-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -509,6 +514,10 @@ nav ul {
         right: 5%;
         top: 50px;
     }
+
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -523,6 +532,10 @@ nav ul {
     .lang-button {
         font-size: 14px;
         padding: 6px 14px;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
     }
 }
 /* =================================== */
@@ -1625,6 +1638,18 @@ nav ul {
 
         .timeline-item:nth-child(odd) .tech-tags {
             justify-content: flex-start;
+        }
+
+    /* Mobilde yatay slide-left/slide-right animasyonu ekran disina tasip
+       yatay kaymaya sebep oluyordu; dikey fade'e ceviriyoruz. */
+    .slide-left,
+    .slide-right {
+        transform: translateY(30px);
+    }
+
+        .slide-left.scrolled,
+        .slide-right.scrolled {
+            transform: translateY(0);
         }
 
     .education-card {

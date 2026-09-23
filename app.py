@@ -4,9 +4,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from dotenv import load_dotenv
 import json
 import requests # HTTP istekleri icin
-import smtplib
-import re
-from email.message import EmailMessage
 import resend
 
 
@@ -14,12 +11,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 os.environ["KAGGLE_CONFIG_DIR"] = basedir
 
 from kaggle.api.kaggle_api_extended import KaggleApi
-load_dotenv()
+load_dotenv(os.path.join(basedir, ".env"), override=True)
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"
-EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+app.secret_key = os.getenv("SECRET_KEY")
+if not app.secret_key:
+    raise RuntimeError("SECRET_KEY ortam degiskeni tanimli degil (.env dosyasina ekleyin).")
 
 #======================================================================
 # 1. TUM VERILER `data.json` DOSYASINDAN YUKLENIYOR
@@ -68,10 +65,7 @@ MENU_ITEMS = []
 LANGUAGE_NAMES = {}
 TRANSLATIONS = {}
 PROJECTS = {}
-SKILLS = {}  
-
-with open("chatbot_contact_flow.json", "r", encoding="utf-8") as f:
-    CONTACT_FLOW = json.load(f)
+SKILLS = {}
 
 
 def load_data_from_json():
@@ -167,16 +161,6 @@ def get_portfolio_data(data_type):
         
     return "No information found for this category."
 
-def send_contact_email(sender_name, sender_email, message_content):
-    # Your existing send_mail logic
-    success = send_mail(
-        to_email=os.getenv("MAIL_FROM"),
-        subject=f"New Message from {sender_name}",
-        message_text=f"Email: {sender_email}\nMessage: {message_content}"
-    )
-    return "Success" if success else "Failed"
-
-
 @app.route("/chat", methods=['POST'])
 def chat():
     user_msg = request.json.get('message', '').strip()
@@ -202,28 +186,38 @@ def chat():
                 "Use 'get_portfolio_data' to fetch Vedat's information when needed. "
                 "However, you are NOT a general-purpose AI. Politely decline requests that have nothing to do with Vedat, such as: "
                 "math calculations, coding help, debugging, weather, news, recipes, jokes, writing essays, or any other off-topic task. "
-                "When declining, be brief and friendly — redirect the conversation back to Vedat naturally, without sounding robotic or repeating the same phrase every time."
+                "When declining, be brief and friendly — redirect the conversation back to Vedat naturally, without sounding robotic or repeating the same phrase every time. "
+                "CRITICAL: Never write template placeholders like [Company], [technology], [certificate] or similar bracketed filler text. "
+                "Only state concrete facts that came from 'get_portfolio_data' results already in this conversation, or call the tool first if you don't have them yet. "
+                "If you genuinely don't have a piece of information, say so plainly instead of inventing a placeholder."
             )}
         ]
 
     session['chat_history'].append({"role": "user", "content": user_msg})
 
     try:
-        # STEP 1: İlk istek — timeout artırıldı
-        payload = {
-            "model": os.getenv("CUSTOM_MODEL_NAME"),
-            "messages": session['chat_history'],
-            "tools": tools,
-            "tool_choice": "auto"
-        }
-        response = requests.post(api_url, json=payload, headers=headers, timeout=90)  # 30 → 90
-        response.raise_for_status()
-        res_json = response.json()
-        response_msg = res_json['choices'][0]['message']
+        # Model art arda birden fazla tool cagirabilir (once skills, sonra experience gibi),
+        # bu yuzden tool_calls bitene kadar dongude devam ediyoruz. 'tools' her adimda
+        # gonderilmezse bazi saglayicilar (orn. Groq) modelin tekrar tool cagirmasini
+        # hata sayip 400 donuyor.
+        MAX_TOOL_ITERATIONS = 5
+        response_msg = None
 
-        # STEP 2: Tool Handling
-        if response_msg.get("tool_calls"):
+        for _ in range(MAX_TOOL_ITERATIONS):
+            payload = {
+                "model": os.getenv("CUSTOM_MODEL_NAME"),
+                "messages": session['chat_history'],
+                "tools": tools,
+                "tool_choice": "auto",
+                "temperature": 0.3
+            }
+            response = requests.post(api_url, json=payload, headers=headers, timeout=90)
+            response.raise_for_status()
+            response_msg = response.json()['choices'][0]['message']
             session['chat_history'].append(response_msg)
+
+            if not response_msg.get("tool_calls"):
+                break
 
             for tool_call in response_msg["tool_calls"]:
                 func_name = tool_call["function"]["name"]
@@ -248,21 +242,8 @@ def chat():
                     "content": str(result_content)
                 })
 
-            # STEP 3: Final response — ayrı timeout
-            final_payload = {
-                "model": os.getenv("CUSTOM_MODEL_NAME"),
-                "messages": session['chat_history']
-            }
-            final_res = requests.post(api_url, json=final_payload, headers=headers, timeout=90)  # 30 → 90
-            final_res.raise_for_status()
-            final_ans = final_res.json()['choices'][0]['message']
-            session['chat_history'].append(final_ans)
-            session.modified = True
-            return jsonify({'reply': final_ans['content']})
-
-        session['chat_history'].append(response_msg)
         session.modified = True
-        return jsonify({'reply': response_msg.get('content', '...')})
+        return jsonify({'reply': response_msg.get('content') or "..."})
 
     except requests.exceptions.Timeout:
         print("DEBUG - Timeout hatası")
@@ -513,4 +494,5 @@ def fetch_leetcode_solutions():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    debug_mode = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)

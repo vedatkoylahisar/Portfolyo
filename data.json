@@ -41,19 +41,19 @@
       "typingText": [ "Software Developer", "AI Developer", "Full-Stack Developer" ],
       "aboutTitle": "About Me",
       "aboutContent": {
-        "paragraph": "I am a senior Computer Engineering student at Kocaeli University. I define myself as a versatile Software Developer who does not limit myself to a single field. I create solutions across a wide spectrum, ranging from web technologies to desktop applications and AI integrations. Using modern tools, primarily C# and Python, I focus on developing scalable, clean, and sustainable systems by selecting the most suitable technology for each need.",
+        "paragraph": "I am a Computer Engineering graduate from Kocaeli University. I define myself as a versatile Software Developer who does not limit myself to a single field. I create solutions across a wide spectrum, ranging from web technologies to desktop applications and AI integrations. Using modern tools, primarily C# and Python, I focus on developing scalable, clean, and sustainable systems by selecting the most suitable technology for each need.",
         "cards": [
           {
             "number": "4+",
             "label": "Years of Active Development"
           },
           {
-            "number": "C#, Python, Java",
+            "number": "C#, Python, Java, SQL",
             "label": "Core Development Languages"
           },
           {
-            "number": "2",
-            "label": "Major Internship Experiences (Bimser & Keep Games)"
+            "number": "3",
+            "label": "Major Internship Experiences (Bimser, DyrobX & Keep Games)"
           },
           {
             "number": "AI & Data",
@@ -65,8 +65,8 @@
         {
           "school": "Kocaeli University",
           "degree": "Computer Engineering",
-          "date": "2021 - 2026",
-          "description": "Software developer focused on artificial intelligence and web technologies."
+          "date": "Sept 2021 - Sept 2026",
+          "description": "Built a strong foundation in object-oriented programming and data structures, and bridged theory with practice by developing full-stack applications using .NET Core, Python, and modern web technologies."
         }
       ],
       "certificates": [
@@ -97,18 +97,25 @@
       ],
       "experience": [
         {
-          "company": "Bimser Cozum",
+          "company": "DyrobX",
           "role": "Software Engineering Intern",
-          "date": "Summer 2024",
-          "description": "Worked on low-code platform development and enterprise process management.",
-          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
+          "date": "July 2026 - Aug 2026",
+          "description": "Designed interactive touch HMI user interfaces and integrated real-time system controls on ESP32-S3 hardware using LVGL. Architected multi-tab menu structures, dynamic layouts, PID tuning settings, sensor telemetries, and operational mode management.",
+          "technologies": [ "ESP32-S3", "LVGL", "Embedded Systems", "HMI" ]
         },
         {
           "company": "Keep Games",
           "role": "Game Development Intern",
-          "date": "Summer 2024",
-          "description": "Gained experience in game mechanics, optimization, and game engine processes.",
+          "date": "Sept 2024 - Oct 2024",
+          "description": "Developed game mechanics and systems using the Unity game engine and C#, and collaborated with the design team to integrate game assets and mechanics.",
           "technologies": [ "Unity", "C#", "Game Design" ]
+        },
+        {
+          "company": "Bimser Cozum",
+          "role": "Software Engineering Intern",
+          "date": "July 2024 - Sept 2024",
+          "description": "Contributed to low-code platform development using .NET Core and SQL, and worked on enterprise process management applications and backend query optimization.",
+          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
         }
       ],
       "projects": [
@@ -122,8 +129,8 @@
         },
         {
           "title": "Personal Portfolio Website",
-          "description": "Portfolio web project built with Flask, featuring a multi-lingual AI assistant powered by Hugging Face.",
-          "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
+          "description": "Built a full-stack web platform using Flask (Python) for backend RESTful APIs and JavaScript/React for dynamic frontend UI. Integrated a multi-lingual AI assistant powered by open-source LLMs, implementing custom tool-calling structures for real-time response generation.",
+          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source LLM", "Tool Calling" ],
           "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
@@ -196,7 +203,8 @@
       "devOpsInfra": "DevOps & Infrastructure",
       "aiMl": "AI & Machine Learning",
       "cloudDeploy": "Cloud & Deployment",
-      "softManagement": "Soft Skills & Management"
+      "softManagement": "Soft Skills & Management",
+      "spokenLanguages": "Languages"
     },
     "tr": {
       "home": "Anasayfa",
@@ -212,19 +220,19 @@
       "typingText": [ "Yazilim Gelistiricisiyim", "Yapay Zeka Gelistiricisiyim", "Full-stack Gelistiriciyim" ],
       "aboutTitle": "Hakkimda",
       "aboutContent": {
-        "paragraph": "Kocaeli Üniversitesi Bilgisayar Mühendisliği son sınıf öğrencisiyim. Kendimi tek bir alanla sınırlamayan, çok yönlü bir Yazılım Geliştirici olarak tanımlıyorum. Web teknolojilerinden masaüstü uygulamalarına, yapay zeka entegrasyonlarından veri analizine kadar geniş bir yelpazede çözümler üretiyorum. C# ve Python başta olmak üzere modern araçları kullanarak, ihtiyaca en uygun teknolojiyle ölçeklenebilir, temiz ve sürdürülebilir sistemler geliştirmeye odaklanıyorum.",
+        "paragraph": "Kocaeli Üniversitesi Bilgisayar Mühendisliği mezunuyum. Kendimi tek bir alanla sınırlamayan, çok yönlü bir Yazılım Geliştirici olarak tanımlıyorum. Web teknolojilerinden masaüstü uygulamalarına, yapay zeka entegrasyonlarından veri analizine kadar geniş bir yelpazede çözümler üretiyorum. C# ve Python başta olmak üzere modern araçları kullanarak, ihtiyaca en uygun teknolojiyle ölçeklenebilir, temiz ve sürdürülebilir sistemler geliştirmeye odaklanıyorum.",
         "cards": [
           {
             "number": "4+",
             "label": "Aktif Gelistirme Yili"
           },
           {
-            "number": "C#, Python, Java",
+            "number": "C#, Python, Java, SQL",
             "label": "Temel Programlama Dilleri"
           },
           {
-            "number": "2",
-            "label": "Buyuk Staj Tecrubesi (Bimser & Keep Games)"
+            "number": "3",
+            "label": "Buyuk Staj Tecrubesi (Bimser, DyrobX & Keep Games)"
           },
           {
             "number": "AI & Data",
@@ -236,8 +244,8 @@
         {
           "school": "Kocaeli Universitesi",
           "degree": "Bilgisayar Muhendisligi",
-          "date": "2021 - 2026",
-          "description": "Yapay zeka ve web teknolojileri üzerine çözümler üreten bir yazılım geliştiricisi."
+          "date": "Eylul 2021 - Eylul 2026",
+          "description": "Nesne yonelimli programlama ve veri yapilarinda saglam bir temel olusturdu; .NET Core, Python ve modern web teknolojileriyle full-stack uygulamalar gelistirerek teoriyi pratikle birlestirdi."
         }
       ],
       "certificates": [
@@ -268,18 +276,25 @@
       ],
       "experience": [
         {
-          "company": "Bimser Cozum",
-          "role": "Yazilim Stajyeri",
-          "date": "Yaz 2024",
-          "description": "Dusuk kodlu (Low-code) platform gelistirmeleri ve kurumsal surec yonetimi uzerine calistim.",
-          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
+          "company": "DyrobX",
+          "role": "Yazilim Muhendisligi Stajyeri",
+          "date": "Temmuz 2026 - Agustos 2026",
+          "description": "ESP32-S3 donanimi uzerinde LVGL kullanarak interaktif dokunmatik HMI arayuzleri tasarladim ve gercek zamanli sistem kontrollerini entegre ettim. Cok sekmeli menu yapilari, dinamik layoutlar, PID ayar parametreleri, sensor telemetrisi ve calisma modu yonetimi gelistirdim.",
+          "technologies": [ "ESP32-S3", "LVGL", "Gomulu Sistemler", "HMI" ]
         },
         {
           "company": "Keep Games",
           "role": "Oyun Gelistirme Stajyeri",
-          "date": "Yaz 2024",
-          "description": "Oyun mekanikleri, optimizasyon ve oyun motoru surecleri uzerine deneyim kazandim.",
+          "date": "Eylul 2024 - Ekim 2024",
+          "description": "Unity oyun motoru ve C# kullanarak oyun mekanikleri ve sistemleri gelistirdim, tasarim ekibiyle oyun varliklarinin ve mekaniklerinin entegrasyonu icin isbirligi yaptim.",
           "technologies": [ "Unity", "C#", "Game Design" ]
+        },
+        {
+          "company": "Bimser Cozum",
+          "role": "Yazilim Stajyeri",
+          "date": "Temmuz 2024 - Eylul 2024",
+          "description": ".NET Core ve SQL teknolojileriyle dusuk kodlu (low-code) platform gelistirmelerine katki sagladim; kurumsal surec yonetimi uygulamalari ve backend sorgu optimizasyonu uzerine calistim.",
+          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
         }
       ],
       "projects": [
@@ -293,8 +308,8 @@
         },
         {
           "title": "Kişisel Portfolyo Websitesi",
-          "description": "Flask altyapısı ile geliştirilen, Hugging Face destekli çok dilli yapay zeka asistanını barındıran interaktif web projesi.",
-          "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
+          "description": "Flask (Python) ile backend RESTful API'ler, JavaScript/React ile dinamik frontend arayüzü kullanılarak geliştirilen full-stack bir web platformu. Açık kaynaklı LLM'ler ile çalışan, gerçek zamanlı yanıt üretimi için özel tool-calling yapıları içeren çok dilli bir yapay zeka asistanı entegre edildi.",
+          "tags": [ "Python", "Flask", "React", "JavaScript", "Açık Kaynak LLM", "Tool Calling" ],
           "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
@@ -367,7 +382,8 @@
       "devOpsInfra": "DevOps & Altyapi",
       "aiMl": "AI & Makine Ogrenmesi",
       "cloudDeploy": "Cloud & Dagitim",
-      "softManagement": "Yonetim & Sosyal Beceriler"
+      "softManagement": "Yonetim & Sosyal Beceriler",
+      "spokenLanguages": "Diller"
     },
     "de": {
       "home": "Startseite",
@@ -383,19 +399,19 @@
       "typingText": [ "Softwareentwickler", "KI-Entwickler", "Full-Stack-Entwickler" ],
       "aboutTitle": "Uber Mich",
       "aboutContent": {
-        "paragraph": "Ich bin Informatikstudent im letzten Jahr an der Universität Kocaeli. Ich definiere mich als vielseitigen Softwareentwickler, der sich nicht auf einen einzigen Bereich beschränkt. Ich entwickle Lösungen in einem breiten Spektrum, das von Webtechnologien über Desktop-Anwendungen bis hin zu KI-Integrationen reicht. Unter Verwendung moderner Tools, vor allem C# und Python, konzentriere ich mich darauf, skalierbare, saubere und nachhaltige Systeme zu entwickeln.",
+        "paragraph": "Ich bin Absolvent der Informatik an der Universität Kocaeli. Ich definiere mich als vielseitigen Softwareentwickler, der sich nicht auf einen einzigen Bereich beschränkt. Ich entwickle Lösungen in einem breiten Spektrum, das von Webtechnologien über Desktop-Anwendungen bis hin zu KI-Integrationen reicht. Unter Verwendung moderner Tools, vor allem C# und Python, konzentriere ich mich darauf, skalierbare, saubere und nachhaltige Systeme zu entwickeln.",
         "cards": [
           {
             "number": "4+",
             "label": "Jahre aktive Entwicklung"
           },
           {
-            "number": "C#, Python, Java",
+            "number": "C#, Python, Java, SQL",
             "label": "Kernprogrammiersprachen"
           },
           {
-            "number": "2",
-            "label": "Große Praktikumserfahrungen (Bimser & Keep Games)"
+            "number": "3",
+            "label": "Große Praktikumserfahrungen (Bimser, DyrobX & Keep Games)"
           },
           {
             "number": "AI & Data",
@@ -407,8 +423,8 @@
         {
           "school": "Kocaeli Universität",
           "degree": "Informatik",
-          "date": "2021 - 2026",
-          "description": "Softwareentwickler mit Schwerpunkt auf künstliche Intelligenz und Webtechnologien."
+          "date": "Sept 2021 - Sept 2026",
+          "description": "Schuf eine solide Grundlage in objektorientierter Programmierung und Datenstrukturen und verband Theorie mit Praxis durch die Entwicklung von Full-Stack-Anwendungen mit .NET Core, Python und modernen Webtechnologien."
         }
       ],
       "certificates": [
@@ -439,18 +455,25 @@
       ],
       "experience": [
         {
-          "company": "Bimser Cozum",
+          "company": "DyrobX",
           "role": "Softwareentwickler Praktikant",
-          "date": "Sommer 2024",
-          "description": "Arbeitete an Low-Code-Plattformentwicklung und Geschäftsprozessmanagement.",
-          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
+          "date": "Juli 2026 - Aug 2026",
+          "description": "Entwarf interaktive Touch-HMI-Benutzeroberflächen und integrierte Echtzeit-Systemsteuerungen auf ESP32-S3-Hardware mit LVGL. Entwickelte mehrere Menüstrukturen mit Tabs, dynamische Layouts, PID-Einstellungen, Sensortelemetrie und Betriebsmodus-Management.",
+          "technologies": [ "ESP32-S3", "LVGL", "Embedded Systems", "HMI" ]
         },
         {
           "company": "Keep Games",
           "role": "Spieleentwickler Praktikant",
-          "date": "Sommer 2024",
-          "description": "Sammelte Erfahrungen in Spielmechanik, Optimierung und Game-Engine-Prozessen.",
+          "date": "Sept 2024 - Okt 2024",
+          "description": "Entwickelte Spielmechaniken und -systeme mit der Unity-Game-Engine und C# und arbeitete mit dem Design-Team an der Integration von Spielelementen und -mechaniken zusammen.",
           "technologies": [ "Unity", "C#", "Game Design" ]
+        },
+        {
+          "company": "Bimser Cozum",
+          "role": "Softwareentwickler Praktikant",
+          "date": "Juli 2024 - Sept 2024",
+          "description": "Trug mit .NET Core und SQL zur Entwicklung einer Low-Code-Plattform bei und arbeitete an Anwendungen für das Geschäftsprozessmanagement sowie an der Backend-Abfrageoptimierung.",
+          "technologies": [ ".NET Core", "SQL", "Low-Code", "JavaScript" ]
         }
       ],
       "projects": [
@@ -464,8 +487,8 @@
         },
         {
           "title": "Persönliche Portfolio-Website",
-          "description": "Interaktives Webprojekt auf Flask-Basis, das einen mehrsprachigen KI-Assistenten mit Hugging Face integriert.",
-          "tags": [ "Python", "Flask", "Hugging Face", "JavaScript", "HTML/CSS" ],
+          "description": "Eine mit Flask (Python) für Backend-RESTful-APIs und JavaScript/React für ein dynamisches Frontend entwickelte Full-Stack-Webplattform. Integriert wurde ein mehrsprachiger KI-Assistent, der von Open-Source-LLMs angetrieben wird und benutzerdefinierte Tool-Calling-Strukturen für die Echtzeit-Antwortgenerierung implementiert.",
+          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source-LLM", "Tool Calling" ],
           "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
@@ -538,7 +561,8 @@
       "devOpsInfra": "DevOps & Altyapi",
       "aiMl": "AI & Makine Ogrenmesi",
       "cloudDeploy": "Cloud & Bereitstellung",
-      "softManagement": "Soft Skills & Management"
+      "softManagement": "Soft Skills & Management",
+      "spokenLanguages": "Sprachen"
     }
   },
   "SKILLS": {
@@ -547,25 +571,26 @@
         "icon_class": "fas fa-code",
         "title_key": "fullstackDev",
         "items": [
-          "C# & ASP.NET Core MVC",
+          "C# & ASP.NET Core MVC / Web API",
           "Python & Flask",
-          "React (SPA Development)",
-          "MVC Architecture",
+          "Java",
+          "React",
+          "JavaScript (ES6+)",
           "HTML5 / CSS3",
-          "JavaScript"
+          "RESTful APIs"
         ]
       },
       {
         "icon_class": "fas fa-database",
         "title_key": "backendDb",
         "items": [
-          "Relational Databases (MSSQL & PostgreSQL)",
-          "NoSQL Systems (MongoDB)",
+          "MSSQL & PostgreSQL",
+          "MongoDB",
+          "Elasticsearch",
           "Redis (Distributed Caching)",
+          "SQL",
           "RabbitMQ (Message Queuing)",
-          "Ocelot API Gateway",
-          "RESTful API Design & Integration",
-          "Data Exchange (JSON & Python Requests)"
+          "Ocelot API Gateway"
         ]
       },
       {
@@ -574,10 +599,10 @@
         "items": [
           "Pandas",
           "NumPy",
-          "Matplotlib",
-          "Seaborn",
+          "TensorFlow",
+          "OpenCV",
           "Scikit-learn",
-          "TensorFlow"
+          "Matplotlib"
         ]
       },
       {
@@ -594,8 +619,15 @@
         "title_key": "cloudDeploy",
         "items": [
           "Cloud Deployment with Render",
-          "Cloudflare DNS & Domain Management",
-          "Firebase Fundamentals (Previous Experience)"
+          "Cloudflare DNS & Domain Management"
+        ]
+      },
+      {
+        "icon_class": "fas fa-language",
+        "title_key": "spokenLanguages",
+        "items": [
+          "Turkish (Native)",
+          "English (Professional Working Proficiency)"
         ]
       }
     ],
@@ -604,24 +636,26 @@
         "icon_class": "fas fa-code",
         "title_key": "fullstackDev",
         "items": [
-          "C# & ASP.NET Core MVC",
+          "C# & ASP.NET Core MVC / Web API",
           "Python & Flask Framework",
-          "React (SPA Geliştirme)",
-          "MVC Mimarisi",
-          "HTML5 / CSS3 & JavaScript"
+          "Java",
+          "React",
+          "JavaScript (ES6+)",
+          "HTML5 / CSS3",
+          "RESTful API'ler"
         ]
       },
       {
         "icon_class": "fas fa-database",
         "title_key": "backendDb",
         "items": [
-          "İlişkisel Veritabanları (MSSQL & PostgreSQL)",
-          "NoSQL Sistemler (MongoDB)",
+          "MSSQL & PostgreSQL",
+          "MongoDB",
+          "Elasticsearch",
           "Redis (Dağıtık Önbellekleme)",
+          "SQL",
           "RabbitMQ (Mesaj Kuyruğu)",
-          "Ocelot API Gateway",
-          "RESTful API Tasarımı & Entegrasyonu",
-          "Veri Alışverişi (JSON & Python Requests)"
+          "Ocelot API Gateway"
         ]
       },
       {
@@ -630,10 +664,10 @@
         "items": [
           "Pandas",
           "NumPy",
-          "Matplotlib",
-          "Seaborn",
+          "TensorFlow",
+          "OpenCV",
           "Scikit-learn",
-          "TensorFlow"
+          "Matplotlib"
         ]
       },
       {
@@ -650,8 +684,15 @@
         "title_key": "cloudDeploy",
         "items": [
           "Render ile Cloud Dağıtımı",
-          "Cloudflare DNS & Domain Yönetimi",
-          "Firebase Temelleri (Önceki Deneyim)"
+          "Cloudflare DNS & Domain Yönetimi"
+        ]
+      },
+      {
+        "icon_class": "fas fa-language",
+        "title_key": "spokenLanguages",
+        "items": [
+          "Türkçe (Anadil)",
+          "İngilizce (Profesyonel Çalışma Yeterliliği)"
         ]
       }
     ],
@@ -660,24 +701,26 @@
         "icon_class": "fas fa-code",
         "title_key": "fullstackDev",
         "items": [
-          "C# & ASP.NET Core MVC",
+          "C# & ASP.NET Core MVC / Web API",
           "Python & Flask Framework",
-          "React (SPA-Entwicklung)",
-          "MVC-Architektur",
-          "HTML5 / CSS3 & JavaScript"
+          "Java",
+          "React",
+          "JavaScript (ES6+)",
+          "HTML5 / CSS3",
+          "RESTful APIs"
         ]
       },
       {
         "icon_class": "fas fa-database",
         "title_key": "backendDb",
         "items": [
-          "Relationale Datenbanken (MSSQL & PostgreSQL)",
-          "NoSQL-Systeme (MongoDB)",
+          "MSSQL & PostgreSQL",
+          "MongoDB",
+          "Elasticsearch",
           "Redis (Verteiltes Caching)",
+          "SQL",
           "RabbitMQ (Nachrichtenwarteschlange)",
-          "Ocelot API Gateway",
-          "RESTful API Design & Integration",
-          "Datenaustausch (JSON & Python Requests)"
+          "Ocelot API Gateway"
         ]
       },
       {
@@ -686,10 +729,10 @@
         "items": [
           "Pandas",
           "NumPy",
-          "Matplotlib",
-          "Seaborn",
+          "TensorFlow",
+          "OpenCV",
           "Scikit-learn",
-          "TensorFlow"
+          "Matplotlib"
         ]
       },
       {
@@ -706,8 +749,15 @@
         "title_key": "cloudDeploy",
         "items": [
           "Cloud-Deployment mit Render",
-          "Cloudflare DNS & Domain-Management",
-          "Firebase-Grundlagen (Vorerfahrung)"
+          "Cloudflare DNS & Domain-Management"
+        ]
+      },
+      {
+        "icon_class": "fas fa-language",
+        "title_key": "spokenLanguages",
+        "items": [
+          "Türkisch (Muttersprache)",
+          "Englisch (Berufliche Arbeitskenntnisse)"
         ]
       }
     ]
