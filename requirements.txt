@@ -4,7 +4,6 @@ requests
 python-dotenv
 flask-cors
 requests-oauthlib
-kaggle
 urllib3
 certifi
 resend

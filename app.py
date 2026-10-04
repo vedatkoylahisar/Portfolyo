@@ -12,10 +12,6 @@ import resend
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-# Lokalde kaggle.json varsa onu kullan; Vercel'de KAGGLE_API_TOKEN (kaggle 2.x) env degiskeni yeterli.
-if os.path.exists(os.path.join(basedir, "kaggle.json")):
-    os.environ["KAGGLE_CONFIG_DIR"] = basedir
-
 load_dotenv(os.path.join(basedir, ".env"), override=True)
 
 app = Flask(__name__)
@@ -297,37 +293,42 @@ KAGGLE_CACHE_TTL = 3600  # saniye
 _kaggle_cache = {"time": 0, "data": []}
 
 
+KAGGLE_LIST_URL = "https://api.kaggle.com/v1/kernels.KernelsApiService/ListKernels"
+
+
 def fetch_kaggle_projects():
     # Her /portfolio isteginde Kaggle API'ye gitmemek icin sonucu onbellekte tutuyoruz.
     if _kaggle_cache["data"] and time.time() - _kaggle_cache["time"] < KAGGLE_CACHE_TTL:
         return _kaggle_cache["data"]
 
+    token = os.getenv("KAGGLE_API_TOKEN", "").strip()
+    if not token:
+        print("Kaggle API error: KAGGLE_API_TOKEN tanimli degil.")
+        return _kaggle_cache["data"]
+
+    username = os.getenv("KAGGLE_USERNAME") or "vedatkoylahisar"
+
     try:
-        # kaggle paketi import aninda authenticate() cagiriyor; kimlik bilgisi yoksa
-        # tum uygulama cokmesin diye import burada yapiliyor.
-        from kaggle.api.kaggle_api_extended import KaggleApi
-        api = KaggleApi()
-        api.authenticate()
-
-        username = os.getenv("KAGGLE_USERNAME") or "vedatkoylahisar"
-
-        # 100 projeye kadar çek, tarihe göre sırala
-        kernels = api.kernels_list(user=username, page_size=100, sort_by='dateRun')
-        kernels = list(kernels)
+        # kaggle paketi yerine API'yi dogrudan cagiriyoruz: paket import aninda kimlik
+        # dogrulamasi yapiyor, Python 3.11+ istiyor ve Vercel'de import hatasi veriyordu.
+        response = requests.post(
+            KAGGLE_LIST_URL,
+            json={"user": username, "pageSize": 100, "sortBy": "dateRun"},
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=10,
+        )
+        response.raise_for_status()
+        kernels = response.json().get("kernels", [])
 
         projects = []
         for k in kernels:
-            # kaggle 1.x 'isPrivate', 2.x (kagglesdk) 'is_private' kullaniyor
-            if getattr(k, 'is_private', False) or getattr(k, 'isPrivate', False):
+            if k.get("isPrivate"):
                 continue
 
-            # Açıklama kontrolü
-            desc = getattr(k, 'description', None)
-
             projects.append({
-                "title": getattr(k, 'title', 'Untitled'),
-                "description": desc,
-                "url": f"https://www.kaggle.com/code/{username}/{k.ref.split('/')[-1]}"
+                "title": k.get("title") or "Untitled",
+                "description": k.get("description"),
+                "url": f"https://www.kaggle.com/code/{k.get('ref', '')}"
             })
         _kaggle_cache.update(time=time.time(), data=projects)
         return projects
