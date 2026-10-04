@@ -1,6 +1,6 @@
 /* ==========================================================================
-   1. GLOBAL MODAL FONKSÝYONLARI (En Kritik Bölüm)
-   Bu fonksiyonlar HTML'den direkt çaðrýldýðý için en dýþta tanýmlanmalý.
+   1. GLOBAL MODAL FONKSÄ°YONLARI (En Kritik BÃ¶lÃ¼m)
+   Bu fonksiyonlar HTML'den direkt Ã§aÄŸrÄ±ldÄ±ÄŸÄ± iÃ§in en dÄ±ÅŸta tanÄ±mlanmalÄ±.
    ========================================================================== */
 
 function showModal(message, category) {
@@ -8,16 +8,16 @@ function showModal(message, category) {
     const msgPara = document.getElementById('modal-message');
     const iconDiv = document.getElementById('modal-icon');
 
-    // Eðer modal sayfada yoksa (baþka sayfadaysak) hata verme, çýk.
+    // EÄŸer modal sayfada yoksa (baÅŸka sayfadaysak) hata verme, Ã§Ä±k.
     if (!modal || !msgPara || !iconDiv) return;
 
-    // --- KESÝN ÇÖZÜM: MODALI KURTARMA ---
-    // Eðer modal bir div'in içine hapsolmuþsa, onu oradan alýp body'nin en altýna taþýyoruz.
-    // Bu iþlem, 'transform' veya 'position' çakýþmalarýný %100 çözer.
+    // --- KESÄ°N Ã‡Ã–ZÃœM: MODALI KURTARMA ---
+    // EÄŸer modal bir div'in iÃ§ine hapsolmuÅŸsa, onu oradan alÄ±p body'nin en altÄ±na taÅŸÄ±yoruz.
+    // Bu iÅŸlem, 'transform' veya 'position' Ã§akÄ±ÅŸmalarÄ±nÄ± %100 Ã§Ã¶zer.
     document.body.appendChild(modal);
     // ------------------------------------
 
-    // Mesajý ve ikonu ayarla
+    // MesajÄ± ve ikonu ayarla
     msgPara.innerText = message;
 
     if (category === 'success') {
@@ -26,7 +26,7 @@ function showModal(message, category) {
         iconDiv.innerHTML = '<i class="fas fa-exclamation-circle error-icon"></i>';
     }
 
-    // Kutuyu göster (CSS'deki flex ortalamayý aktif eder)
+    // Kutuyu gÃ¶ster (CSS'deki flex ortalamayÄ± aktif eder)
     modal.style.display = 'flex';
 }
 
@@ -37,7 +37,7 @@ function closeModal() {
     }
 }
 
-// Modalýn dýþýndaki siyah alana týklayýnca kapatma
+// ModalÄ±n dÄ±ÅŸÄ±ndaki siyah alana tÄ±klayÄ±nca kapatma
 window.addEventListener('click', (event) => {
     const modal = document.getElementById('flash-modal');
     if (event.target === modal) {
@@ -47,11 +47,11 @@ window.addEventListener('click', (event) => {
 
 
 /* ==========================================================================
-   2. SAYFA YÜKLENÝNCE ÇALIÞACAKLAR (Chatbot, Dil Seçimi vb.)
+   2. SAYFA YÃœKLENÄ°NCE Ã‡ALIÅžACAKLAR (Chatbot, Dil SeÃ§imi vb.)
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-    // --- DÝL SEÇÝCÝ ---
+    // --- DÄ°L SEÃ‡Ä°CÄ° ---
     const langButton = document.getElementById('langButton');
     const langDropdown = document.getElementById('langDropdown');
 
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- YAZI YAZMA (TYPING) ANÝMASYONU ---
+    // --- YAZI YAZMA (TYPING) ANÄ°MASYONU ---
     const typingElement = document.querySelector(".typing");
     if (typingElement && typingElement.dataset.texts) {
         try {
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     if (!isDeleting && charIndex === currentText.length) {
                         isDeleting = true;
-                        typeSpeed = 2000; // Yazdýktan sonra bekle
+                        typeSpeed = 2000; // YazdÄ±ktan sonra bekle
                     } else if (isDeleting && charIndex === 0) {
                         isDeleting = false;
                         textIndex = (textIndex + 1) % textArray.length;
@@ -101,17 +101,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- CHATBOT ÝÞLEVLERÝ ---
+    // --- CHATBOT Ä°ÅžLEVLERÄ° ---
     const chatbotForm = document.getElementById('chatbot-form');
     const chatbotInput = document.getElementById('chatbot-input');
     const chatbotMessages = document.getElementById('chatbot-messages');
 
     if (chatbotForm) {
-        // Yardýmcý fonksiyon: Mesaj ekleme
+        // Sohbet geÃ§miÅŸi tarayÄ±cÄ±da tutulur ve her istekte sunucuya gÃ¶nderilir
+        // (sunucu tarafÄ±ndaki session cookie'si 4 KB sÄ±nÄ±rÄ±nÄ± aÅŸÄ±yordu).
+        const chatHistory = [];
+        const MAX_HISTORY = 12;
+        let isSending = false;
+
+        // YardÄ±mcÄ± fonksiyon: Mesaj ekleme (textContent ile, HTML enjeksiyonuna kapalÄ±)
         function addMessage(sender, text) {
             const messageElement = document.createElement('div');
             messageElement.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
-            messageElement.innerHTML = `<p>${text}</p>`;
+            const p = document.createElement('p');
+            p.style.whiteSpace = 'pre-wrap';
+            p.textContent = text;
+            messageElement.appendChild(p);
             chatbotMessages.appendChild(messageElement);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
             return messageElement;
@@ -120,31 +129,42 @@ document.addEventListener("DOMContentLoaded", () => {
         chatbotForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const userMessage = chatbotInput.value.trim();
-            if (!userMessage) return;
+            if (!userMessage || isSending) return;
+            isSending = true;
 
-            // Kullanýcý mesajýný göster
+            // KullanÄ±cÄ± mesajÄ±nÄ± gÃ¶ster
             addMessage('user', userMessage);
             chatbotInput.value = "";
 
-            // "Yazýyor..." mesajý
+            // "YazÄ±yor..." mesajÄ±
             const loadingMessage = addMessage('bot', '...');
 
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMessage })
+                    body: JSON.stringify({ message: userMessage, history: chatHistory.slice(-MAX_HISTORY) })
                 });
 
-                if (!response.ok) throw new Error('API Error');
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    const err = new Error('API Error');
+                    err.serverReply = data.reply;
+                    throw err;
+                }
 
-                const data = await response.json();
-                // Cevabý güncelle
+                // CevabÄ± gÃ¼ncelle
                 loadingMessage.querySelector('p').textContent = data.reply;
+                chatHistory.push({ role: 'user', content: userMessage });
+                chatHistory.push({ role: 'assistant', content: data.reply });
 
             } catch (error) {
                 console.error("Chatbot Error:", error);
-                loadingMessage.querySelector('p').textContent = "Connection error. Please try again.";
+                loadingMessage.querySelector('p').textContent =
+                    error.serverReply || "Connection error. Please try again.";
+            } finally {
+                isSending = false;
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
             }
         });
     }
@@ -152,8 +172,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ==========================================================================
-   3. PROFÝL FOTOÐRAFI ANÝMASYONU (Sadece Anasayfa)
-   Resimlerin yüklenmesini beklemek için 'load' event'i kullanýlýr.
+   3. PROFÄ°L FOTOÄžRAFI ANÄ°MASYONU (Sadece Anasayfa)
+   Resimlerin yÃ¼klenmesini beklemek iÃ§in 'load' event'i kullanÄ±lÄ±r.
    ========================================================================== */
 window.addEventListener('load', () => {
     const animatedPic = document.getElementById('animated-profile-pic');
@@ -181,7 +201,7 @@ window.addEventListener('load', () => {
                 transform: 'translate(0, 0)'
             });
 
-            // Animasyon bitince chatbot'u aç
+            // Animasyon bitince chatbot'u aÃ§
             setTimeout(() => {
                 if (chatbotContainer) chatbotContainer.classList.add('visible');
             }, 2500);
@@ -196,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (langToggle && langDropdown) {
         langToggle.addEventListener('click', function (e) {
-            // Sadece ekran geniþliði 768px altýndaysa (mobilse) týklamayý iþle
+            // Sadece ekran geniÅŸliÄŸi 768px altÄ±ndaysa (mobilse) tÄ±klamayÄ± iÅŸle
             if (window.innerWidth <= 768) {
                 e.preventDefault();
                 langDropdown.classList.toggle('show');

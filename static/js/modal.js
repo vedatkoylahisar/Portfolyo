@@ -2,10 +2,10 @@
    PORTFOLIO MODAL LOGIC (Multi-Language Support & Fixes)
    ========================================================================== */
 
-// Global Deðiþkenler
+// Global DeÄŸiÅŸkenler
 let projectModal, modalTitle, modalDesc, modalTech, modalGithub, modalDemo, modalProfile, modalSubProjectsList, projectCloseBtn;
 
-// 1. DÝL SÖZLÜÐÜ
+// 1. DÄ°L SÃ–ZLÃœÄžÃœ
 const uiTranslations = {
     tr: {
         viewProfile: 'Profili Gor',
@@ -30,7 +30,7 @@ const uiTranslations = {
     }
 };
 
-// Sayfa Yüklendiðinde
+// Sayfa YÃ¼klendiÄŸinde
 document.addEventListener("DOMContentLoaded", () => {
     projectModal = document.getElementById("projectModal");
     modalTitle = document.getElementById("modalTitle");
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Butonlar
     modalGithub = document.getElementById("modalGithub");
     modalDemo = document.getElementById("modalDemo");
-    modalProfile = document.getElementById("modalProfile"); // HTML'deki ID ile eþleþti
+    modalProfile = document.getElementById("modalProfile"); // HTML'deki ID ile eÅŸleÅŸti
 
     projectCloseBtn = document.querySelector("#projectModal .close-btn");
 
@@ -66,16 +66,16 @@ function closeProjectModal() {
 function openModal(element) {
     if (!projectModal) return;
 
-    // 2. DÝLÝ ALGILA
+    // 2. DÄ°LÄ° ALGILA
     const currentLang = document.documentElement.lang || 'en';
     const t = uiTranslations[currentLang] || uiTranslations['en'];
 
-    // 3. VERÝLERÝ HTML'DEN ÇEK (data- attributes)
+    // 3. VERÄ°LERÄ° HTML'DEN Ã‡EK (data- attributes)
     const type = element.getAttribute("data-type");
     const title = element.getAttribute("data-title");
     const desc = element.getAttribute("data-desc");
 
-    // HTML'de data-url olarak göndermiþtik, onu alýyoruz
+    // HTML'de data-url olarak gÃ¶ndermiÅŸtik, onu alÄ±yoruz
     const profileUrl = element.getAttribute("data-url");
 
     // Linkler
@@ -94,12 +94,12 @@ function openModal(element) {
     } catch (e) { console.error("Subprojects parse error", e); }
 
 
-    // --- A. ÝÇERÝÐÝ DOLDUR ---
+    // --- A. Ä°Ã‡ERÄ°ÄžÄ° DOLDUR ---
 
-    // Baþlýk
+    // BaÅŸlÄ±k
     modalTitle.innerHTML = type === 'folder' ? '<i class="fas fa-folder-open" style="color:#00d9ff"></i> ' + title : title;
 
-    // Açýklama
+    // AÃ§Ä±klama
     modalDesc.innerHTML = desc;
 
     // Etiketler (Tags)
@@ -112,43 +112,47 @@ function openModal(element) {
     });
 
 
-    // --- B. GÖRÜNÜM MANTIÐI (FOLDER vs PROJECT) ---
+    // --- B. GÃ–RÃœNÃœM MANTIÄžI (FOLDER vs PROJECT) ---
 
-    // Temizlik: Önce listeyi temizle
+    // Temizlik: Ã–nce listeyi temizle
     if (modalSubProjectsList) modalSubProjectsList.innerHTML = "";
     if (modalSubProjectsList) modalSubProjectsList.style.display = "none";
 
     if (type === 'folder') {
-        // --- KLASÖR (KAGGLE) MODU ---
+        // --- KLASÃ–R (KAGGLE) MODU ---
 
-        // 1. GitHub ve Demo butonlarýný gizle
+        // 1. GitHub ve Demo butonlarÄ±nÄ± gizle
         updateModalButton(modalGithub, null);
         updateModalButton(modalDemo, null);
 
-        // 2. Profil Butonunu Göster (En Altta)
+        // 2. Profil Butonunu GÃ¶ster (En Altta)
         if (modalProfile) {
             modalProfile.style.display = "inline-flex";
             modalProfile.href = profileUrl;
             modalProfile.innerHTML = `<i class="fas fa-user-circle"></i> ${t.viewProfile}`;
         }
 
-        // 3. Kaggle Listesini Oluþtur ve Göster
+        // 3. Kaggle Listesini OluÅŸtur ve GÃ¶ster
         if (subProjects.length > 0 && modalSubProjectsList) {
-            modalSubProjectsList.style.display = "flex"; // Listeyi görünür yap
+            modalSubProjectsList.style.display = "flex"; // Listeyi gÃ¶rÃ¼nÃ¼r yap
 
             subProjects.forEach(proj => {
                 const itemDiv = document.createElement("div");
                 itemDiv.className = "kaggle-item"; // CSS class
 
-                // Link kontrolü
+                // Link kontrolÃ¼
                 const itemLink = proj.url || proj.link || "#";
+
+                const shortDesc = proj.description
+                    ? (proj.description.length > 50 ? proj.description.substring(0, 50) + '...' : proj.description)
+                    : '';
 
                 itemDiv.innerHTML = `
                     <div class="k-info">
-                        <strong><i class="fas fa-code"></i> ${proj.title || "Project"}</strong>
-                        <div class="k-desc" style="font-size:0.8rem; color:#aaa;">${proj.description ? proj.description.substring(0, 50) + '...' : ''}</div>
+                        <strong><i class="fas fa-code"></i> ${escapeHtml(proj.title || "Project")}</strong>
+                        <div class="k-desc" style="font-size:0.8rem; color:#aaa;">${escapeHtml(shortDesc)}</div>
                     </div>
-                    <a href="${itemLink}" target="_blank" class="btn-kaggle-mini">
+                    <a href="${escapeHtml(itemLink)}" target="_blank" rel="noopener" class="btn-kaggle-mini">
                         ${t.viewProject} <i class="fas fa-arrow-right"></i>
                     </a>
                 `;
@@ -163,17 +167,24 @@ function openModal(element) {
         if (modalProfile) modalProfile.style.display = "none";
         if (modalSubProjectsList) modalSubProjectsList.style.display = "none";
 
-        // 2. GitHub ve Demo butonlarýný ayarla
+        // 2. GitHub ve Demo butonlarÄ±nÄ± ayarla
         updateModalButton(modalGithub, githubLink);
         updateModalButton(modalDemo, demoLink);
     }
 
-    // Modalý Aç
+    // ModalÄ± AÃ§
     projectModal.style.display = "block";
-    document.body.style.overflow = "hidden"; // Arka plan kaymasýný engelle
+    document.body.style.overflow = "hidden"; // Arka plan kaymasÄ±nÄ± engelle
 }
 
-// Yardýmcý Fonksiyon: Buton Göster/Gizle
+// YardÄ±mcÄ± Fonksiyon: DÄ±ÅŸ kaynaktan (Kaggle API) gelen metni HTML'e gÃ¼venli basmak iÃ§in
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML.replace(/"/g, '&quot;');
+}
+
+// YardÄ±mcÄ± Fonksiyon: Buton GÃ¶ster/Gizle
 function updateModalButton(btn, link) {
     if (btn) {
         if (link && link !== "None" && link !== "" && link !== "#") {

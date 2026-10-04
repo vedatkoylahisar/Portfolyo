@@ -1,22 +1,34 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify , flash
+from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 import json
+import re
+import time
+import html
 import requests # HTTP istekleri icin
 import resend
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-os.environ["KAGGLE_CONFIG_DIR"] = basedir
+# Lokalde kaggle.json varsa onu kullan; Vercel'de KAGGLE_API_TOKEN (kaggle 2.x) env degiskeni yeterli.
+if os.path.exists(os.path.join(basedir, "kaggle.json")):
+    os.environ["KAGGLE_CONFIG_DIR"] = basedir
 
-from kaggle.api.kaggle_api_extended import KaggleApi
 load_dotenv(os.path.join(basedir, ".env"), override=True)
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key:
     raise RuntimeError("SECRET_KEY ortam degiskeni tanimli degil (.env dosyasina ekleyin).")
+
+# Vercel proxy'si arkasinda dogru sema (https) ve host bilgisini almak icin
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+app.config.update(
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=os.environ.get("VERCEL") == "1",  # lokalde http ile de calissin
+)
 
 #======================================================================
 # 1. TUM VERILER `data.json` DOSYASINDAN YUKLENIYOR
@@ -71,7 +83,7 @@ SKILLS = {}
 def load_data_from_json():
     global MENU_ITEMS, LANGUAGE_NAMES, TRANSLATIONS, PROJECTS, SKILLS
     try:
-        with open('data.json', 'r', encoding='utf-8') as f:
+        with open(os.path.join(basedir, 'data.json'), 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         MENU_ITEMS = data.get("MENU_ITEMS", [])
@@ -161,9 +173,47 @@ def get_portfolio_data(data_type):
         
     return "No information found for this category."
 
+SYSTEM_PROMPT = (
+    "You are a friendly assistant on Vedat Koylahisar's personal portfolio website. "
+    "You can greet visitors, exchange small talk, and respond in whatever language the user prefers. "
+    "Your main purpose is to answer questions about Vedat: his projects, skills, work experience, education, and certificates. "
+    "You can also help visitors send Vedat a message by collecting their name, email, and message, then calling 'send_contact_email'. "
+    "Before calling 'send_contact_email', make sure you have all three and that the email looks valid. "
+    "Use 'get_portfolio_data' to fetch Vedat's information when needed. "
+    "However, you are NOT a general-purpose AI. Politely decline requests that have nothing to do with Vedat, such as: "
+    "math calculations, coding help, debugging, weather, news, recipes, jokes, writing essays, or any other off-topic task. "
+    "When declining, be brief and friendly — redirect the conversation back to Vedat naturally, without sounding robotic or repeating the same phrase every time. "
+    "CRITICAL: Never write template placeholders like [Company], [technology], [certificate] or similar bracketed filler text. "
+    "Only state concrete facts that came from 'get_portfolio_data' results already in this conversation, or call the tool first if you don't have them yet. "
+    "If you genuinely don't have a piece of information, say so plainly instead of inventing a placeholder. "
+    "The chat window shows plain text only: do not use Markdown tables, headings, or bold markers. "
+    "Keep answers short and conversational; use simple '-' bullet lines for lists."
+)
+
+# Sohbet gecmisi tarayicida tutuluyor (Flask session cookie'si 4 KB siniri yuzunden
+# tool sonuclarini tasiyamiyordu). Istemciden gelen gecmisi bu sinirlarla temizliyoruz.
+MAX_HISTORY_MESSAGES = 12
+MAX_MESSAGE_CHARS = 2000
+
+
+def sanitize_history(raw_history):
+    history = []
+    if not isinstance(raw_history, list):
+        return history
+    for item in raw_history[-MAX_HISTORY_MESSAGES:]:
+        if not isinstance(item, dict):
+            continue
+        role = item.get("role")
+        content = item.get("content")
+        if role in ("user", "assistant") and isinstance(content, str) and content.strip():
+            history.append({"role": role, "content": content[:MAX_MESSAGE_CHARS]})
+    return history
+
+
 @app.route("/chat", methods=['POST'])
 def chat():
-    user_msg = request.json.get('message', '').strip()
+    body = request.get_json(silent=True) or {}
+    user_msg = str(body.get('message', '')).strip()[:MAX_MESSAGE_CHARS]
     if not user_msg:
         return jsonify({'error': 'No message provided'}), 400
 
@@ -176,24 +226,9 @@ def chat():
         "Content-Type": "application/json"
     }
 
-    if 'chat_history' not in session:
-        session['chat_history'] = [
-            {"role": "system", "content": (
-                "You are a friendly assistant on Vedat Koylahisar's personal portfolio website. "
-                "You can greet visitors, exchange small talk, and respond in whatever language the user prefers. "
-                "Your main purpose is to answer questions about Vedat: his projects, skills, work experience, education, and certificates. "
-                "You can also help visitors send Vedat a message by collecting their name, email, and message, then calling 'send_contact_email'. "
-                "Use 'get_portfolio_data' to fetch Vedat's information when needed. "
-                "However, you are NOT a general-purpose AI. Politely decline requests that have nothing to do with Vedat, such as: "
-                "math calculations, coding help, debugging, weather, news, recipes, jokes, writing essays, or any other off-topic task. "
-                "When declining, be brief and friendly — redirect the conversation back to Vedat naturally, without sounding robotic or repeating the same phrase every time. "
-                "CRITICAL: Never write template placeholders like [Company], [technology], [certificate] or similar bracketed filler text. "
-                "Only state concrete facts that came from 'get_portfolio_data' results already in this conversation, or call the tool first if you don't have them yet. "
-                "If you genuinely don't have a piece of information, say so plainly instead of inventing a placeholder."
-            )}
-        ]
-
-    session['chat_history'].append({"role": "user", "content": user_msg})
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages += sanitize_history(body.get('history'))
+    messages.append({"role": "user", "content": user_msg})
 
     try:
         # Model art arda birden fazla tool cagirabilir (once skills, sonra experience gibi),
@@ -206,7 +241,7 @@ def chat():
         for _ in range(MAX_TOOL_ITERATIONS):
             payload = {
                 "model": os.getenv("CUSTOM_MODEL_NAME"),
-                "messages": session['chat_history'],
+                "messages": messages,
                 "tools": tools,
                 "tool_choice": "auto",
                 "temperature": 0.3
@@ -214,15 +249,18 @@ def chat():
             response = requests.post(api_url, json=payload, headers=headers, timeout=90)
             response.raise_for_status()
             response_msg = response.json()['choices'][0]['message']
-            session['chat_history'].append(response_msg)
+            messages.append(response_msg)
 
             if not response_msg.get("tool_calls"):
                 break
 
             for tool_call in response_msg["tool_calls"]:
                 func_name = tool_call["function"]["name"]
-                args = json.loads(tool_call["function"]["arguments"])
-                print(f"DEBUG - Executing: {func_name} | Args: {args}")
+                try:
+                    args = json.loads(tool_call["function"].get("arguments") or "{}")
+                except json.JSONDecodeError:
+                    args = {}
+                print(f"DEBUG - Executing: {func_name}")
 
                 if func_name == "get_portfolio_data":
                     result_content = get_portfolio_data(args.get('data_type'))
@@ -235,14 +273,13 @@ def chat():
                 else:
                     result_content = "Function not found."
 
-                session['chat_history'].append({
+                messages.append({
                     "role": "tool",
                     "tool_call_id": tool_call["id"],
                     "name": func_name,
                     "content": str(result_content)
                 })
 
-        session.modified = True
         return jsonify({'reply': response_msg.get('content') or "..."})
 
     except requests.exceptions.Timeout:
@@ -256,8 +293,19 @@ def chat():
         return jsonify({'reply': "Something went wrong. Let's try again."}), 500
 
 
+KAGGLE_CACHE_TTL = 3600  # saniye
+_kaggle_cache = {"time": 0, "data": []}
+
+
 def fetch_kaggle_projects():
+    # Her /portfolio isteginde Kaggle API'ye gitmemek icin sonucu onbellekte tutuyoruz.
+    if _kaggle_cache["data"] and time.time() - _kaggle_cache["time"] < KAGGLE_CACHE_TTL:
+        return _kaggle_cache["data"]
+
     try:
+        # kaggle paketi import aninda authenticate() cagiriyor; kimlik bilgisi yoksa
+        # tum uygulama cokmesin diye import burada yapiliyor.
+        from kaggle.api.kaggle_api_extended import KaggleApi
         api = KaggleApi()
         api.authenticate()
 
@@ -265,33 +313,32 @@ def fetch_kaggle_projects():
 
         # 100 projeye kadar çek, tarihe göre sırala
         kernels = api.kernels_list(user=username, page_size=100, sort_by='dateRun')
-        kernels = list(kernels) 
+        kernels = list(kernels)
 
         projects = []
         for k in kernels:
-            if getattr(k, 'isPrivate', False):
-                continue 
+            # kaggle 1.x 'isPrivate', 2.x (kagglesdk) 'is_private' kullaniyor
+            if getattr(k, 'is_private', False) or getattr(k, 'isPrivate', False):
+                continue
 
             # Açıklama kontrolü
-            desc = getattr(k, 'description', None) 
-            
+            desc = getattr(k, 'description', None)
+
             projects.append({
                 "title": getattr(k, 'title', 'Untitled'),
                 "description": desc,
-                "url": f"https://www.kaggle.com/code/{username}/{k.ref.split('/')[-1]}",
-                "image": "/static/images/kaggle_logo.png"
+                "url": f"https://www.kaggle.com/code/{username}/{k.ref.split('/')[-1]}"
             })
+        _kaggle_cache.update(time=time.time(), data=projects)
         return projects
     except Exception as e:
         print("Kaggle API error:", e)
-        return []
+        return _kaggle_cache["data"]
 
 
 # --- Sayfa Route'lari  ---
 @app.route("/")
 def home():
-
-    session.pop('chat_history', None)
     return render_template("index.html", active='home')
 
 @app.route("/about")
@@ -328,10 +375,9 @@ def portfolio():
     # DİKKAT: Artık PROJECTS global değişkeninden değil, current_texts içinden alıyoruz
     projects_from_json = current_texts.get("projects", [])
     
-    # 3. Kaggle ve LeetCode verilerini çek
+    # 3. Kaggle verilerini çek
     kaggle_list = fetch_kaggle_projects()
-    leetcode_solutions = fetch_leetcode_solutions()
-    
+
     # 4. Klasör yapısını oluştur (Kaggle Projeleri Varsa)
     if kaggle_list:
         # Klasör kartı için dil ayarları (Burayı hardcode bırakabiliriz veya JSON'a taşıyabilirsin)
@@ -390,31 +436,45 @@ def portfolio():
         'portfolio.html', 
         active='portfolio',
         texts=current_texts,       # HTML'deki menülerin çalışması için ŞART
-        projects=all_projects,     # Birleştirilmiş liste
-        leetcode=leetcode_solutions
+        projects=all_projects      # Birleştirilmiş liste
     )
+
+
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 def send_contact_email(name, email, message):
     api_key = os.getenv("RESEND_API_KEY")
     target_email = os.getenv("MAIL_FROM") # Mesajın gideceği kendi mailin
-    
-    if not api_key:
-        print("ERROR: RESEND_API_KEY not found.")
-        return "Error: API Key missing."
+
+    name = (name or "").strip()[:100]
+    email = (email or "").strip()[:254]
+    message = (message or "").strip()[:5000]
+
+    if not name or not message:
+        return "Error: Name and message are required."
+    if not EMAIL_RE.match(email):
+        return "Error: The email address is not valid."
+
+    if not api_key or not target_email:
+        print("ERROR: RESEND_API_KEY veya MAIL_FROM tanimli degil.")
+        return "Error: Mail service is not configured."
 
     resend.api_key = api_key
 
     try:
+        # Kullanici girdisi HTML'e escape edilmeden konursa maile link/HTML enjekte edilebilir.
+        safe_message = html.escape(message).replace("\n", "<br>")
         params = {
             "from": "Portfolio Assistant <onboarding@resend.dev>",
             "to": [target_email],
-            "subject": f"New Message from {name}",
+            "reply_to": email,
+            "subject": f"New Message from {name.replace(chr(10), ' ').replace(chr(13), ' ')}",
             "html": f"""
                 <h3>New Contact Request</h3>
-                <p><strong>Name:</strong> {name}</p>
-                <p><strong>Email:</strong> {email}</p>
-                <p><strong>Message:</strong> {message}</p>
+                <p><strong>Name:</strong> {html.escape(name)}</p>
+                <p><strong>Email:</strong> {html.escape(email)}</p>
+                <p><strong>Message:</strong><br>{safe_message}</p>
             """
         }
 
@@ -423,7 +483,7 @@ def send_contact_email(name, email, message):
         return "Success: Your message has been delivered to Vedat."
     except Exception as e:
         print(f"Resend Error: {str(e)}")
-        return f"Error: {str(e)}"
+        return "Error: The message could not be sent right now."
 
 
 
@@ -433,6 +493,10 @@ def contact():
     current_texts = TRANSLATIONS.get(lang_code, TRANSLATIONS.get('en', {}))
 
     if request.method == "POST":
+        # Honeypot: insanlar bu gizli alani gormez, botlar doldurur.
+        if request.form.get("website"):
+            return redirect(url_for('contact'))
+
         name = request.form.get("name")
         email = request.form.get("email")
         message = request.form.get("message")
@@ -445,7 +509,7 @@ def contact():
         )
 
         # send_contact_email "Success..." diye baslayan bir string donuyor
-        if "Success" in success_msg:
+        if success_msg.startswith("Success"):
             msg = current_texts.get("contactSuccess", "Your message has been sent!")
             flash(msg, "success")
         else:
@@ -457,39 +521,21 @@ def contact():
     return render_template("contact.html", active='contact')
 
 
-def fetch_leetcode_solutions():
-    # GitHub API URL'si
-    github_user = "vedatkoylahisar"
-    repo_name = "leetcode-problems"
-    url = f"https://api.github.com/repos/{github_user}/{repo_name}/contents"
+@app.route("/robots.txt")
+def robots_txt():
+    body = f"User-agent: *\nAllow: /\nSitemap: {url_for('sitemap_xml', _external=True)}\n"
+    return app.response_class(body, mimetype="text/plain")
 
-    try:
-        response = requests.get(url)
-        
-        if response.status_code == 200:
-            files = response.json()
-            solutions = []
-            
-            for file in files:
-                if file['name'].endswith(('.py', '.cpp', '.java', '.js')) and file['type'] == 'file':
-                    
-                   
-                    clean_name = file['name'].rsplit('.', 1)[0].replace('_', ' ').replace('-', ' ').title()
-                    
-                    solutions.append({
-                        'title': clean_name,       # Ekranda görünecek isim
-                        'filename': file['name'],  # Orijinal dosya ismi
-                        'url': file['html_url'],   # GitHub'daki kodun linki
-                        'language': file['name'].split('.')[-1] # py, cpp vs.
-                    })
-            return solutions
-        else:
-            print(f"GitHub Hatası: {response.status_code}")
-            return []
-            
-    except Exception as e:
-        print("GitHub Bağlantı Hatası:", e)
-        return []
+
+@app.route("/sitemap.xml")
+def sitemap_xml():
+    urls = "".join(
+        f"<url><loc>{url_for(item['endpoint'], _external=True)}</loc></url>"
+        for item in MENU_ITEMS
+    )
+    body = ('<?xml version="1.0" encoding="UTF-8"?>'
+            f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
+    return app.response_class(body, mimetype="application/xml")
 
 
 if __name__ == "__main__":

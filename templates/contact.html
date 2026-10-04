@@ -161,11 +161,12 @@
             <h3>{{ texts.contactFormTitle }}</h3>
             <form action="{{ url_for('contact') }}" method="POST" class="contact-form">
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="{{ texts.formName }}" required>
+                    <input type="text" name="name" placeholder="{{ texts.formName }}" maxlength="100" required>
                     <input type="email" name="email" placeholder="{{ texts.formEmail }}" required>
                 </div>
+                <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;">
                 <div class="form-group">
-                    <textarea name="message" placeholder="{{ texts.formMessage }}" required></textarea>
+                    <textarea name="message" placeholder="{{ texts.formMessage }}" maxlength="5000" required></textarea>
                 </div>
                 <button type="submit" class="btn">{{ texts.formSend }}</button>
             </form>
@@ -174,10 +175,10 @@
 
             <h3>{{ texts.contactSocialTitle }}</h3>
             <div class="social-contact">
-                <a href="https://www.linkedin.com/in/vedat-koylahisar-98790b238/" target="_blank" class="social-link linkedin">
+                <a href="https://www.linkedin.com/in/vedat-koylahisar-98790b238/" target="_blank" rel="noopener" class="social-link linkedin">
                     <i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
                 </a>
-                <a href="https://github.com/vedatkoylahisar" target="_blank" class="social-link github">
+                <a href="https://github.com/vedatkoylahisar" target="_blank" rel="noopener" class="social-link github">
                     <i class="fab fa-github"></i><span>GitHub</span>
                 </a>
                 <a href="mailto:vedatkylhsr@gmail.com" class="social-link email">
@@ -193,7 +194,7 @@
                     <div class="message bot-message"><p>{{ texts.chatbotContactIntro }}</p></div>
                 </div>
                 <form class="chatbot-input-form" id="chatbot-form">
-                    <input type="text" id="chatbot-input" placeholder="{{ texts.chatbotPlaceholder }}" autocomplete="off">
+                    <input type="text" id="chatbot-input" placeholder="{{ texts.chatbotPlaceholder }}" maxlength="2000" autocomplete="off">
                     <button type="submit"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
@@ -206,7 +207,7 @@
     <div class="modal-content">
         <div id="modal-icon"></div>
         <p id="modal-message"></p>
-        <button onclick="closeModal()" class="btn">Tamam</button>
+        <button onclick="closeModal()" class="btn">{{ texts.ok }}</button>
     </div>
 </div>
 
@@ -216,12 +217,7 @@
       window.addEventListener('load', function() {
         setTimeout(function() {
             {% for category, message in messages %}
-              if (typeof showModal === "function") {
-                console.log("Modal tetikleniyor: {{ message }}");
-                showModal("{{ message }}", "{{ category }}");
-              } else {
-                alert("Mesajınız gönderildi: {{ message }}");
-              }
+              showModal({{ message|tojson }}, {{ category|tojson }});
             {% endfor %}
         }, 500);
       });

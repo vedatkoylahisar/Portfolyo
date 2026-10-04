@@ -7,7 +7,7 @@
 
     <section class="skills-section container">
         <div class="intro-wrapper scroll-element fade-in-up">
-          <h3 class="intro-title"></h3> <p class="skills-intro-text">
+          <p class="skills-intro-text">
           {{ texts.skillsIntro }}
           </p>
         </div>
@@ -29,7 +29,7 @@
 
     {% if texts.experience %}
     <section class="experience-section container">
-        <h2 class="section-title scroll-element fade-in-up">Deneyimler</h2>
+        <h2 class="section-title scroll-element fade-in-up">{{ texts.experienceTitle }}</h2>
         
         <div class="timeline">
             <div class="timeline-line"></div>
@@ -59,7 +59,7 @@
 
     {% if texts.education %}
     <section class="education-section container">
-        <h2 class="section-title scroll-element fade-in-up">Eğitim</h2>
+        <h2 class="section-title scroll-element fade-in-up">{{ texts.educationTitle }}</h2>
         <div class="education-grid">
             {% for edu in texts.education %}
             <div class="education-card dark-card scroll-element fade-in-up">
@@ -80,7 +80,7 @@
 
     {% if texts.certificates %}
     <section class="certificates-section container">
-        <h2 class="section-title scroll-element fade-in-up">Sertifikalar</h2>
+        <h2 class="section-title scroll-element fade-in-up">{{ texts.certificatesTitle }}</h2>
         <div class="certificates-grid">
             {% for cert in texts.certificates %}
             <div class="certificate-card dark-card scroll-element fade-in-up">
@@ -92,8 +92,8 @@
                     <span class="cert-issuer">{{ cert.issuer }}</span>
                     <span class="cert-date">{{ cert.date }}</span>
                     {% if cert.link %}
-                    <a href="{{ cert.link }}" target="_blank" class="cert-link">
-                        Görüntüle <i class="fas fa-external-link-alt"></i>
+                    <a href="{{ cert.link }}" target="_blank" rel="noopener" class="cert-link">
+                        {{ texts.viewCertificate }} <i class="fas fa-external-link-alt"></i>
                     </a>
                     {% endif %}
                 </div>

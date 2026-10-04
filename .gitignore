@@ -365,3 +365,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Python sanal ortam ve gizli anahtarlar
+venv/
+.venv/
+kaggle.json
