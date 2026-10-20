@@ -218,6 +218,9 @@
       "certificatesTitle": "Certificates",
       "viewCertificate": "View",
       "ok": "OK",
+      "notFoundTitle": "Page not found",
+      "notFoundMessage": "The page you are looking for doesn't exist or may have been moved.",
+      "backHome": "Back to home",
       "metaDescription": "Vedat Koylahisar - Software & AI developer. Projects, skills, experience and contact."
     },
     "tr": {
@@ -411,6 +414,9 @@
       "certificatesTitle": "Sertifikalar",
       "viewCertificate": "Görüntüle",
       "ok": "Tamam",
+      "notFoundTitle": "Sayfa bulunamadı",
+      "notFoundMessage": "Aradığınız sayfa mevcut değil ya da taşınmış olabilir.",
+      "backHome": "Ana sayfaya dön",
       "metaDescription": "Vedat Koylahisar - Yazılım ve yapay zekâ geliştiricisi. Projeler, yetenekler, deneyim ve iletişim."
     },
     "de": {
@@ -604,6 +610,9 @@
       "certificatesTitle": "Zertifikate",
       "viewCertificate": "Ansehen",
       "ok": "OK",
+      "notFoundTitle": "Seite nicht gefunden",
+      "notFoundMessage": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+      "backHome": "Zur Startseite",
       "metaDescription": "Vedat Koylahisar - Software- und KI-Entwickler. Projekte, Fähigkeiten, Erfahrung und Kontakt."
     }
   },
@@ -660,7 +669,7 @@
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
         "items": [
-          "Cloud Deployment with Render",
+          "Cloud Deployment with Vercel",
           "Cloudflare DNS & Domain Management"
         ]
       },
@@ -725,7 +734,7 @@
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
         "items": [
-          "Render ile Cloud Dağıtımı",
+          "Vercel ile Cloud Dağıtımı",
           "Cloudflare DNS & Domain Yönetimi"
         ]
       },
@@ -790,7 +799,7 @@
         "icon_class": "fas fa-cloud",
         "title_key": "cloudDeploy",
         "items": [
-          "Cloud-Deployment mit Render",
+          "Cloud-Deployment mit Vercel",
           "Cloudflare DNS & Domain-Management"
         ]
       },

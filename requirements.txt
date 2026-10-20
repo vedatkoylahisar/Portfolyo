@@ -2,8 +2,6 @@ Flask
 gunicorn
 requests
 python-dotenv
-flask-cors
-requests-oauthlib
 urllib3
 certifi
 resend

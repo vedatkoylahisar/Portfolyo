@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{{ texts.notFoundTitle }} - {{ texts.name }}{% endblock %}
+
+{% block content %}
+<section class="coming-soon-section">
+    <div class="coming-soon-content">
+        <i class="fas fa-compass construction-icon"></i>
+        <h1>404</h1>
+        <p>{{ texts.notFoundTitle }} — {{ texts.notFoundMessage }}</p>
+        <a href="{{ url_for('home') }}" class="btn"><i class="fas fa-home"></i> {{ texts.backHome }}</a>
+    </div>
+</section>
+{% endblock %}

@@ -128,7 +128,8 @@ def inject_global_vars():
 @app.before_request
 def ensure_lang_in_session():
     if 'lang' not in session:
-        session['lang'] = 'en'
+        # Ilk ziyarette tarayicinin dil tercihine bak (Accept-Language); desteklenmiyorsa Ingilizce.
+        session['lang'] = request.accept_languages.best_match(list(LANGUAGE_NAMES)) or 'en'
 
 @app.route("/set_language/<lang_code>")
 def set_language(lang_code):
@@ -526,6 +527,11 @@ def contact():
 def legacy_cv():
     # Eski tek CV linki disarida (LinkedIn vb.) paylasilmis olabilir; Backend CV'ye yonlendir.
     return redirect(url_for('static', filename='files/Vedat_Koylahisar_Backend_CV.pdf'), code=301)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html", active=None), 404
 
 
 @app.route("/robots.txt")
