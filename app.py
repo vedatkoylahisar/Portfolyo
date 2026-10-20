@@ -118,7 +118,9 @@ def inject_global_vars():
         menu=MENU_ITEMS,
         lang=lang_code,
         texts=current_texts,
-        language_names=LANGUAGE_NAMES
+        language_names=LANGUAGE_NAMES,
+        # Vercel Web Analytics script'i sadece Vercel'de yuklensin (lokalde 404 verir, ziyaret de sayilmasin)
+        is_vercel=os.environ.get("VERCEL") == "1"
     )
 
 #======================================================================
