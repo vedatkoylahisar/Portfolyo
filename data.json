@@ -152,8 +152,8 @@
         },
         {
           "title": "Personal Portfolio Website",
-          "description": "Built a full-stack web platform using Flask (Python) for backend RESTful APIs and JavaScript/React for dynamic frontend UI. Integrated a multi-lingual AI assistant powered by open-source LLMs, implementing custom tool-calling structures for real-time response generation.",
-          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source LLM", "Tool Calling" ],
+          "description": "Built a full-stack web platform using Flask (Python) for backend RESTful APIs and vanilla JavaScript for a dynamic frontend UI. Integrated a multi-lingual AI assistant powered by open-source LLMs, implementing custom tool-calling structures for real-time response generation.",
+          "tags": [ "Python", "Flask", "JavaScript", "Open-Source LLM", "Tool Calling" ],
           "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
@@ -345,8 +345,8 @@
         },
         {
           "title": "Kişisel Portfolyo Websitesi",
-          "description": "Flask (Python) ile backend RESTful API'ler, JavaScript/React ile dinamik frontend arayüzü kullanılarak geliştirilen full-stack bir web platformu. Açık kaynaklı LLM'ler ile çalışan, gerçek zamanlı yanıt üretimi için özel tool-calling yapıları içeren çok dilli bir yapay zeka asistanı entegre edildi.",
-          "tags": [ "Python", "Flask", "React", "JavaScript", "Açık Kaynak LLM", "Tool Calling" ],
+          "description": "Flask (Python) ile backend RESTful API'ler, saf JavaScript ile dinamik frontend arayüzü kullanılarak geliştirilen full-stack bir web platformu. Açık kaynaklı LLM'ler ile çalışan, gerçek zamanlı yanıt üretimi için özel tool-calling yapıları içeren çok dilli bir yapay zeka asistanı entegre edildi.",
+          "tags": [ "Python", "Flask", "JavaScript", "Açık Kaynak LLM", "Tool Calling" ],
           "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
@@ -538,8 +538,8 @@
         },
         {
           "title": "Persönliche Portfolio-Website",
-          "description": "Eine mit Flask (Python) für Backend-RESTful-APIs und JavaScript/React für ein dynamisches Frontend entwickelte Full-Stack-Webplattform. Integriert wurde ein mehrsprachiger KI-Assistent, der von Open-Source-LLMs angetrieben wird und benutzerdefinierte Tool-Calling-Strukturen für die Echtzeit-Antwortgenerierung implementiert.",
-          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source-LLM", "Tool Calling" ],
+          "description": "Eine mit Flask (Python) für Backend-RESTful-APIs und Vanilla-JavaScript für ein dynamisches Frontend entwickelte Full-Stack-Webplattform. Integriert wurde ein mehrsprachiger KI-Assistent, der von Open-Source-LLMs angetrieben wird und benutzerdefinierte Tool-Calling-Strukturen für die Echtzeit-Antwortgenerierung implementiert.",
+          "tags": [ "Python", "Flask", "JavaScript", "Open-Source-LLM", "Tool Calling" ],
           "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
           "demo_link": "https://vedatkoylahisar.com.tr"
         },
