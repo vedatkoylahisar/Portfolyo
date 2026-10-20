@@ -23,7 +23,14 @@
             <a href="mailto:vedatkylhsr@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
         <!-- ... existing code ... -->
-        <a href="{{ url_for('static', filename='files/VedatKoylahisarCV.pdf') }}" class="btn" download="VedatKoylahisarCV.pdf">{{ texts.downloadCV }}</a>
+        <div class="cv-buttons">
+            <a href="{{ url_for('static', filename='files/Vedat_Koylahisar_Backend_CV.pdf') }}" class="btn" download="Vedat_Koylahisar_Backend_CV.pdf">
+                <i class="fas fa-download"></i> {{ texts.cvBackend }}
+            </a>
+            <a href="{{ url_for('static', filename='files/Vedat_Koylahisar_AI_ML_CV.pdf') }}" class="btn" download="Vedat_Koylahisar_AI_ML_CV.pdf">
+                <i class="fas fa-download"></i> {{ texts.cvAiMl }}
+            </a>
+        </div>
     </div>
 
     <!-- ... (animation-wrapper ve img aynı) ... -->

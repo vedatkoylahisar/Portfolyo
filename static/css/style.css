@@ -360,6 +360,23 @@ nav ul {
         background: #00bcd4;
     }
 
+/* Ana sayfa: Backend / AI-ML CV butonlari */
+.cv-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+    .cv-buttons .btn i {
+        margin-right: 6px;
+    }
+
+@media screen and (max-width: 768px) {
+    .cv-buttons {
+        justify-content: center;
+    }
+}
+
 /* =================================== */
 /* Skills / Yetenekler Bölümü - Yeni Nesil Görünüm */
 /* =================================== */

@@ -37,7 +37,8 @@
       "name": "Vedat Koylahisar",
       "profession": "And I'm a",
       "description": "",
-      "downloadCV": "Download CV",
+      "cvBackend": "Backend CV",
+      "cvAiMl": "AI/ML CV",
       "typingText": [ "Software Developer", "AI Developer", "Full-Stack Developer" ],
       "aboutTitle": "About Me",
       "aboutContent": {
@@ -121,18 +122,26 @@
       "projects": [
         {
           "title": "MicroCommerce — Microservices E-Commerce Platform",
-          "description": "A scalable e-commerce platform built with microservices architecture using .NET 8, featuring a React frontend (SwiftShop), inter-service messaging, caching, and API gateway.",
-          "details": "An actively developed microservices-based e-commerce platform designed for scalability and modularity.<br><br><strong>Architecture:</strong><ul><li>Independent microservices for Catalog, Basket, Order, Discount, and Cargo.</li><li>Ocelot API Gateway for centralized routing and load balancing.</li><li>RabbitMQ for asynchronous inter-service communication.</li><li>Redis for distributed caching (basket, session data).</li></ul><br><strong>Backend:</strong><ul><li>.NET 8 Web API with clean architecture principles.</li><li>MongoDB for catalog service, PostgreSQL for order/discount services.</li><li>Docker & Docker Compose for containerized deployment.</li></ul><br><strong>Frontend:</strong><ul><li>React-based SPA (SwiftShop) with Turkish-language UI.</li><li>User profile, orders, and messaging pages.</li></ul>",
-          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React" ],
-          "github_link": "",
+          "description": ".NET 8 microservices e-commerce platform: 5 services behind an Ocelot gateway, asynchronous checkout via MassTransit/RabbitMQ, JWT auth, and xUnit integration tests enforced in GitHub Actions CI.",
+          "details": "A .NET 8 e-commerce platform built as independent microservices, focused on scalability, reliable messaging and automated testing.<br><br><strong>Architecture:</strong><ul><li>5 microservices, each with its own database:<ul><li>Catalog.API (MongoDB)</li><li>Basket.API (Redis)</li><li>Ordering.API (PostgreSQL)</li><li>Identity.API (PostgreSQL, JWT auth)</li><li>Messages.API (PostgreSQL)</li></ul></li><li>OcelotGateway as the single entry point and router for all services.</li><li>Asynchronous checkout: Basket and Order communicate through MassTransit over RabbitMQ.</li></ul><br><strong>Backend &amp; Security:</strong><ul><li>.NET 8 Web APIs following clean architecture principles.</li><li>JWT-based authentication and authorization via Identity.API.</li><li>Docker &amp; Docker Compose for containerized deployment.</li></ul><br><strong>Quality:</strong><ul><li>xUnit integration tests.</li><li>Integration tests run against the live stack in GitHub Actions and must pass before any Docker image is published.</li></ul><br><strong>Frontend:</strong><ul><li>React-based SPA (SwiftShop).</li><li>Buyer↔seller messaging (Messages.API) and an admin panel.</li></ul>",
+          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React", "MassTransit", "xUnit", "GitHub Actions", "JWT" ],
+          "github_link": "https://github.com/vedatkoylahisar/MicroCommerce",
           "demo_link": ""
         },
         {
-          "title": "Personal Portfolio Website",
-          "description": "Built a full-stack web platform using Flask (Python) for backend RESTful APIs and JavaScript/React for dynamic frontend UI. Integrated a multi-lingual AI assistant powered by open-source LLMs, implementing custom tool-calling structures for real-time response generation.",
-          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source LLM", "Tool Calling" ],
-          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
-          "demo_link": "https://vedatkoylahisar.com.tr"
+          "title": "Maxxing — Social Habit Tracking App",
+          "description": "Social habit tracking app with an ASP.NET Core (.NET 10) + PostgreSQL API and a React Native (Expo) client. Features JWT auth, email verification, timezone-aware streaks, invite-code groups and Turkish/English localization.",
+          "tags": [ ".NET 10", "EF Core", "PostgreSQL", "React Native", "Expo", "JWT", "Docker" ],
+          "github_link": "https://github.com/vedatkoylahisar/maxxing_app",
+          "demo_link": ""
+        },
+        {
+          "title": "EEG-Based Emotion Recognition (TÜBİTAK 2209-A)",
+          "description": "TÜBİTAK 2209-A funded research: systematic review of 136 papers on deep learning for EEG emotion recognition, plus a hybrid 1D CNN-LSTM implemented on the DREAMER dataset (EEG + ECG).",
+          "details": "A research project funded by the TÜBİTAK 2209-A Undergraduate Research Projects Program, combining a large-scale literature study with a practical deep learning implementation for emotion recognition.<br><br><strong>Systematic Review:</strong><ul><li>Systematic review of 136 papers on deep learning for EEG-based emotion recognition.</li><li>Comparison of the architectures, datasets and preprocessing approaches used in the literature.</li></ul><br><strong>Implementation:</strong><ul><li>Hybrid 1D CNN-LSTM model: CNN layers extract local signal features, LSTM layers capture temporal dependencies.</li><li>Trained and evaluated on the DREAMER dataset using both EEG and ECG signals.</li><li>Signal preprocessing and segmentation before training.</li></ul><br><strong>Achievements:</strong><ul><li>TÜBİTAK project leadership experience</li><li>Academic research and systematic literature review</li><li>Biomedical signal processing proficiency</li></ul>",
+          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
+          "github_link": "",
+          "demo_link": ""
         },
         {
           "title": "Sign Language Recognition",
@@ -142,12 +151,11 @@
           "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
         },
         {
-          "title": "EEG-Based Emotion Recognition (TÜBİTAK 2209-A)",
-          "description": "A senior research project funded by TÜBİTAK 2209-A, comparing deep learning models for emotion recognition from EEG signals.",
-          "details": "This project, supported by the TÜBİTAK 2209-A Undergraduate Research Projects Program, investigates the effectiveness of various deep learning architectures in recognizing emotions from EEG data.<br><br><strong>Project Scope:</strong><ul><li>Preprocessing and denoising of EEG signals.</li><li>Time-frequency analysis and feature extraction.</li><li>Comparative analysis of CNN, LSTM, and Hybrid models.</li></ul><br><strong>Achievements:</strong><ul><li>TÜBİTAK Project Leadership Experience</li><li>Academic Research and Literature Review</li><li>Biomedical Signal Processing Proficiency</li></ul>",
-          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
-          "github_link": "",
-          "demo_link": ""
+          "title": "Personal Portfolio Website",
+          "description": "Built a full-stack web platform using Flask (Python) for backend RESTful APIs and JavaScript/React for dynamic frontend UI. Integrated a multi-lingual AI assistant powered by open-source LLMs, implementing custom tool-calling structures for real-time response generation.",
+          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source LLM", "Tool Calling" ],
+          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
+          "demo_link": "https://vedatkoylahisar.com.tr"
         },
         {
           "title": "Academic Article Search (Web Scraping)",
@@ -222,7 +230,8 @@
       "name": "Vedat Koylahisar",
       "profession": "Ve Ben bir",
       "description": "",
-      "downloadCV": "CV İndir",
+      "cvBackend": "Backend CV",
+      "cvAiMl": "Yapay Zekâ/ML CV",
       "typingText": [ "Yazılım Geliştiricisiyim", "Yapay Zekâ Geliştiricisiyim", "Full-stack Geliştiriciyim" ],
       "aboutTitle": "Hakkımda",
       "aboutContent": {
@@ -306,18 +315,26 @@
       "projects": [
         {
           "title": "MicroCommerce — Mikroservis E-Ticaret Platformu",
-          "description": ".NET 8 ve mikroservis mimarisi ile geliştirilen, React frontend (SwiftShop), servisler arası mesajlaşma, önbellekleme ve API Gateway içeren ölçeklenebilir e-ticaret platformu.",
-          "details": "Aktif olarak geliştirilen, ölçeklenebilirlik ve modülerlik odaklı mikroservis tabanlı e-ticaret platformu.<br><br><strong>Mimari:</strong><ul><li>Katalog, Sepet, Sipariş, İndirim ve Kargo için bağımsız mikroservisler.</li><li>Ocelot API Gateway ile merkezi yönlendirme ve yük dengeleme.</li><li>RabbitMQ ile servisler arası asenkron iletişim.</li><li>Redis ile dağıtık önbellekleme (sepet, oturum verileri).</li></ul><br><strong>Backend:</strong><ul><li>.NET 8 Web API, temiz mimari prensipleri.</li><li>Katalog servisi için MongoDB, sipariş/indirim servisleri için PostgreSQL.</li><li>Docker & Docker Compose ile konteynerize dağıtım.</li></ul><br><strong>Frontend:</strong><ul><li>React tabanlı SPA (SwiftShop), Türkçe arayüz.</li><li>Kullanıcı profili, siparişler ve mesajlaşma sayfaları.</li></ul>",
-          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React" ],
-          "github_link": "",
+          "description": ".NET 8 mikroservis e-ticaret platformu: Ocelot gateway arkasında 5 servis, MassTransit/RabbitMQ ile asenkron ödeme (checkout) akışı, JWT kimlik doğrulama ve GitHub Actions CI'da zorunlu tutulan xUnit entegrasyon testleri.",
+          "details": "Ölçeklenebilirlik, güvenilir mesajlaşma ve otomatik test odaklı, bağımsız mikroservislerden oluşan .NET 8 e-ticaret platformu.<br><br><strong>Mimari:</strong><ul><li>Her biri kendi veritabanına sahip 5 mikroservis:<ul><li>Catalog.API (MongoDB)</li><li>Basket.API (Redis)</li><li>Ordering.API (PostgreSQL)</li><li>Identity.API (PostgreSQL, JWT kimlik doğrulama)</li><li>Messages.API (PostgreSQL)</li></ul></li><li>Tüm servisler için tek giriş noktası ve yönlendirici olarak OcelotGateway.</li><li>Asenkron ödeme (checkout) akışı: Sepet ve Sipariş servisleri MassTransit ile RabbitMQ üzerinden haberleşir.</li></ul><br><strong>Backend &amp; Güvenlik:</strong><ul><li>Temiz mimari prensipleriyle .NET 8 Web API'ler.</li><li>Identity.API üzerinden JWT tabanlı kimlik doğrulama ve yetkilendirme.</li><li>Docker &amp; Docker Compose ile konteynerize dağıtım.</li></ul><br><strong>Kalite:</strong><ul><li>xUnit entegrasyon testleri.</li><li>Entegrasyon testleri GitHub Actions'ta çalışan tüm sisteme karşı koşar; herhangi bir Docker imajı yayınlanmadan önce geçmeleri zorunludur.</li></ul><br><strong>Frontend:</strong><ul><li>React tabanlı SPA (SwiftShop).</li><li>Alıcı↔satıcı mesajlaşma (Messages.API) ve admin paneli.</li></ul>",
+          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React", "MassTransit", "xUnit", "GitHub Actions", "JWT" ],
+          "github_link": "https://github.com/vedatkoylahisar/MicroCommerce",
           "demo_link": ""
         },
         {
-          "title": "Kişisel Portfolyo Websitesi",
-          "description": "Flask (Python) ile backend RESTful API'ler, JavaScript/React ile dinamik frontend arayüzü kullanılarak geliştirilen full-stack bir web platformu. Açık kaynaklı LLM'ler ile çalışan, gerçek zamanlı yanıt üretimi için özel tool-calling yapıları içeren çok dilli bir yapay zeka asistanı entegre edildi.",
-          "tags": [ "Python", "Flask", "React", "JavaScript", "Açık Kaynak LLM", "Tool Calling" ],
-          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
-          "demo_link": "https://vedatkoylahisar.com.tr"
+          "title": "Maxxing — Sosyal Alışkanlık Takip Uygulaması",
+          "description": "ASP.NET Core (.NET 10) + PostgreSQL API ve React Native (Expo) istemcisinden oluşan sosyal alışkanlık takip uygulaması. JWT kimlik doğrulama, e-posta doğrulama, saat dilimine duyarlı seriler (streak), davet koduyla katılınan gruplar ve Türkçe/İngilizce dil desteği içerir.",
+          "tags": [ ".NET 10", "EF Core", "PostgreSQL", "React Native", "Expo", "JWT", "Docker" ],
+          "github_link": "https://github.com/vedatkoylahisar/maxxing_app",
+          "demo_link": ""
+        },
+        {
+          "title": "EEG Tabanlı Duygu Tanıma (TÜBİTAK 2209-A)",
+          "description": "TÜBİTAK 2209-A destekli araştırma: EEG ile duygu tanımada derin öğrenme üzerine 136 makalelik sistematik literatür taraması ve DREAMER veri setinde (EEG + EKG) uygulanan hibrit 1D CNN-LSTM modeli.",
+          "details": "TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı kapsamında desteklenen, kapsamlı bir literatür çalışmasını duygu tanıma için uygulamalı bir derin öğrenme modeliyle birleştiren araştırma projesi.<br><br><strong>Sistematik Literatür Taraması:</strong><ul><li>EEG tabanlı duygu tanımada derin öğrenme üzerine 136 makalenin sistematik olarak incelenmesi.</li><li>Literatürde kullanılan mimarilerin, veri setlerinin ve ön işleme yaklaşımlarının karşılaştırılması.</li></ul><br><strong>Uygulama:</strong><ul><li>Hibrit 1D CNN-LSTM modeli: CNN katmanları yerel sinyal özniteliklerini çıkarır, LSTM katmanları zamansal bağımlılıkları yakalar.</li><li>DREAMER veri setinde EEG ve EKG sinyalleri birlikte kullanılarak eğitildi ve değerlendirildi.</li><li>Eğitim öncesinde sinyal ön işleme ve segmentasyon.</li></ul><br><strong>Kazanımlar:</strong><ul><li>TÜBİTAK proje yürütücülüğü deneyimi</li><li>Akademik araştırma ve sistematik literatür taraması</li><li>Biyomedikal sinyal işleme yetkinliği</li></ul>",
+          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
+          "github_link": "",
+          "demo_link": ""
         },
         {
           "title": "İşaret Dili Algılama Sistemi",
@@ -327,12 +344,11 @@
           "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
         },
         {
-          "title": "EEG Tabanlı Duygu Tanıma (TÜBİTAK 2209-A)",
-          "description": "TÜBİTAK 2209-A desteğiyle gerçekleştirilen, EEG sinyalleri üzerinden duygu analizi yapan derin öğrenme modellerinin karşılaştırıldığı bitirme projesi.",
-          "details": "TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı kapsamında hibe almaya hak kazanan bu proje, EEG sinyalleri kullanılarak duygu tanıma üzerine çeşitli derin öğrenme yöntemlerinin performansını karşılaştırır.<br><br><strong>Proje Kapsamı:</strong><ul><li>EEG sinyallerinin işlenmesi ve gürültüden arındırılması.</li><li>Zaman-frekans analizi ve öznitelik çıkarımı.</li><li>CNN, LSTM ve Hibrit modellerin başarı oranlarının kıyaslanması.</li></ul><br><strong>Kazanımlar:</strong><ul><li>TÜBİTAK Proje Yürütücülüğü Deneyimi</li><li>Akademik Araştırma ve Literatür Tarama</li><li>Biyomedikal Sinyal İşleme Yetkinliği</li></ul>",
-          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
-          "github_link": "",
-          "demo_link": ""
+          "title": "Kişisel Portfolyo Websitesi",
+          "description": "Flask (Python) ile backend RESTful API'ler, JavaScript/React ile dinamik frontend arayüzü kullanılarak geliştirilen full-stack bir web platformu. Açık kaynaklı LLM'ler ile çalışan, gerçek zamanlı yanıt üretimi için özel tool-calling yapıları içeren çok dilli bir yapay zeka asistanı entegre edildi.",
+          "tags": [ "Python", "Flask", "React", "JavaScript", "Açık Kaynak LLM", "Tool Calling" ],
+          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
+          "demo_link": "https://vedatkoylahisar.com.tr"
         },
         {
           "title": "Akademik Makale Arama (Web Scraping)",
@@ -407,7 +423,8 @@
       "name": "Vedat Koylahisar",
       "profession": "Und ich bin ein",
       "description": "",
-      "downloadCV": "Lebenslauf herunterladen",
+      "cvBackend": "Lebenslauf Backend",
+      "cvAiMl": "Lebenslauf KI/ML",
       "typingText": [ "Softwareentwickler", "KI-Entwickler", "Full-Stack-Entwickler" ],
       "aboutTitle": "Über mich",
       "aboutContent": {
@@ -491,18 +508,26 @@
       "projects": [
         {
           "title": "MicroCommerce — Mikroservice E-Commerce-Plattform",
-          "description": "Eine skalierbare E-Commerce-Plattform mit Mikroservice-Architektur auf Basis von .NET 8, mit React-Frontend (SwiftShop), Inter-Service-Messaging, Caching und API-Gateway.",
-          "details": "Eine aktiv entwickelte, auf Skalierbarkeit und Modularität ausgelegte Mikroservice-basierte E-Commerce-Plattform.<br><br><strong>Architektur:</strong><ul><li>Unabhängige Mikroservices für Katalog, Warenkorb, Bestellung, Rabatt und Versand.</li><li>Ocelot API Gateway für zentralisiertes Routing und Lastverteilung.</li><li>RabbitMQ für asynchrone Inter-Service-Kommunikation.</li><li>Redis für verteiltes Caching (Warenkorb, Sitzungsdaten).</li></ul><br><strong>Backend:</strong><ul><li>.NET 8 Web API mit Clean-Architecture-Prinzipien.</li><li>MongoDB für den Katalogservice, PostgreSQL für Bestell-/Rabattservices.</li><li>Docker & Docker Compose für containerisierte Bereitstellung.</li></ul><br><strong>Frontend:</strong><ul><li>React-basierte SPA (SwiftShop) mit türkischer Benutzeroberfläche.</li><li>Benutzerprofil-, Bestell- und Nachrichtenseiten.</li></ul>",
-          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React" ],
-          "github_link": "",
+          "description": ".NET-8-Mikroservice-E-Commerce-Plattform: 5 Services hinter einem Ocelot-Gateway, asynchroner Checkout über MassTransit/RabbitMQ, JWT-Authentifizierung und xUnit-Integrationstests, die in der GitHub-Actions-CI erzwungen werden.",
+          "details": "Eine .NET-8-E-Commerce-Plattform aus unabhängigen Mikroservices mit Fokus auf Skalierbarkeit, zuverlässiges Messaging und automatisierte Tests.<br><br><strong>Architektur:</strong><ul><li>5 Mikroservices mit jeweils eigener Datenbank:<ul><li>Catalog.API (MongoDB)</li><li>Basket.API (Redis)</li><li>Ordering.API (PostgreSQL)</li><li>Identity.API (PostgreSQL, JWT-Authentifizierung)</li><li>Messages.API (PostgreSQL)</li></ul></li><li>OcelotGateway als zentraler Einstiegspunkt und Router für alle Services.</li><li>Asynchroner Checkout: Warenkorb und Bestellung kommunizieren über MassTransit und RabbitMQ.</li></ul><br><strong>Backend &amp; Sicherheit:</strong><ul><li>.NET 8 Web APIs nach Clean-Architecture-Prinzipien.</li><li>JWT-basierte Authentifizierung und Autorisierung über Identity.API.</li><li>Docker &amp; Docker Compose für containerisierte Bereitstellung.</li></ul><br><strong>Qualität:</strong><ul><li>xUnit-Integrationstests.</li><li>Integrationstests laufen in GitHub Actions gegen den laufenden Gesamtstack und müssen bestanden werden, bevor ein Docker-Image veröffentlicht wird.</li></ul><br><strong>Frontend:</strong><ul><li>React-basierte SPA (SwiftShop).</li><li>Käufer↔Verkäufer-Messaging (Messages.API) und ein Admin-Panel.</li></ul>",
+          "tags": [ ".NET 8", "Microservices", "MongoDB", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "Ocelot", "React", "MassTransit", "xUnit", "GitHub Actions", "JWT" ],
+          "github_link": "https://github.com/vedatkoylahisar/MicroCommerce",
           "demo_link": ""
         },
         {
-          "title": "Persönliche Portfolio-Website",
-          "description": "Eine mit Flask (Python) für Backend-RESTful-APIs und JavaScript/React für ein dynamisches Frontend entwickelte Full-Stack-Webplattform. Integriert wurde ein mehrsprachiger KI-Assistent, der von Open-Source-LLMs angetrieben wird und benutzerdefinierte Tool-Calling-Strukturen für die Echtzeit-Antwortgenerierung implementiert.",
-          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source-LLM", "Tool Calling" ],
-          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
-          "demo_link": "https://vedatkoylahisar.com.tr"
+          "title": "Maxxing — Soziale Gewohnheits-Tracking-App",
+          "description": "Soziale Gewohnheits-Tracking-App mit einer ASP.NET Core (.NET 10) + PostgreSQL API und einem React-Native-(Expo)-Client. Bietet JWT-Authentifizierung, E-Mail-Verifizierung, zeitzonenbewusste Streaks, Gruppen per Einladungscode sowie Lokalisierung auf Türkisch/Englisch.",
+          "tags": [ ".NET 10", "EF Core", "PostgreSQL", "React Native", "Expo", "JWT", "Docker" ],
+          "github_link": "https://github.com/vedatkoylahisar/maxxing_app",
+          "demo_link": ""
+        },
+        {
+          "title": "EEG-basierte Emotionserkennung (TÜBİTAK 2209-A)",
+          "description": "Von TÜBİTAK 2209-A gefördertes Forschungsprojekt: systematische Übersicht über 136 Arbeiten zu Deep Learning für EEG-basierte Emotionserkennung sowie ein hybrides 1D-CNN-LSTM-Modell, umgesetzt auf dem DREAMER-Datensatz (EEG + EKG).",
+          "details": "Ein durch das TÜBİTAK-2209-A-Programm gefördertes Forschungsprojekt, das eine umfangreiche Literaturstudie mit einer praktischen Deep-Learning-Implementierung zur Emotionserkennung verbindet.<br><br><strong>Systematische Übersicht:</strong><ul><li>Systematische Übersicht über 136 Arbeiten zu Deep Learning für EEG-basierte Emotionserkennung.</li><li>Vergleich der in der Literatur verwendeten Architekturen, Datensätze und Vorverarbeitungsansätze.</li></ul><br><strong>Implementierung:</strong><ul><li>Hybrides 1D-CNN-LSTM-Modell: CNN-Schichten extrahieren lokale Signalmerkmale, LSTM-Schichten erfassen zeitliche Abhängigkeiten.</li><li>Trainiert und evaluiert auf dem DREAMER-Datensatz mit EEG- und EKG-Signalen.</li><li>Signalvorverarbeitung und Segmentierung vor dem Training.</li></ul><br><strong>Erfolge:</strong><ul><li>Erfahrung in der TÜBİTAK-Projektleitung</li><li>Akademische Forschung und systematische Literaturrecherche</li><li>Kompetenz in der biomedizinischen Signalverarbeitung</li></ul>",
+          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
+          "github_link": "",
+          "demo_link": ""
         },
         {
           "title": "Gebärdenspracherkennung",
@@ -512,12 +537,11 @@
           "demo_link": "https://www.kaggle.com/code/vedatkoylahisar/sign-language"
         },
         {
-          "title": "EEG-basierte Emotionserkennung (TÜBİTAK 2209-A)",
-          "description": "Ein von TÜBİTAK 2209-A gefördertes Forschungsprojekt, das Deep-Learning-Modelle zur Emotionserkennung aus EEG-Signalen vergleicht.",
-          "details": "Dieses Abschlussprojekt, unterstützt durch das TÜBİTAK 2209-A Programm, untersucht die Effektivität verschiedener Deep-Learning-Methoden bei der Erkennung von Emotionen aus EEG-Daten.<br><br><strong>Projektumfang:</strong><ul><li>Vorverarbeitung und Rauschunterdrückung von EEG-Signalen.</li><li>Zeit-Frequenz-Analyse und Merkmalsextraktion.</li><li>Vergleichsanalyse von CNN-, LSTM- und Hybridmodellen.</li></ul><br><strong>Erfolge:</strong><ul><li>Erfahrung in der TÜBİTAK-Projektleitung</li><li>Akademische Forschung und Literaturrecherche</li><li>Kompetenz in der biomedizinischen Signalverarbeitung</li></ul>",
-          "tags": [ "Deep Learning", "EEG", "TÜBİTAK", "Python", "Signal Processing" ],
-          "github_link": "",
-          "demo_link": ""
+          "title": "Persönliche Portfolio-Website",
+          "description": "Eine mit Flask (Python) für Backend-RESTful-APIs und JavaScript/React für ein dynamisches Frontend entwickelte Full-Stack-Webplattform. Integriert wurde ein mehrsprachiger KI-Assistent, der von Open-Source-LLMs angetrieben wird und benutzerdefinierte Tool-Calling-Strukturen für die Echtzeit-Antwortgenerierung implementiert.",
+          "tags": [ "Python", "Flask", "React", "JavaScript", "Open-Source-LLM", "Tool Calling" ],
+          "github_link": "https://github.com/vedatkoylahisar/Portfolyo",
+          "demo_link": "https://vedatkoylahisar.com.tr"
         },
         {
           "title": "Akademische Artikelsuche (Web Scraping)",

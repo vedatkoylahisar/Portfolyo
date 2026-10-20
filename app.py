@@ -522,6 +522,12 @@ def contact():
     return render_template("contact.html", active='contact')
 
 
+@app.route("/static/files/VedatKoylahisarCV.pdf")
+def legacy_cv():
+    # Eski tek CV linki disarida (LinkedIn vb.) paylasilmis olabilir; Backend CV'ye yonlendir.
+    return redirect(url_for('static', filename='files/Vedat_Koylahisar_Backend_CV.pdf'), code=301)
+
+
 @app.route("/robots.txt")
 def robots_txt():
     body = f"User-agent: *\nAllow: /\nSitemap: {url_for('sitemap_xml', _external=True)}\n"
